@@ -1,0 +1,81 @@
+ 	<!-- ----------------------------------------------------------------------------- -->
+ 	<!-- Template for SpecialJump skin                                                 -->
+ 	<!-- ----------------------------------------------------------------------------- -->
+ 	<!-- use either the skins embedded in plugin.py                                    -->
+ 	<!-- or copy the section below into your skin, e.g. skin_user.xml                  -->
+ 	<!-- ----------------------------------------------------------------------------- -->
+   
+	<!-- SpecialJump InfoBar skin copied from DMConcinnity-HD section "TimeshiftState" -->
+	<screen name="SpecialJump_SpecialJumpInfoBar" title="SpecialJump InfoBar" flags="wfNoBorder" position="center,center" size="1135,70" zPosition="1" backgroundColor="black">
+		<widget source="session.CurrentService" render="Label" position="180, 15" size="150,27" font="Arial;22" halign="left" backgroundColor="black" transparent="1" zPosition="3">
+			<convert type="ServicePosition">Remaining</convert>
+		</widget>
+		<widget source="session.CurrentService" render="Label" position=" 920, 15" size=" 80,27" font="Arial;22" halign="right" backgroundColor="black" transparent="1" zPosition="3">
+			<convert type="ServicePosition">Position</convert>
+		</widget>
+		<eLabel text="/" position="1010, 15" size=" 10,27" font="Arial;22" halign="center" backgroundColor="black" transparent="1" />
+		<widget source="session.CurrentService" render="Label" position="1030, 15" size=" 80,27" font="Arial;22" halign="left" backgroundColor="black" transparent="1" zPosition="3">
+			<convert type="ServicePosition">Length</convert>
+		</widget>
+		<widget source="session.CurrentService" render="Progress" position="  10,49" size="1120,8" pixmap="DMConcinnity-HD/progress.png" transparent="1" zPosition="3">
+			<convert type="ServicePosition">Position</convert>
+		</widget>
+		<widget backgroundColor="black" font="Regular; 24" halign="left" name="SJJumpTime" position="300,15" size=" 350,27" transparent="1" />
+	</screen>
+	
+	<!-- blending text into existing screen doesn't work, not even with alphatest="blend", the screen behind is never visible
+	<screen name="SpecialJump_SpecialJumpInfoBar" title="SpecialJump InfoBar" flags="wfNoBorder" position="center,center" size="150,30" zPosition="1" backgroundColor="transparent" alphatest="blend">
+		<widget backgroundColor="transparent" foregroundColor="white" font="Regular; 24" halign="left" name="SJJumpTime" position="0,0" size=" 150,30" zPosition="1" alphatest="blend"/>
+	</screen>
+	-->
+
+	<!-- ZAP message -->
+	<screen name="SpecialJump_ZapMessage" title="SpecialJump" flags="wfNoBorder" position="center,center" size="400,50" zPosition="1" backgroundColor="transparent">
+		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/images/ZapMessageBG.png" position="-1,2" size="400,50" zPosition="-1" />
+		<widget backgroundColor="black" font="Regular; 24" halign="left" name="ZapMessageText" position="30,13" size=" 360,28" transparent="1" />
+	</screen>
+	
+	<!-- 3 (currently identical) sections for Audio, Volume, Subs -->
+	<!-- from Record Infobar Plugin -->
+	<screen name="SpecialJump_AudioSubsInfobox_Audio" title="SpecialJump AudioSubsInfobox Audio" flags="wfNoBorder" position="center,center" size="290,20" zPosition="1" >
+		<widget name="number"       position="0,0"   size="30,20"  zPosition="1" font="Regular;18" halign="right" transparent="1" />
+		<widget name="description"  position="40,0"  size="100,20" zPosition="1" font="Regular;18" halign="left"  transparent="1" />
+		<widget name="language"     position="150,0" size="100,20" zPosition="1" font="Regular;18" halign="left"  transparent="1" />
+		<widget name="selected"     position="260,0" size="20,20"  zPosition="1" font="Regular;18" halign="left"  transparent="1" />
+	</screen>
+
+	<screen name="SpecialJump_AudioSubsInfobox_Volume" title="SpecialJump AudioSubsInfobox Volume" flags="wfNoBorder" position="center,center" size="290,20" zPosition="1" >
+		<widget name="number"       position="0,0"   size="30,20"  zPosition="1" font="Regular;18" halign="right" transparent="1" />
+		<widget name="description"  position="40,0"  size="100,20" zPosition="1" font="Regular;18" halign="left"  transparent="1" />
+		<widget name="language"     position="150,0" size="100,20" zPosition="1" font="Regular;18" halign="left"  transparent="1" />
+		<widget name="selected"     position="260,0" size="20,20"  zPosition="1" font="Regular;18" halign="left"  transparent="1" />
+	</screen>
+
+	<screen name="SpecialJump_AudioSubsInfobox_Subs" title="SpecialJump AudioSubsInfobox Subs" flags="wfNoBorder" position="center,center" size="290,20" zPosition="1" >
+		<widget name="number"       position="0,0"   size="30,20"  zPosition="1" font="Regular;18" halign="right" transparent="1" />
+		<widget name="description"  position="40,0"  size="100,20" zPosition="1" font="Regular;18" halign="left"  transparent="1" />
+		<widget name="language"     position="150,0" size="100,20" zPosition="1" font="Regular;18" halign="left"  transparent="1" />
+		<widget name="selected"     position="260,0" size="20,20"  zPosition="1" font="Regular;18" halign="left"  transparent="1" />
+	</screen>
+
+	<!--  skin copied from DMConcinnity-HD section "CrashlogAutoSubmitConfiguration"           -->
+	<!--  - changed name, title, text                                                          -->
+	<!--  - made sure source="key_red" matches self["key_red"] = Label(_("Cancel")) below etc. -->
+	<!--  - changed config (scrollbar) from size="1040,270" to size="1040,440"                 -->
+	<!--  removed widget source="status" etc.                                                  -->
+	<screen name="SpecialJump_SpecialJumpConfiguration" position="center,center" size="1100,605" title="SpecialJump Configuration" flags="wfNoBorder">
+		<ePixmap position="0,0" zPosition="-10" size="1100,605" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/images/mainbg.png" />
+		<widget source="global.CurrentTime" render="Label" position=" 20,20" size=" 80,25" font="Regular;23" foregroundColor="black" backgroundColor="white" transparent="1">
+			<convert type="ClockToText">Default</convert>
+		</widget>
+		<widget source="global.CurrentTime" render="Label" position="110,20" size="140,25" font="Regular;23" foregroundColor="blue" backgroundColor="white" transparent="1">
+			<convert type="ClockToText">Format:%d.%m.%Y</convert>
+		</widget>
+		<eLabel text="SpecialJump Configuration" position="270,15" size="800,43" font="Regular;35" halign="right" foregroundColor="black" backgroundColor="white" transparent="1" />
+		<widget name="config" position="30,90" size="1040,440" itemHeight="30" scrollbarMode="showOnDemand" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/images/sel1040x30.png" backgroundColor="black" transparent="1" />
+		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/buttons/red.png" position=" 30,570" size="35,27" alphatest="blend" />
+		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/buttons/green.png" position="290,570" size="35,27" alphatest="blend" />
+		<widget source="key_red" render="Label" position=" 80,573" size="200,26" font="Regular;22" halign="left" foregroundColor="black" backgroundColor="grey" transparent="1" />
+		<widget source="key_green" render="Label" position="340,573" size="200,26" font="Regular;22" halign="left" foregroundColor="black" backgroundColor="grey" transparent="1" />
+	</screen>
+	

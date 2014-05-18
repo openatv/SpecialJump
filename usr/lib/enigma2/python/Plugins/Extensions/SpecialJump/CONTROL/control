@@ -1,0 +1,10 @@
+Package: enigma2-plugin-extensions-specialjump
+Version: 0.7-20140502-r0
+Description: SpecialJump - Fast manual skipping of commercials, and more...
+Section: misc
+Architecture: mips32el
+Priority: optional
+Maintainer: www.opena.tv Fischreiher
+Homepage: 
+Depends: enigma2
+Source: 
