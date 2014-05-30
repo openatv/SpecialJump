@@ -1524,40 +1524,6 @@ class SpecialJump():
 		self.SJJumpTime = 0
 				
 	def debugmessagebox(self,parent):
-		title =_("Please select what to do after flashing the image:\n(Put your additional actions into /media/hdd/images/config/myrestore.sh)")
-		list = ((_("Flash and start installation wizart"), "wizart"),
-		 (_("Flash and restore settings only"), "restoresettings"),
-		 (_("Flash and restore settings and all saved plugins"), "restoresettingsandallplugins"))
-		self.session.openWithCallback(self.postFlashActionCallback, ChoiceBox,title=title,list=list)
-
-	def postFlashActionCallback(self, answer):
-		restoreSettings   = False
-		restoreAllPlugins = False
-		if answer[1] == "restoresettings":
-			restoreSettings   = True
-		if answer[1] == "restoresettingsandallplugins":
-			restoreSettings   = True
-			restoreAllPlugins = True
-		if restoreSettings:
-			try:
-				os.system('mkdir -p /media/hdd/images/config')
-				os.system('touch /media/hdd/images/config/settings')
-			except:
-				print "postFlashActionCallback: failed to create /media/hdd/images/config/settings"
-		else:
-			if os.path.exists('/media/hdd/images/config/settings'):
-				os.system('rm -f /media/hdd/images/config/settings')
-		if restoreAllPlugins:
-			try:
-				os.system('mkdir -p /media/hdd/images/config')
-				os.system('touch /media/hdd/images/config/plugins')
-			except:
-				print "postFlashActionCallback: failed to create /media/hdd/images/config/plugins"
-		else:
-			if os.path.exists('/media/hdd/images/config/plugins'):
-				os.system('rm -f /media/hdd/images/config/plugins')
-	
-	def debugmessagebox_ok(self,parent):
 		self.InfoBar_instance = parent
 		service = self.session.nav.getCurrentService()
 		if service is None:
@@ -1610,6 +1576,32 @@ class SpecialJump():
 			video_rate = int(info.getInfo(iServiceInformation.sFrameRate))
 			messageString += _("Video content: %ix%i%s %iHz\n") % (video_width, video_height, video_pol, (video_rate + 500) / 1000)
 
+			if path.exists('/proc/stb/vmpeg/0/clip_left'):
+				f = open('/proc/stb/vmpeg/0/clip_left', 'r')
+				clip_left = int(f.read(), 16)
+				f.close()
+			else:
+				clip_left = -999
+			if path.exists('/proc/stb/vmpeg/0/clip_width'):
+				f = open('/proc/stb/vmpeg/0/clip_width', 'r')
+				clip_width = int(f.read(), 16)
+				f.close()
+			else:
+				clip_width = -999
+			if path.exists('/proc/stb/vmpeg/0/clip_top'):
+				f = open('/proc/stb/vmpeg/0/clip_top', 'r')
+				clip_top = int(f.read(), 16)
+				f.close()
+			else:
+				clip_top = -999
+			if path.exists('/proc/stb/vmpeg/0/clip_height'):
+				f = open('/proc/stb/vmpeg/0/clip_height', 'r')
+				clip_height = int(f.read(), 16)
+				f.close()
+			else:
+				clip_height = -999
+			messageString += _("/proc/stb/vmpeg/0 clip: left=%i/w=%i / top=%i/h=%i/\n" % (clip_left, clip_width, clip_top, clip_height))
+  
 			if path.exists('/proc/stb/vmpeg/0/yres'):
 				f = open('/proc/stb/vmpeg/0/yres', 'r')
 				video_height = int(f.read(), 16)
