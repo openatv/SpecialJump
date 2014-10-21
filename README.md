@@ -92,7 +92,7 @@ FAQ:
       Ich empfehle, den Inhalt der /usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/keymap.xml in die /usr/share/enigma2/keymap.usr zu kopieren und dort weiter zu ändern, dann bleiben die Änderungen nach einem Update von SpecialJump erhalten.  
       Änderungen der Tastenbelegung sind in dieser Datei einfach möglich, die Namen sollten halbwegs selbsterklärend sein.  
       Tipp: Unerwünschte Doppel-Aktionen können entstehen, wenn z.B. die gewünschte neue Tastenfunktion beim Drücken (flags="m") und die bisherige Tastenfunktion beim Loslassen (flags="b") ausgelöst wird.  
-            In diesem Fall kann die bisherige Tastenfunktion durch den folgenden Eintrag "ausgeschaltet" werden:
+            In diesem Fall kann die bisherige Tastenfunktion durch den folgenden Eintrag "ausgeschaltet" werden:  
             >`<key id="KEY_XXXX"   mapto="specialjump_doNothing"   flags="b" />`
 
 3. Und warum wird in dieses Anleitung nicht die default-Tastenbelegung beschrieben?  
@@ -100,10 +100,10 @@ FAQ:
 
 4. Wozu dient das "Zap speed limit"?  
       Die Begrenzung der Zap-Geschwindigkeit macht nur Sinn, wenn die keymap.xml so eingestellt ist, dass ein langer Tastendruck auf P+ bzw. P- zum fortlaufenden Kanalwechsel führt:  
-        >`<key id="KEY_CHANNELDOWN" mapto="specialjump_channelDown" flags="mr" />  
-       ><key id="KEY_CHANNELUP"   mapto="specialjump_channelUp"   flags="mr" />  
-        <key id="KEY_CHANNELDOWN" mapto="specialjump_doNothing"   flags="bl" />  
-        <key id="KEY_CHANNELUP"   mapto="specialjump_doNothing"   flags="bl" />`  
+        >`<key id="KEY_CHANNELDOWN" mapto="specialjump_channelDown" flags="mr" />`  
+        >`<key id="KEY_CHANNELUP"   mapto="specialjump_channelUp"   flags="mr" />`  
+        >`<key id="KEY_CHANNELDOWN" mapto="specialjump_doNothing"   flags="bl" />`  
+        >`<key id="KEY_CHANNELUP"   mapto="specialjump_doNothing"   flags="bl" />`  
 
       Die Begrenzung verhindert, dass dabei Kanäle übersprungen werden. Allerdings geht durch diese keymap-Variante die Doppelbelegung der Tasten (PIP zap) verloren.
       
