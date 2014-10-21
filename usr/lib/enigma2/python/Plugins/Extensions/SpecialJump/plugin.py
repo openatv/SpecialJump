@@ -5,6 +5,7 @@
 # Special thanks to Dr.Best (Quickbutton)
 # Special thanks to Emanuel (MultiQuickButton)
 # Special thanks to vlamo   (Record Infobar)
+# Special thanks to StarStb (ExecuteOnPowerEvent)
 #
 # This plugin is free software, you are allowed to
 # modify it (if you keep the license),
@@ -53,6 +54,7 @@ from datetime import datetime
 from Tools.Directories import *
 from Tools.BoundFunction import boundFunction
 from Tools.ISO639 import LanguageCodes
+from Tools import Notifications
 from os import path
 
 import xml.sax.xmlreader
@@ -181,6 +183,12 @@ def autostart(reason, **kwargs):
 		InfoBarPlugins.specialjump_jumpNextMark         = specialjump_jumpNextMark
 		InfoBarPlugins.specialjump_toggleMark           = specialjump_toggleMark
 		InfoBarPlugins.specialjump_toggleLCDBlanking    = specialjump_toggleLCDBlanking
+		if reason == 0:
+			if session is not None:
+				if not session.nav.wasTimerWakeup() or session.nav.RecordTimer.getNextRecordingTime() > session.nav.RecordTimer.getNextZapTime():
+					SpecialJump.powerOn(SpecialJumpInstance)
+		else:
+			SpecialJump.powerOff(SpecialJumpInstance)
 		
 def setup(session, **kwargs):
 	session.open(SpecialJumpConfiguration)
@@ -765,14 +773,17 @@ class SpecialJump():
 
 	def __init__(self,session):
 		self.session = session
+		config.misc.standbyCounter.addNotifier(self._onStandby, initial_call = False)
 		
 		self.SJLCDon = True                # for toggling LCD brightness
+		if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG __init__ SJLCDon = True"
 		self.SJNextJumpIndex = 0           # next jump (0 = before 1st direction change)        
 		self.SJLastJumpDir   = 0           # last jump direction (0=none, 1=forward, -1=backward)        
 		self.SJJumpTime      = 0           # accumulated jump time since last timeout        
 		self.SJPreMuteVolume = -1          # -1 = no value stored
 		self.SJLastSubsTrack = 0           # last subtitle track in "onoff" toggle mode
 		self.SJMode="--"                   # TV or MoviePlayer mode
+		self.SJLastInitialJump = 0         # last value of "initialJump" (for starting over again when changing between full and small SpecialJump)
 		self.SJAudioBoxTimerActive = False # timer for audio infobox is (not) active
 		self.SJSubsBoxTimerActive  = False # timer for subtitle infobox is (not) active
 		self.SJMuteTimerActive     = False # timer for muting is (not) active
@@ -821,6 +832,22 @@ class SpecialJump():
 		self.AudioVolumeInfobox_instance      = self.session.instantiateDialog(AudioSubsInfobox, 'Volume')
 		self.SubsToggleInfobox_instance       = self.session.instantiateDialog(AudioSubsInfobox, 'Subs')
 
+	def powerOn(self):
+		if config.plugins.SpecialJump.debugEnable.getValue(): print datetime.now()
+		if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump powerOn"
+		self.SJLCDon = True
+
+	def powerOff(self):
+		if config.plugins.SpecialJump.debugEnable.getValue(): print datetime.now()
+		if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump powerOff"
+		pass
+   				
+	def _onStandby(self, element):
+		if config.plugins.SpecialJump.debugEnable.getValue(): print datetime.now()
+		if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump _onStandby"
+		from Screens.Standby import inStandby
+		inStandby.onClose.append(self.powerOn)
+		self.powerOff()
 			
 	def specialJumpValue(self,index):
 		#I want arrays ...
@@ -958,6 +985,9 @@ class SpecialJump():
 	def specialJumpBackwards(self,parent,mode,initialJump):
 		self.InfoBar_instance = parent
 		self.SJMode=mode
+		if initialJump != self.SJLastInitialJump:
+			self.SJLastInitialJump = initialJump
+			self.SJLastJumpDir = 0 # start over when changing between full and small SpecialJump
 		if InfoBar and self.InfoBar_instance:
 			if self.SJLastJumpDir    == 0:
 				self.SJNextJumpIndex  = initialJump # 0 for full specialJump
@@ -974,6 +1004,9 @@ class SpecialJump():
 	def specialJumpForwards(self,parent,mode,initialJump):
 		self.InfoBar_instance = parent
 		self.SJMode=mode
+		if initialJump != self.SJLastInitialJump:
+			self.SJLastInitialJump = initialJump
+			self.SJLastJumpDir = 0 # start over when changing between full and small SpecialJump
 		if InfoBar and self.InfoBar_instance:
 			if self.SJLastJumpDir    == 0:
 				self.SJNextJumpIndex  = initialJump # 0 for full specialJump
@@ -1464,9 +1497,11 @@ class SpecialJump():
 		# config.lcd.standby = ConfigSlider(default=standby_default, limits=(0, 10))
 		# config.lcd.bright  = ConfigSlider(default=5, limits=(0, 10))
 		if self.SJLCDon:
+			if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG toggleLCDBlanking if SJLCDon"
 			self.setLCDBrightness(0)
 			self.SJLCDon = False
 		else:
+			if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG toggleLCDBlanking if not SJLCDon"
 			self.restoreLCDBrightness()
 
 	def setLCDBrightness(self, value):
@@ -1478,6 +1513,7 @@ class SpecialJump():
 		eDBoxLCD.getInstance().setLCDBrightness(value)
 
 	def restoreLCDBrightness(self):
+		if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG restoreLCDBrightness"
 		if Screens.Standby.inStandby:
 			self.setLCDBrightness(config.lcd.standby.getValue())
 		else:
