@@ -1,7 +1,9 @@
 SpecialJump
 ===========
 
-SpecialJump by Fischreiher
+Plugin zum schnellen manuellen Überspringen von Werbung (und mehr)
+------------------------------------------------------------------
+by Fischreiher
 
 Algorithmus:
 ------------
