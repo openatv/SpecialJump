@@ -176,7 +176,7 @@ Added display blanking
 Fixed wrong "display blanking" state variable after power-on from standby, this sometimes required pressing the "toggleLCDBlanking" key twice  
 When mixing "short" and "long" SpecialJumps, now the initial jump distance is used for every new type of SpecialJumps
 
-0.9
+0.9  
 Fixed potential issues with empty subtitlelist
 
 Postponed:  
