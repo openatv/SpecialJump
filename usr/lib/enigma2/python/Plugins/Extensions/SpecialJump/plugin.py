@@ -1319,7 +1319,10 @@ class SpecialJump():
 		subtitle = service and service.subtitle()
 		subtitlelist = subtitle and subtitle.getSubtitleList()
 		selectedidx = -1
-		n = len(subtitlelist)
+		try:
+			n = len(subtitlelist)
+		except:
+			n = 0
 		if n > 0:
 			idx = 0
 			for x in subtitlelist:
@@ -1370,7 +1373,10 @@ class SpecialJump():
 			idx += 1
 			#we return "idx+1", not "number", for always being consistent with "selectedidx"
 			streams.append((idx, description, language, selected, x))
-		n = len(subtitlelist)
+		try:
+			n = len(subtitlelist)
+		except:
+			n = 0
 		return (n, streams, selectedidx)
 		
 	def shutdown(self):
