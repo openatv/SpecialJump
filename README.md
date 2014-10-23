@@ -122,8 +122,21 @@ FAQ:
 7. Wie kann ich die SpecialJump-Infobar skinnen?  
       Die Skins aller Screens sind in plugin.py eingebettet, können aber durch Einträge in anderen skins, z.B. der skin\_user.xml, überschrieben werden.  
       Ein Template dafür, das auch die richtigen Screen-Namen enthält, liegt unter /usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/skin.xml - Diese Datei wird aber an dieser Stelle nicht verwendet und dient nur als Vorlage für Zusätze zur eigenen skin\_user.xml.
-  
-8. Wer hat Dir geholfen, dieses Plugin zu schreiben?  
+
+8. Wie lassen sich die Farbtasten mit den neuen Funktionen belegen?  
+      Hierzu ist es erforderlich, die Normalbelegung der Farbtasten zu deaktivieren:  
+      menu - system - settings - button setup - use image color buttons - no (bzw. in den settings: config.plisettings.ColouredButtons=false)  
+      Außerdem kann es noch weitere Funktionen im Image geben, die in der keymap deaktiviert werden müssen (vgl. Q2). Daraus ergibt sich z.B. ein keymap-Eintrag wie folgt:  
+      `<map context="SpecialJumpActions">`  
+      ` <key id="KEY_RED" mapto="specialjump_jump1" flags="m" />`  
+      `  <key id="KEY_RED" mapto="specialjump_doNothing" flags="brl" />`  
+      `</map>`  
+      `<map context="SpecialJumpMoviePlayerActions">`  
+      `  <key id="KEY_RED" mapto="specialjump_jump1" flags="m" />`  
+      `  <key id="KEY_RED" mapto="specialjump_doNothing" flags="brl" />`  
+      `</map>`
+
+9. Wer hat Dir geholfen, dieses Plugin zu schreiben?  
       So direkt eigentlich niemand. Die meisten Fragen, die ich in diversen Foren gestellt habe, waren leider so speziell, dass ich sie mir nur selbst durch Suchen und Probieren beantworten konnte. "Print" und Google waren meine besten Freunde.
       Die wertvollste Hilfe kam aus dem Quellcode anderer Plugins, ich danke insbesondere Dr.Best (Quickbutton), Emanuel (MultiQuickButton) und vlamo (Record Infobar), bei denen ich Anleihen genommen habe.
 
