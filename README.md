@@ -180,8 +180,8 @@ When mixing "short" and "long" SpecialJumps, now the initial jump distance is us
 Fixed potential issues with empty subtitlelist
 
 1.0  
-Workaround for Gigablue Quad/Plus driver 2014.12.16 for jumping into TS buffer from live TV (config.plugins.SpecialJump.algoVersion=2)
-Added EMC parental control
+Workaround for Gigablue Quad/Plus driver 2014.12.16 for jumping into TS buffer from live TV (config.plugins.SpecialJump.algoVersion=2)  
+Added EMC parental control  
 Fix infobar control by show_infobar_on_jumpPreviousNextMark
 
 Postponed:  
