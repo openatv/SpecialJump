@@ -75,6 +75,7 @@ config.plugins.SpecialJump = ConfigSubsection()
 config.plugins.SpecialJump.enable = ConfigYesNo(default=True)
 config.plugins.SpecialJump.mainmenu = ConfigYesNo(default=False)
 config.plugins.SpecialJump.show_infobar_on_jumpPreviousNextMark = ConfigSelection([("yes", _("yes")),("default", _("default"))], default="default")
+config.plugins.SpecialJump.show_infobar = ConfigYesNo(default=True)
 config.plugins.SpecialJump.debugEnable = ConfigYesNo(default=False)
 #config.plugins.SpecialJump.keyPriority = ConfigSelection([("0", _("0")),("-1", _("-1")),("-2", _("-2"))], default="0")
 
@@ -151,6 +152,15 @@ config.plugins.SpecialJump.audioVolumeNonTSVideoTrack3    = ConfigSelection(audi
 config.plugins.SpecialJump.audioVolumeNonTSVideoTrack4    = ConfigSelection(audioVolumes, default="no_change")
 config.plugins.SpecialJump.audioVolumeMuteDuringJump      = ConfigSelection(audioVolumes, default="0")
 
+config.plugins.SpecialJump.timeConstant1                  = ConfigInteger(default = 50,  limits  = (1, 999))
+config.plugins.SpecialJump.timeConstant2                  = ConfigInteger(default = 100, limits  = (1, 999))
+config.plugins.SpecialJump.algoVersion                    = ConfigSelection([("1", _("1")),("2", _("2")),("3", _("3")),("4", _("4")),("5", _("5")),("6", _("6")),("7", _("7"))], default="1")
+
+config.plugins.SpecialJump.EMCdirsHideOnPowerup           = ConfigYesNo(default=False)
+config.plugins.SpecialJump.EMCdirsShowWindowTitle         = ConfigText(default = "EMC parental control")
+config.plugins.SpecialJump.EMCdirsShowText                = ConfigText(default = "Enter PIN to show EMC hidden dirs")
+config.plugins.SpecialJump.EMCdirsShowPin                 = ConfigInteger(default  = 0000, limits  = (0, 9999))
+
 config.plugins.SpecialJump.separator = ConfigSelection([("na", _(" "))], default="na")
 
 SpecialJumpInstance = None
@@ -172,6 +182,7 @@ def autostart(reason, **kwargs):
 		InfoBarPlugins.__init__ = InfoBarPlugins__init__
 		InfoBarPlugins.specialjump_forwards             = specialjump_forwards
 		InfoBarPlugins.specialjump_backwards            = specialjump_backwards
+		InfoBarPlugins.specialjump_emcpin               = specialjump_emcpin
 		InfoBarPlugins.specialjump_debugmessagebox      = specialjump_debugmessagebox
 		InfoBarPlugins.specialjump_jump                 = specialjump_jump
 		InfoBarPlugins.specialjump_toggleSubtitleTrack  = specialjump_toggleSubtitleTrack
@@ -237,6 +248,7 @@ def InfoBarPlugins__init__(self):
 		 'specialjump_toggleSubtitleTrack': (self.specialjump_toggleSubtitleTrack, _('toggle subtitle track')),
 		 'specialjump_toggleAudioTrack':    (self.specialjump_toggleAudioTrack,    _('toggle audio track')),
 		 'specialjump_toggleLCDBlanking':   (self.specialjump_toggleLCDBlanking,   _('toggle LCD blanking')),
+		 'specialjump_emcpin':              (self.specialjump_emcpin,              _('enter parental control PIN for EMC hidden dirs')),
 		 'specialjump_debugmessagebox':     (self.specialjump_debugmessagebox,     _('show debug message box'))}
 		self['SpecialJumpActions'] = HelpableActionMap(self, 'SpecialJumpActions', x, prio=-2) # -2 for priority over InfoBarSeek SeekActions seekdef:1 etc.
 	elif isinstance(self, InfoBarShowMovies):
@@ -269,6 +281,7 @@ def InfoBarPlugins__init__(self):
 		 'specialjump_toggleSubtitleTrack': (self.specialjump_toggleSubtitleTrack, _('toggle subtitle track')),
 		 'specialjump_toggleAudioTrack':    (self.specialjump_toggleAudioTrack,    _('toggle audio track')),
 		 'specialjump_toggleLCDBlanking':   (self.specialjump_toggleLCDBlanking,   _('toggle LCD blanking')),
+		 'specialjump_emcpin':              (self.specialjump_emcpin,              _('enter parental control PIN for EMC hidden dirs')),
 		 'specialjump_debugmessagebox':     (self.specialjump_debugmessagebox,     _('show debug message box'))}
 		self['SpecialJumpMoviePlayerActions'] = HelpableActionMap(self, 'SpecialJumpMoviePlayerActions', x, prio=-2) # -2 for priority over InfoBarSeek SeekActions seekdef:1 etc.
 	else:
@@ -278,6 +291,7 @@ def InfoBarPlugins__init__(self):
 		InfoBarPlugins.specialjump_forwards = None
 		InfoBarPlugins.specialjump_backwards = None
 		InfoBarPlugins.specialjump_debugmessagebox = None
+		InfoBarPlugins.specialjump_emcpin = None
 		InfoBarPlugins.specialjump_jump = None
 		InfoBarPlugins.specialjump_toggleSubtitleTrack = None
 		InfoBarPlugins.specialjump_toggleAudioTrack = None
@@ -343,6 +357,8 @@ def specialjump_toggleLCDBlanking(self):
 def specialjump_debugmessagebox(self):
 	SpecialJump.debugmessagebox(SpecialJumpInstance,self)
 
+def specialjump_emcpin(self):
+	SpecialJump.specialJumpEMCpin(SpecialJumpInstance,self)
 #----------------------------------------------------------------------
 
 class SpecialJumpEventTracker(Screen):
@@ -663,6 +679,7 @@ class SpecialJumpConfiguration(Screen, ConfigListScreen):
 		#self.list.append(getConfigListEntry((_("Key priority (0 for image color buttons, -2 for SJ number keys")),                    config.plugins.SpecialJump.keyPriority))
 		self.list.append(getConfigListEntry((_("[OSD settings] Show infobar on skip (set to 'no' when using SpecialJump infobar)")),   config.usage.show_infobar_on_skip))
 		self.list.append(getConfigListEntry((_("[Timeshift settings] Show timeshift infobar")),                                        config.timeshift.showinfobar))
+		self.list.append(getConfigListEntry((_("Show SpecialJump infobar (set to 'yes')")),           config.plugins.SpecialJump.show_infobar))
 		self.list.append(getConfigListEntry((_("Show SpecialJump infobar on jumpNextMark/jumpPreviousMark (set to 'yes')")),           config.plugins.SpecialJump.show_infobar_on_jumpPreviousNextMark))
 		self.list.append(getConfigListEntry((_(" ")),                                                 config.plugins.SpecialJump.separator))
 		self.list.append(getConfigListEntry((_("__ Special jump __")),                                config.plugins.SpecialJump.separator))
@@ -737,7 +754,12 @@ class SpecialJumpConfiguration(Screen, ConfigListScreen):
 		self.list.append(getConfigListEntry((_(" ")),                                                 config.plugins.SpecialJump.separator))
 		self.list.append(getConfigListEntry((_("__ Toggle LCD brightness by key __")),                config.plugins.SpecialJump.separator))
 		self.list.append(getConfigListEntry((_("Turn LCD on again on event change")),                 config.plugins.SpecialJump.LCDonOnEventChange))
-		
+		self.list.append(getConfigListEntry((_(" ")),                                                 config.plugins.SpecialJump.separator))
+		self.list.append(getConfigListEntry((_("__ Gigablue Quad/Plus driver workaround __")),        config.plugins.SpecialJump.separator))
+		self.list.append(getConfigListEntry((_("Use algorithm (2=Quad/Plus, 1=others)")),             config.plugins.SpecialJump.algoVersion))
+		self.list.append(getConfigListEntry((_("Quad/Plus time constant 1 (author only)")),           config.plugins.SpecialJump.timeConstant1))
+		self.list.append(getConfigListEntry((_("Quad/Plus time constant 2 (author only)")),           config.plugins.SpecialJump.timeConstant2))
+
 	def changedEntry(self):
 		self.createConfigList()
 		self["config"].setList(self.list)
@@ -809,6 +831,11 @@ class SpecialJump():
 		self.SJZapDownTimer.timeout.get().append(self.specialJumpZapDownTimeout)
 		self.SJZapTimer=eTimer()           # timer for zapping speed limit
 		self.SJZapTimer.timeout.get().append(self.specialJumpZapTimeout)
+		self.SJWorkaround1Timer=eTimer()          # timer for a workaround (test)
+		self.SJWorkaround1Timer.timeout.get().append(self.specialJumpWorkaround1Timeout)
+		self.SJWorkaround2Timer=eTimer()          # timer for a workaround (test)
+		self.SJWorkaround2Timer.timeout.get().append(self.specialJumpWorkaround2Timeout)
+		self.WorkaroundPTS = 0
 		
 		self.InfoBar_instance         = None # always passed as an argument
 		# always use self.InfoBar_instance from parent (not global InfoBar.instance):
@@ -836,19 +863,41 @@ class SpecialJump():
 		if config.plugins.SpecialJump.debugEnable.getValue(): print datetime.now()
 		if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump powerOn"
 		self.SJLCDon = True
-
+		if config.plugins.SpecialJump.EMCdirsHideOnPowerup.getValue():
+			try:
+				#/etc/engima2/emc-hide.cfg
+				config.EMC.cfghide_enable.setValue(True)
+			except:
+				if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump could not set config.EMC.cfghide_enable True"
+		
 	def powerOff(self):
 		if config.plugins.SpecialJump.debugEnable.getValue(): print datetime.now()
 		if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump powerOff"
 		pass
-   				
+
 	def _onStandby(self, element):
 		if config.plugins.SpecialJump.debugEnable.getValue(): print datetime.now()
 		if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump _onStandby"
 		from Screens.Standby import inStandby
 		inStandby.onClose.append(self.powerOn)
 		self.powerOff()
-			
+
+	def specialJumpEMCpin(self,parent):
+		from Screens.InputBox import PinInput
+		self.session.openWithCallback(self.checkEMCpin, PinInput, pinList=[config.plugins.SpecialJump.EMCdirsShowPin.getValue()], triesEntry=config.ParentalControl.retries.servicepin, title=config.plugins.SpecialJump.EMCdirsShowText.getValue(), windowTitle=config.plugins.SpecialJump.EMCdirsShowWindowTitle.getValue())
+
+	def checkEMCpin(self, ret):
+		if ret is not None:
+			if ret:
+				if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump EMC PIN correct"
+				try:
+					config.EMC.cfghide_enable.setValue(False)
+				except:
+					if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump could not set config.EMC.cfghide_enable False"
+			else:
+				if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump EMC PIN incorrect"
+
+		
 	def specialJumpValue(self,index):
 		#I want arrays ...
 		if index == 0:
@@ -872,8 +921,8 @@ class SpecialJump():
 	def specialJumpStartTimerShowInfoBar(self, muteTime_ms):
 		self.SJTimer.stop()
 		self.SJTimer.start(int(config.plugins.SpecialJump.specialJumpTimeout_ms.getValue()))
-		#self.SpecialJumpInfoBar_instance.doShow(self,self) # grandparent_InfoBar
-		self.SpecialJumpInfoBar_instance.doShow(self,self.InfoBar_instance) # grandparent_InfoBar
+		if config.plugins.SpecialJump.show_infobar.getValue():
+			self.SpecialJumpInfoBar_instance.doShow(self,self.InfoBar_instance) # grandparent_InfoBar
 		self.specialJumpMute(muteTime_ms)
 
 	def specialJumpMute(self, muteTime_ms):
@@ -996,10 +1045,9 @@ class SpecialJump():
 			elif self.SJNextJumpIndex > initialJump:
 				self.SJNextJumpIndex += 1
 
-			self.activateTimeshiftIfNecessaryAndDoSeekRelative(- self.specialJumpValue(self.SJNextJumpIndex) * 90000)                
 			self.SJJumpTime     -= self.specialJumpValue(self.SJNextJumpIndex)
 			self.SJLastJumpDir   = -1
-			self.specialJumpStartTimerShowInfoBar(config.plugins.SpecialJump.specialJumpMuteTime_ms.getValue())
+			self.activateTimeshiftIfNecessaryAndDoSeekRelative(- self.specialJumpValue(self.SJNextJumpIndex) * 90000, config.plugins.SpecialJump.specialJumpMuteTime_ms.getValue())                
 			
 	def specialJumpForwards(self,parent,mode,initialJump):
 		self.InfoBar_instance = parent
@@ -1015,12 +1063,46 @@ class SpecialJump():
 			elif self.SJNextJumpIndex > initialJump:
 				self.SJNextJumpIndex += 1
 
-			self.activateTimeshiftIfNecessaryAndDoSeekRelative(self.specialJumpValue(self.SJNextJumpIndex) * 90000)            
 			self.SJJumpTime     += self.specialJumpValue(self.SJNextJumpIndex)
 			self.SJLastJumpDir   = 1
-			self.specialJumpStartTimerShowInfoBar(config.plugins.SpecialJump.specialJumpMuteTime_ms.getValue())
+			self.activateTimeshiftIfNecessaryAndDoSeekRelative(self.specialJumpValue(self.SJNextJumpIndex) * 90000, config.plugins.SpecialJump.specialJumpMuteTime_ms.getValue())
 
-	def activateTimeshiftIfNecessaryAndDoSeekRelative(self, pts):
+	def debugMessage(self,locationString):
+		if config.plugins.SpecialJump.debugEnable.getValue():
+			print '-----------------------------------------'
+			print '[SpecialJump] ', locationString
+			print '-----------------------------------------'
+			print 'date:',datetime.now()
+			seek = self.getSeek()
+			print 'self.InfoBar_instance:', self.InfoBar_instance
+			print 'seek:', seek
+			if seek.isCurrentlySeekable():
+				print "is  seek.isCurrentlySeekable()"
+			else:
+				print "not seek.isCurrentlySeekable()"
+			length  = seek.getLength()
+			playpos = seek.getPlayPosition()
+			print 'length/pos', length[1]/90000, playpos[1]/90000
+			if isinstance(self.InfoBar_instance, InfoBarShowMovies):
+				print "Infobar is MoviePlayer"
+			if isinstance(self.InfoBar_instance, InfoBarEPG):
+				print "Infobar is InfoBar"
+			print '-----------------------------------------'
+
+	def fixGigablueDriverProb(self,locationString):
+		#short version: getting length and pos seems to help
+		seek = self.getSeek()
+		length  = seek.getLength()
+		playpos = seek.getPlayPosition()
+			
+	def activateTimeshiftIfNecessaryAndDoSeekRelative(self, pts, MuteTime_ms):
+		if config.plugins.SpecialJump.algoVersion.getValue() == '1':
+			self.activateTimeshiftIfNecessaryAndDoSeekRelative_1(pts, MuteTime_ms)
+		if config.plugins.SpecialJump.algoVersion.getValue() == '2':
+			self.activateTimeshiftIfNecessaryAndDoSeekRelative_2(pts, MuteTime_ms)
+			
+	def activateTimeshiftIfNecessaryAndDoSeekRelative_1(self, pts, MuteTime_ms):
+		if config.plugins.SpecialJump.debugEnable.getValue(): print '[SpecialJump] activateTimeshiftIfNecessaryAndDoSeekRelative_1', pts, ' ', MuteTime_ms
 		if InfoBar and self.InfoBar_instance:
 			seek = self.getSeek()
 			if seek is not None:
@@ -1037,9 +1119,74 @@ class SpecialJump():
 				if needPauseService:
 					# workaround part II
 					self.pauseService()
+				self.specialJumpStartTimerShowInfoBar(MuteTime_ms)
+			else:
+				self.session.open(MessageBox,_("SpecialJump debug: no seek"), type = MessageBox.TYPE_ERROR,timeout = 2)
 		else:
 			self.session.open(MessageBox,_("SpecialJump debug: no (InfoBar and self.InfoBar_instance)"), type = MessageBox.TYPE_ERROR,timeout = 2)
 			
+	def activateTimeshiftIfNecessaryAndDoSeekRelative_2(self, pts, MuteTime_ms):
+		if config.plugins.SpecialJump.debugEnable.getValue(): print '[SpecialJump] activateTimeshiftIfNecessaryAndDoSeekRelative_2', pts, ' ', MuteTime_ms
+		print datetime.now()
+		if InfoBar and self.InfoBar_instance:
+			seek = self.getSeek()
+			if seek is not None:
+				if not seek.isCurrentlySeekable():
+					# OK without workarounds on Gigablue Quad with driver up to 2014.11.22
+					# Gigablue Quad driver 2014.12.16 requires workarounds:
+					# 4 to 6 calls of "self.fixGigablueDriverProb" for jumping into TS buffer from live TV (95% OK with 6 calls, 85% OK with 4 calls)
+					#
+					# also the following sequence no longer works with Gigablue Quad driver 2014.12.16:
+					# - play a .ts file
+					# - jump to A
+					# - rewind to B
+					# - stop  -> playback continues at A, not at B
+					# - infobar combinations:
+					# -- SJ-bar + InfoBar   SJ-bar causes the problem during jump
+					# -- SJ-bar             SJ-bar causes the problem during jump + "SJ-bar only" is affected during rewind
+					# -- InfoBar            nothing
+					# -- no bar             nothing
+					
+					# need to activate timeshift first
+					self.fixGigablueDriverProb('activateTimeshiftIfNecessaryAndDoSeekRelative_2 not seekable 1 / mandatory')
+					InfoBarTimeshift.activateTimeshiftEndAndPause(self.InfoBar_instance)
+					self.fixGigablueDriverProb('activateTimeshiftIfNecessaryAndDoSeekRelative_2 not seekable 2 / mandatory')
+					self.WorkaroundPTS = pts
+					self.WorkaroundMuteTime_ms = MuteTime_ms
+					self.SJWorkaround1Timer.start(config.plugins.SpecialJump.timeConstant1.getValue())
+					self.fixGigablueDriverProb('activateTimeshiftIfNecessaryAndDoSeekRelative_2 not seekable 3 started timer')
+				else:
+					needPauseService = False
+					if self.isSeekstatePaused():
+						# workaround for the bug that, when paused, multiple jumps are not possible (only the last one has effect at a time)
+						self.unPauseService()
+						needPauseService = True
+					InfoBarSeek.doSeekRelative(self.InfoBar_instance, pts)
+					if needPauseService:
+						# workaround part II
+						self.pauseService()
+					self.specialJumpStartTimerShowInfoBar(MuteTime_ms)
+			else:
+				self.session.open(MessageBox,_("SpecialJump debug: no seek"), type = MessageBox.TYPE_ERROR,timeout = 2)
+		else:
+			self.session.open(MessageBox,_("SpecialJump debug: no (InfoBar and self.InfoBar_instance)"), type = MessageBox.TYPE_ERROR,timeout = 2)
+
+	def specialJumpWorkaround1Timeout(self):
+		self.SJWorkaround1Timer.stop()
+		self.fixGigablueDriverProb('activateTimeshiftIfNecessaryAndDoSeekRelative_2 timer 1 a / mandatory')
+		InfoBarSeek.unPauseService(self.InfoBar_instance)
+		self.fixGigablueDriverProb('activateTimeshiftIfNecessaryAndDoSeekRelative_2 timer 1 b / mandatory')
+		self.SJWorkaround2Timer.start(config.plugins.SpecialJump.timeConstant2.getValue())
+
+	def specialJumpWorkaround2Timeout(self):
+		self.SJWorkaround2Timer.stop()
+		self.fixGigablueDriverProb('activateTimeshiftIfNecessaryAndDoSeekRelative_2 timer 2 a')
+		seek = self.getSeek()
+		pts = self.WorkaroundPTS
+		MuteTime_ms = self.WorkaroundMuteTime_ms
+		InfoBarSeek.doSeekRelative(self.InfoBar_instance, pts)
+		self.specialJumpStartTimerShowInfoBar(MuteTime_ms)
+	
 	def channelDown(self,parent,mode):
 		self.InfoBar_instance = parent
 		self.SJMode=mode
@@ -1186,12 +1333,11 @@ class SpecialJump():
 					(n, AudioTrackList, selected_track) = SpecialJump.getAudioTrackList(SpecialJumpInstance)
 					SpecialJump.specialJumpStartTimerShowAudioBox(SpecialJumpInstance, AudioTrackList, selected_track)
 				if doJump:
-					self.activateTimeshiftIfNecessaryAndDoSeekRelative(time_seconds * 90000)
 					self.SJJumpTime += time_seconds
 					if doMute:
-						self.specialJumpStartTimerShowInfoBar(config.plugins.SpecialJump.jumpMuteTime_ms.getValue())
+						self.activateTimeshiftIfNecessaryAndDoSeekRelative(time_seconds * 90000, config.plugins.SpecialJump.jumpMuteTime_ms.getValue())
 					else:
-						self.specialJumpStartTimerShowInfoBar(0)
+						self.activateTimeshiftIfNecessaryAndDoSeekRelative(time_seconds * 90000, 0)
 
 	def setNewVolumeWithBox(self,newVolume):
 		lastVolume = self.getAudioVolume()
@@ -1398,6 +1544,10 @@ class SpecialJump():
 		self.SJZapDownTimer = None
 		self.SJZapTimer.callback.remove(self.specialJumpZapTimeout)
 		self.SJZapTimer = None
+		self.SJWorkaround1Timer.callback.remove(self.specialJumpWorkaround1Timeout)
+		self.SJWorkaround1Timer = None
+		self.SJWorkaround2Timer.callback.remove(self.specialJumpWorkaround2Timeout)
+		self.SJWorkaround2Timer = None
 
 	def getSeek(self):
 		service = self.session.nav.getCurrentService()
@@ -1530,11 +1680,11 @@ class SpecialJump():
 		if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG jumpPreviousMark"
 		self.InfoBar_instance = parent
 		self.SJMode=mode
-		if config.plugins.SpecialJump.show_infobar_on_jumpPreviousNextMark.getValue():
+		if config.plugins.SpecialJump.show_infobar_on_jumpPreviousNextMark.getValue() == 'yes':
 			show_infobar_on_skip_lastValue = config.usage.show_infobar_on_skip.getValue()
 			config.usage.show_infobar_on_skip.setValue(True) # force showing infobar
 		InfoBarCueSheetSupport.jumpPreviousMark(self.InfoBar_instance)
-		if config.plugins.SpecialJump.show_infobar_on_jumpPreviousNextMark.getValue():
+		if config.plugins.SpecialJump.show_infobar_on_jumpPreviousNextMark.getValue() == 'yes':
 			config.usage.show_infobar_on_skip.setValue(show_infobar_on_skip_lastValue)
 		self.SJJumpTime = "jump >*"
 		#self.specialJumpStartTimerShowInfoBar(config.plugins.SpecialJump.jumpMuteTime_ms.getValue())
@@ -1545,11 +1695,11 @@ class SpecialJump():
 		if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG jumpNextMark"
 		self.InfoBar_instance = parent
 		self.SJMode=mode
-		if config.plugins.SpecialJump.show_infobar_on_jumpPreviousNextMark.getValue():
+		if config.plugins.SpecialJump.show_infobar_on_jumpPreviousNextMark.getValue() == 'yes':
 			show_infobar_on_skip_lastValue = config.usage.show_infobar_on_skip.getValue()
 			config.usage.show_infobar_on_skip.setValue(True) # force showing infobar
 		InfoBarCueSheetSupport.jumpNextMark(self.InfoBar_instance)
-		if config.plugins.SpecialJump.show_infobar_on_jumpPreviousNextMark.getValue():
+		if config.plugins.SpecialJump.show_infobar_on_jumpPreviousNextMark.getValue() == 'yes':
 			config.usage.show_infobar_on_skip.setValue(show_infobar_on_skip_lastValue)
 		self.SJJumpTime = "jump *<"
 		#self.specialJumpStartTimerShowInfoBar(config.plugins.SpecialJump.jumpMuteTime_ms.getValue())
@@ -1590,13 +1740,6 @@ class SpecialJump():
 
 			#messageString += _("getAudioVolume =%d\n\n" % self.getAudioVolume())
 						
-			#try:
-			#    if os.path.exists('/usr/lib/enigma2/python/Plugins/Extensions/EnhancedMovieCenter/plugin.pyo'):
-			#        for plugin in plugins.getPlugins(PluginDescriptor.WHERE_PLUGINMENU):
-			#            messageString += _("plugin found =%s\n" % plugin.name)
-			#except:
-			#    messageString += _("EMC_6 fail\n\n")
-
 			if isinstance(self.InfoBar_instance, InfoBarShowMovies):
 				messageString += _("Infobar is MoviePlayer\n")
 			#else:
