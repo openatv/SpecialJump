@@ -1717,11 +1717,11 @@ class SpecialJump():
 		self.SJJumpTime = 0
 
 	#from Plugins/Extensions/Infopanel/plugin.py
-	def command(self,comandline, strip=1):
-		comandline = comandline + " >/tmp/command.txt"
-		print 'LBA1 ',comandline
-		os.system(comandline)
-		print 'LBA2 ',comandline
+	def command(self,commandline, strip=1):
+		commandline = commandline + " >/tmp/command.txt"
+		print 'LBA1 ',commandline
+		os.system(commandline)
+		print 'LBA2 ',commandline
 		text = ""
 		if os.path.exists("/tmp/command.txt") is True:
 			file = open("/tmp/command.txt", "r")
@@ -1735,7 +1735,7 @@ class SpecialJump():
 			file.close()
 		# if one or last line then remove linefeed
 		if text[-1:] == '\n': text = text[:-1]
-		#os.system("rm /tmp/command.txt")
+		os.system("rm /tmp/command.txt")
 		return text
 		
 	def debugmessagebox(self,parent):
