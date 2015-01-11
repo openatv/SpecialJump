@@ -1134,13 +1134,14 @@ class SpecialJump():
 				if not seek.isCurrentlySeekable():
 					# OK without workarounds on Gigablue Quad with driver up to 2014.11.22
 					# Gigablue Quad driver 2014.12.16 requires workarounds:
-					# 4 to 6 calls of "self.fixGigablueDriverProb" for jumping into TS buffer from live TV (95% OK with 6 calls, 85% OK with 4 calls)
+					# - pauses between steps (by timers)
+					# - 4 to 6 calls of "self.fixGigablueDriverProb" for jumping into TS buffer from live TV (95% OK with 6 calls, 85% OK with 4 calls)
 					#
 					# also the following sequence no longer works with Gigablue Quad driver 2014.12.16:
 					# - play a .ts file
 					# - jump to A
 					# - rewind to B
-					# - stop  -> playback continues at A, not at B
+					# - OK  -> playback continues at A, not at B
 					# - infobar combinations:
 					# -- SJ-bar + InfoBar   SJ-bar causes the problem during jump
 					# -- SJ-bar             SJ-bar causes the problem during jump + "SJ-bar only" is affected during rewind
@@ -1714,7 +1715,29 @@ class SpecialJump():
 		self.SJJumpTime = "toggle mark"
 		#self.specialJumpStartTimerShowInfoBar(config.plugins.SpecialJump.jumpMuteTime_ms.getValue())
 		self.SJJumpTime = 0
-				
+
+	#from Plugins/Extensions/Infopanel/plugin.py
+	def command(self,comandline, strip=1):
+		comandline = comandline + " >/tmp/command.txt"
+		print 'LBA1 ',comandline
+		os.system(comandline)
+		print 'LBA2 ',comandline
+		text = ""
+		if os.path.exists("/tmp/command.txt") is True:
+			file = open("/tmp/command.txt", "r")
+			if strip == 1:
+				for line in file:
+					text = text + line.strip() + '\n'
+			else:
+				for line in file:
+					text = text + line
+					if text[-1:] != '\n': text = text + "\n"
+			file.close()
+		# if one or last line then remove linefeed
+		if text[-1:] == '\n': text = text[:-1]
+		#os.system("rm /tmp/command.txt")
+		return text
+		
 	def debugmessagebox(self,parent):
 		self.InfoBar_instance = parent
 		service = self.session.nav.getCurrentService()
@@ -1738,92 +1761,120 @@ class SpecialJump():
 			timeshift_file_kB = self.getTimeshiftFileSize_kB()
 			messageString += _("timeshift file length =%d kbytes / estimated %ds\n\n" % (timeshift_file_kB,timeshift_file_kB/1000))
 
-			#messageString += _("getAudioVolume =%d\n\n" % self.getAudioVolume())
-						
-			if isinstance(self.InfoBar_instance, InfoBarShowMovies):
-				messageString += _("Infobar is MoviePlayer\n")
-			#else:
-			#    messageString += _("Infobar is not MoviePlayer\n")
-			if isinstance(self.InfoBar_instance, InfoBarEPG):
-				messageString += _("Infobar is InfoBar\n\n")
-			#else:
-			#    messageString += _("Infobar is not InfoBar\n\n")  
-
-			messageString += _("global InfoBar.instance.seekstate = (%s, %s, %s, %s)\n"   % (InfoBar.instance.seekstate[0],InfoBar.instance.seekstate[1],InfoBar.instance.seekstate[2],InfoBar.instance.seekstate[3]))
-			messageString += _("parent InfoBar_instance.seekstate = (%s, %s, %s, %s)\n\n" % (self.InfoBar_instance.seekstate[0],self.InfoBar_instance.seekstate[1],self.InfoBar_instance.seekstate[2],self.InfoBar_instance.seekstate[3]))
-
-			messageString += _("self.starttime = %s\n\n" % self.starttime)
+			# audio volume
+			if False:
+				messageString += _("getAudioVolume =%d\n\n" % self.getAudioVolume())
 			
-			info = service.info()
-			video_height = int(info.getInfo(iServiceInformation.sVideoHeight))
-			video_width = int(info.getInfo(iServiceInformation.sVideoWidth))
-			video_pol = ('i', 'p')[info.getInfo(iServiceInformation.sProgressive)]
-			video_rate = int(info.getInfo(iServiceInformation.sFrameRate))
-			messageString += _("Video content: %ix%i%s %iHz\n") % (video_width, video_height, video_pol, (video_rate + 500) / 1000)
+			# infobar instance
+			if False:
+				if isinstance(self.InfoBar_instance, InfoBarShowMovies):
+					messageString += _("Infobar is MoviePlayer\n")
+				#else:
+				#    messageString += _("Infobar is not MoviePlayer\n")
+				if isinstance(self.InfoBar_instance, InfoBarEPG):
+					messageString += _("Infobar is InfoBar\n\n")
+				#else:
+				#    messageString += _("Infobar is not InfoBar\n\n")  
 
-			if path.exists('/proc/stb/vmpeg/0/clip_left'):
-				f = open('/proc/stb/vmpeg/0/clip_left', 'r')
-				clip_left = int(f.read(), 16)
-				f.close()
-			else:
-				clip_left = -999
-			if path.exists('/proc/stb/vmpeg/0/clip_width'):
-				f = open('/proc/stb/vmpeg/0/clip_width', 'r')
-				clip_width = int(f.read(), 16)
-				f.close()
-			else:
-				clip_width = -999
-			if path.exists('/proc/stb/vmpeg/0/clip_top'):
-				f = open('/proc/stb/vmpeg/0/clip_top', 'r')
-				clip_top = int(f.read(), 16)
-				f.close()
-			else:
-				clip_top = -999
-			if path.exists('/proc/stb/vmpeg/0/clip_height'):
-				f = open('/proc/stb/vmpeg/0/clip_height', 'r')
-				clip_height = int(f.read(), 16)
-				f.close()
-			else:
-				clip_height = -999
-			messageString += _("/proc/stb/vmpeg/0 clip: left=%i/w=%i / top=%i/h=%i/\n" % (clip_left, clip_width, clip_top, clip_height))
-  
-			if path.exists('/proc/stb/vmpeg/0/yres'):
-				f = open('/proc/stb/vmpeg/0/yres', 'r')
-				video_height = int(f.read(), 16)
-				f.close()
-			if path.exists('/proc/stb/vmpeg/0/xres'):
-				f = open('/proc/stb/vmpeg/0/xres', 'r')
-				video_width = int(f.read(), 16)
-				f.close()
-			if path.exists('/proc/stb/vmpeg/0/progressive'):
-				f = open('/proc/stb/vmpeg/0/progressive', 'r')
-				video_pol = 'p' if int(f.read(), 16) else 'i'
-				f.close()
-			if path.exists('/proc/stb/vmpeg/0/framerate'):
-				f = open('/proc/stb/vmpeg/0/framerate', 'r')
+			# infobar seekstate
+			if True:
+				messageString += _("global InfoBar.instance.seekstate = (%s, %s, %s, %s)\n"   % (InfoBar.instance.seekstate[0],InfoBar.instance.seekstate[1],InfoBar.instance.seekstate[2],InfoBar.instance.seekstate[3]))
+				messageString += _("parent InfoBar_instance.seekstate = (%s, %s, %s, %s)\n\n" % (self.InfoBar_instance.seekstate[0],self.InfoBar_instance.seekstate[1],self.InfoBar_instance.seekstate[2],self.InfoBar_instance.seekstate[3]))
+
+			# start time
+			if False:
+				messageString += _("self.starttime = %s\n\n" % self.starttime)
+			
+			# sdb1 status
+			if True:
 				try:
-					video_rate = int(f.read())
+					sdb1_status = self.command('hdparm -C /dev/sdb1')
 				except:
-					video_rate = -999
-				f.close()
-			messageString += _("/proc/stb/vmpeg/0: %ix%i%s / %i\n" % (video_width, video_height, video_pol, video_rate))
+					sdb1_status = '(command failed)'
+				messageString += _("hdparm -C /dev/sdb1 = %s\n\n" % sdb1_status)               
 			
-			f = open('/proc/stb/video/videomode')
-			current_mode = f.read()[:-1].replace('\n', '')
-			f.close()
-			messageString += _("/proc/stb/video/videomode=%s\n\n" % current_mode)
+			# video geometries 1
+			if True:
+				info = service.info()
+				video_height = int(info.getInfo(iServiceInformation.sVideoHeight))
+				video_width = int(info.getInfo(iServiceInformation.sVideoWidth))
+				video_pol = ('i', 'p')[info.getInfo(iServiceInformation.sProgressive)]
+				video_rate = int(info.getInfo(iServiceInformation.sFrameRate))
+				messageString += _("Video content: %ix%i%s %iHz\n") % (video_width, video_height, video_pol, (video_rate + 500) / 1000)
 
-			(n,SubtitleTrackList,selectedidx) = self.getSubtitleTrackList()
-			for x in SubtitleTrackList:
-				messageString += _("ST (%d, %d, %d, %d) / %s / %s / %s / %s\n" % (x[4][0], x[4][1], x[4][2], x[4][3], x[0],x[1],x[2],x[3]))
-			if self.InfoBar_instance.selected_subtitle:
-				messageString += _("self.InfoBar_instance.selected_subtitle=(%d, %d, %d, %d)\n\n" % (self.InfoBar_instance.selected_subtitle[0], self.InfoBar_instance.selected_subtitle[1], self.InfoBar_instance.selected_subtitle[2], self.InfoBar_instance.selected_subtitle[3]))
-			else:
-				messageString += _("self.InfoBar_instance.selected_subtitle=None\n\n")
+			# video clipping
+			if False:
+				if path.exists('/proc/stb/vmpeg/0/clip_left'):
+					f = open('/proc/stb/vmpeg/0/clip_left', 'r')
+					clip_left = int(f.read(), 16)
+					f.close()
+				else:
+					clip_left = -999
+				if path.exists('/proc/stb/vmpeg/0/clip_width'):
+					f = open('/proc/stb/vmpeg/0/clip_width', 'r')
+					clip_width = int(f.read(), 16)
+					f.close()
+				else:
+					clip_width = -999
+				if path.exists('/proc/stb/vmpeg/0/clip_top'):
+					f = open('/proc/stb/vmpeg/0/clip_top', 'r')
+					clip_top = int(f.read(), 16)
+					f.close()
+				else:
+					clip_top = -999
+				if path.exists('/proc/stb/vmpeg/0/clip_height'):
+					f = open('/proc/stb/vmpeg/0/clip_height', 'r')
+					clip_height = int(f.read(), 16)
+					f.close()
+				else:
+					clip_height = -999
+				messageString += _("/proc/stb/vmpeg/0 clip: left=%i/w=%i / top=%i/h=%i/\n" % (clip_left, clip_width, clip_top, clip_height))
+  
+			# video geometries 2
+			if True:
+				if path.exists('/proc/stb/vmpeg/0/yres'):
+					f = open('/proc/stb/vmpeg/0/yres', 'r')
+					video_height = int(f.read(), 16)
+					f.close()
+				if path.exists('/proc/stb/vmpeg/0/xres'):
+					f = open('/proc/stb/vmpeg/0/xres', 'r')
+					video_width = int(f.read(), 16)
+					f.close()
+				if path.exists('/proc/stb/vmpeg/0/progressive'):
+					f = open('/proc/stb/vmpeg/0/progressive', 'r')
+					video_pol = 'p' if int(f.read(), 16) else 'i'
+					f.close()
+				if path.exists('/proc/stb/vmpeg/0/framerate'):
+					f = open('/proc/stb/vmpeg/0/framerate', 'r')
+					try:
+						video_rate = int(f.read())
+					except:
+						video_rate = -999
+					f.close()
+				messageString += _("/proc/stb/vmpeg/0: %ix%i%s / %i\n" % (video_width, video_height, video_pol, video_rate))
+			
+			# video mode
+			if True:
+				f = open('/proc/stb/video/videomode')
+				current_mode = f.read()[:-1].replace('\n', '')
+				f.close()
+				messageString += _("/proc/stb/video/videomode=%s\n\n" % current_mode)
 
-			(n,AudioTrackList,selectedidx) = self.getAudioTrackList()        
-			for x in AudioTrackList:
-				messageString += _("AudioTrack %s / %s / %s / %s\n" % (x[0],x[1],x[2],x[3]))
+			# subtitle tracks
+			if False:
+				(n,SubtitleTrackList,selectedidx) = self.getSubtitleTrackList()
+				for x in SubtitleTrackList:
+					messageString += _("ST (%d, %d, %d, %d) / %s / %s / %s / %s\n" % (x[4][0], x[4][1], x[4][2], x[4][3], x[0],x[1],x[2],x[3]))
+				if self.InfoBar_instance.selected_subtitle:
+					messageString += _("self.InfoBar_instance.selected_subtitle=(%d, %d, %d, %d)\n\n" % (self.InfoBar_instance.selected_subtitle[0], self.InfoBar_instance.selected_subtitle[1], self.InfoBar_instance.selected_subtitle[2], self.InfoBar_instance.selected_subtitle[3]))
+				else:
+					messageString += _("self.InfoBar_instance.selected_subtitle=None\n\n")
+
+			# audio tracks
+			if False:
+				(n,AudioTrackList,selectedidx) = self.getAudioTrackList()        
+				for x in AudioTrackList:
+					messageString += _("AudioTrack %s / %s / %s / %s\n" % (x[0],x[1],x[2],x[3]))
 
 			self.session.open(MessageBox, messageString, type = MessageBox.TYPE_ERROR,timeout = 10)
 	
