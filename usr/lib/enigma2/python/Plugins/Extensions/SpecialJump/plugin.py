@@ -184,6 +184,8 @@ def autostart(reason, **kwargs):
 		InfoBarPlugins.specialjump_backwards            = specialjump_backwards
 		InfoBarPlugins.specialjump_emcpin               = specialjump_emcpin
 		InfoBarPlugins.specialjump_debugmessagebox      = specialjump_debugmessagebox
+		InfoBarPlugins.specialjump_startTeletext        = specialjump_startTeletext
+		InfoBarPlugins.specialjump_toggleSubtitleTrack_skipTeletext         = specialjump_toggleSubtitleTrack_skipTeletext
 		InfoBarPlugins.specialjump_jump                 = specialjump_jump
 		InfoBarPlugins.specialjump_toggleSubtitleTrack  = specialjump_toggleSubtitleTrack
 		InfoBarPlugins.specialjump_toggleAudioTrack     = specialjump_toggleAudioTrack
@@ -249,7 +251,9 @@ def InfoBarPlugins__init__(self):
 		 'specialjump_toggleAudioTrack':    (self.specialjump_toggleAudioTrack,    _('toggle audio track')),
 		 'specialjump_toggleLCDBlanking':   (self.specialjump_toggleLCDBlanking,   _('toggle LCD blanking')),
 		 'specialjump_emcpin':              (self.specialjump_emcpin,              _('enter parental control PIN for EMC hidden dirs')),
-		 'specialjump_debugmessagebox':     (self.specialjump_debugmessagebox,     _('show debug message box'))}
+		 'specialjump_debugmessagebox':     (self.specialjump_debugmessagebox,     _('show debug message box')),
+		 'specialjump_startTeletext':       (self.specialjump_startTeletext,       _('start teletext')),
+		 'specialjump_toggleSubtitleTrack_skipTeletext':        (self.specialjump_toggleSubtitleTrack_skipTeletext,        _('skip teletext activation'))}
 		self['SpecialJumpActions'] = HelpableActionMap(self, 'SpecialJumpActions', x, prio=-2) # -2 for priority over InfoBarSeek SeekActions seekdef:1 etc.
 	elif isinstance(self, InfoBarShowMovies):
 		if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG isinstance(self, InfoBarShowMovies)"
@@ -282,7 +286,9 @@ def InfoBarPlugins__init__(self):
 		 'specialjump_toggleAudioTrack':    (self.specialjump_toggleAudioTrack,    _('toggle audio track')),
 		 'specialjump_toggleLCDBlanking':   (self.specialjump_toggleLCDBlanking,   _('toggle LCD blanking')),
 		 'specialjump_emcpin':              (self.specialjump_emcpin,              _('enter parental control PIN for EMC hidden dirs')),
-		 'specialjump_debugmessagebox':     (self.specialjump_debugmessagebox,     _('show debug message box'))}
+		 'specialjump_debugmessagebox':     (self.specialjump_debugmessagebox,     _('show debug message box')),
+		 'specialjump_startTeletext':       (self.specialjump_startTeletext,       _('start teletext')),
+		 'specialjump_toggleSubtitleTrack_skipTeletext':        (self.specialjump_toggleSubtitleTrack_skipTeletext,        _('skip teletext activation'))}
 		self['SpecialJumpMoviePlayerActions'] = HelpableActionMap(self, 'SpecialJumpMoviePlayerActions', x, prio=-2) # -2 for priority over InfoBarSeek SeekActions seekdef:1 etc.
 	else:
 		if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG NOT isinstance(self, ...)"
@@ -291,6 +297,8 @@ def InfoBarPlugins__init__(self):
 		InfoBarPlugins.specialjump_forwards = None
 		InfoBarPlugins.specialjump_backwards = None
 		InfoBarPlugins.specialjump_debugmessagebox = None
+		InfoBarPlugins.specialjump_startTeletext = None
+		InfoBarPlugins.specialjump_toggleSubtitleTrack_skipTeletext = None
 		InfoBarPlugins.specialjump_emcpin = None
 		InfoBarPlugins.specialjump_jump = None
 		InfoBarPlugins.specialjump_toggleSubtitleTrack = None
@@ -356,6 +364,13 @@ def specialjump_toggleLCDBlanking(self):
 			
 def specialjump_debugmessagebox(self):
 	SpecialJump.debugmessagebox(SpecialJumpInstance,self)
+
+def specialjump_startTeletext(self):
+	SpecialJump.startTeletext(SpecialJumpInstance,self)
+
+def specialjump_toggleSubtitleTrack_skipTeletext(self):
+	SpecialJump.toggleSubtitleTrack(SpecialJumpInstance,self)
+	SpecialJump.skipTeletext(SpecialJumpInstance,self)
 
 def specialjump_emcpin(self):
 	SpecialJump.specialJumpEMCpin(SpecialJumpInstance,self)
@@ -812,6 +827,7 @@ class SpecialJump():
 		self.SJZapTimerActive      = False # for zapping speed limit: timer starts when last zapped
 		self.SJZapUpTimerActive    = False # for zapping from timeshift instead of play/pause by pressing KEY_CHANNELUP/DOWN twice quickly: time starts when last "zap up" was blocked
 		self.SJZapDownTimerActive  = False # for zapping from timeshift instead of play/pause by pressing KEY_CHANNELUP/DOWN twice quickly: time starts when last "zap down" was blocked
+		self.skipTeletextActivation = False # see below
 		
 		self.SJTimer=eTimer()              # timer for specialJump timeout
 		self.SJTimer.timeout.get().append(self.specialJumpTimeout)
@@ -1737,6 +1753,16 @@ class SpecialJump():
 		if text[-1:] == '\n': text = text[:-1]
 		os.system("rm /tmp/command.txt")
 		return text
+
+	def skipTeletext(self,parent):
+		# avoid "break" action "startTeletext" when "long" action of the same key is executed quickly without changing the context
+		self.skipTeletextActivation = True
+
+	def startTeletext(self,parent):
+		if self.skipTeletextActivation is False:
+			self.InfoBar_instance = parent
+			self.InfoBar_instance.teletext_plugin(session=self.session, service=self.session.nav.getCurrentService())
+		self.skipTeletextActivation = False
 		
 	def debugmessagebox(self,parent):
 		self.InfoBar_instance = parent
@@ -1875,6 +1901,6 @@ class SpecialJump():
 				(n,AudioTrackList,selectedidx) = self.getAudioTrackList()        
 				for x in AudioTrackList:
 					messageString += _("AudioTrack %s / %s / %s / %s\n" % (x[0],x[1],x[2],x[3]))
-
+					
 			self.session.open(MessageBox, messageString, type = MessageBox.TYPE_ERROR,timeout = 10)
 	
