@@ -220,42 +220,7 @@ def Plugins(**kwargs):
 	return list
 
 def InfoBarPlugins__init__(self):
-	if isinstance(self, InfoBarEPG):
-		if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG isinstance(self, InfoBarEPG)"
-		if config.plugins.SpecialJump.debugEnable.getValue(): print datetime.now()
-		x = {'specialjump_forwards':        (boundFunction(self.specialjump_forwards,"TV","normal"),  _('SpecialJump forwards')),
-		 'specialjump_backwards':           (boundFunction(self.specialjump_backwards,"TV","normal"), _('SpecialJump backwards')),
-		 'specialjump_forwards_small':      (boundFunction(self.specialjump_forwards,"TV","small"),  _('SpecialJump forwards small')),
-		 'specialjump_backwards_small':     (boundFunction(self.specialjump_backwards,"TV","small"), _('SpecialJump backwards small')),
-		 'specialjump_jump1':               (boundFunction(self.specialjump_jump,"TV", "J1"), _('programmable jump 1')),
-		 'specialjump_jump2':               (boundFunction(self.specialjump_jump,"TV", "J2"), _('programmable jump 2')),
-		 'specialjump_jump3':               (boundFunction(self.specialjump_jump,"TV", "J3"), _('programmable jump 3')),
-		 'specialjump_jump4':               (boundFunction(self.specialjump_jump,"TV", "J4"), _('programmable jump 4')),
-		 'specialjump_jump5':               (boundFunction(self.specialjump_jump,"TV", "J5"), _('programmable jump 5')),
-		 'specialjump_jump6':               (boundFunction(self.specialjump_jump,"TV", "J6"), _('programmable jump 6')),
-		 'specialjump_jump7':               (boundFunction(self.specialjump_jump,"TV", "J7"), _('programmable jump 7')),
-		 'specialjump_jump8':               (boundFunction(self.specialjump_jump,"TV", "J8"), _('programmable jump 8')),
-		 'specialjump_jumpkey1':            (boundFunction(self.specialjump_jump,"TV", "K1"), _('programmable jump key 1')),
-		 'specialjump_jumpkey4':            (boundFunction(self.specialjump_jump,"TV", "K4"), _('programmable jump key 4')),
-		 'specialjump_jumpkey7':            (boundFunction(self.specialjump_jump,"TV", "K7"), _('programmable jump key 7')),
-		 'specialjump_jumpkey3':            (boundFunction(self.specialjump_jump,"TV", "K3"), _('programmable jump key 3')),
-		 'specialjump_jumpkey6':            (boundFunction(self.specialjump_jump,"TV", "K6"), _('programmable jump key 6')),
-		 'specialjump_jumpkey9':            (boundFunction(self.specialjump_jump,"TV", "K9"), _('programmable jump key 9')),
-		 'specialjump_channelDown':         (boundFunction(self.specialjump_channelDown,"TV"),      _('KEY_CHANNELDOWN combined pause/zap function')),
-		 'specialjump_channelUp':           (boundFunction(self.specialjump_channelUp,  "TV"),      _('KEY_CHANNELUP   combined  play/zap function')),
-		 'specialjump_jumpPreviousMark':    (boundFunction(self.specialjump_jumpPreviousMark,"TV"), _('jump to previous mark')),
-		 'specialjump_jumpNextMark':        (boundFunction(self,specialjump_jumpNextMark,"TV"),     _('jump to next mark')),
-		 'specialjump_toggleMark':          (boundFunction(self.specialjump_toggleMark,"TV"),       _('toggle mark')),
-		 'specialjump_doNothing':           (self.specialjump_doNothing, _('do nothing')),
-		 'specialjump_toggleSubtitleTrack': (self.specialjump_toggleSubtitleTrack, _('toggle subtitle track')),
-		 'specialjump_toggleAudioTrack':    (self.specialjump_toggleAudioTrack,    _('toggle audio track')),
-		 'specialjump_toggleLCDBlanking':   (self.specialjump_toggleLCDBlanking,   _('toggle LCD blanking')),
-		 'specialjump_emcpin':              (self.specialjump_emcpin,              _('enter parental control PIN for EMC hidden dirs')),
-		 'specialjump_debugmessagebox':     (self.specialjump_debugmessagebox,     _('show debug message box')),
-		 'specialjump_startTeletext':       (self.specialjump_startTeletext,       _('start teletext')),
-		 'specialjump_toggleSubtitleTrack_skipTeletext':        (self.specialjump_toggleSubtitleTrack_skipTeletext,        _('skip teletext activation'))}
-		self['SpecialJumpActions'] = HelpableActionMap(self, 'SpecialJumpActions', x, prio=-2) # -2 for priority over InfoBarSeek SeekActions seekdef:1 etc.
-	elif isinstance(self, InfoBarShowMovies):
+	if isinstance(self, InfoBarShowMovies):
 		if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG isinstance(self, InfoBarShowMovies)"
 		if config.plugins.SpecialJump.debugEnable.getValue(): print datetime.now()
 		x = {'specialjump_forwards':        (boundFunction(self.specialjump_forwards,"MP","normal"),  _('SpecialJump forwards')),
@@ -290,6 +255,41 @@ def InfoBarPlugins__init__(self):
 		 'specialjump_startTeletext':       (self.specialjump_startTeletext,       _('start teletext')),
 		 'specialjump_toggleSubtitleTrack_skipTeletext':        (self.specialjump_toggleSubtitleTrack_skipTeletext,        _('skip teletext activation'))}
 		self['SpecialJumpMoviePlayerActions'] = HelpableActionMap(self, 'SpecialJumpMoviePlayerActions', x, prio=-2) # -2 for priority over InfoBarSeek SeekActions seekdef:1 etc.
+	elif isinstance(self, InfoBarEPG):
+		if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG isinstance(self, InfoBarEPG)"
+		if config.plugins.SpecialJump.debugEnable.getValue(): print datetime.now()
+		x = {'specialjump_forwards':        (boundFunction(self.specialjump_forwards,"TV","normal"),  _('SpecialJump forwards')),
+		 'specialjump_backwards':           (boundFunction(self.specialjump_backwards,"TV","normal"), _('SpecialJump backwards')),
+		 'specialjump_forwards_small':      (boundFunction(self.specialjump_forwards,"TV","small"),  _('SpecialJump forwards small')),
+		 'specialjump_backwards_small':     (boundFunction(self.specialjump_backwards,"TV","small"), _('SpecialJump backwards small')),
+		 'specialjump_jump1':               (boundFunction(self.specialjump_jump,"TV", "J1"), _('programmable jump 1')),
+		 'specialjump_jump2':               (boundFunction(self.specialjump_jump,"TV", "J2"), _('programmable jump 2')),
+		 'specialjump_jump3':               (boundFunction(self.specialjump_jump,"TV", "J3"), _('programmable jump 3')),
+		 'specialjump_jump4':               (boundFunction(self.specialjump_jump,"TV", "J4"), _('programmable jump 4')),
+		 'specialjump_jump5':               (boundFunction(self.specialjump_jump,"TV", "J5"), _('programmable jump 5')),
+		 'specialjump_jump6':               (boundFunction(self.specialjump_jump,"TV", "J6"), _('programmable jump 6')),
+		 'specialjump_jump7':               (boundFunction(self.specialjump_jump,"TV", "J7"), _('programmable jump 7')),
+		 'specialjump_jump8':               (boundFunction(self.specialjump_jump,"TV", "J8"), _('programmable jump 8')),
+		 'specialjump_jumpkey1':            (boundFunction(self.specialjump_jump,"TV", "K1"), _('programmable jump key 1')),
+		 'specialjump_jumpkey4':            (boundFunction(self.specialjump_jump,"TV", "K4"), _('programmable jump key 4')),
+		 'specialjump_jumpkey7':            (boundFunction(self.specialjump_jump,"TV", "K7"), _('programmable jump key 7')),
+		 'specialjump_jumpkey3':            (boundFunction(self.specialjump_jump,"TV", "K3"), _('programmable jump key 3')),
+		 'specialjump_jumpkey6':            (boundFunction(self.specialjump_jump,"TV", "K6"), _('programmable jump key 6')),
+		 'specialjump_jumpkey9':            (boundFunction(self.specialjump_jump,"TV", "K9"), _('programmable jump key 9')),
+		 'specialjump_channelDown':         (boundFunction(self.specialjump_channelDown,"TV"),      _('KEY_CHANNELDOWN combined pause/zap function')),
+		 'specialjump_channelUp':           (boundFunction(self.specialjump_channelUp,  "TV"),      _('KEY_CHANNELUP   combined  play/zap function')),
+		 'specialjump_jumpPreviousMark':    (boundFunction(self.specialjump_jumpPreviousMark,"TV"), _('jump to previous mark')),
+		 'specialjump_jumpNextMark':        (boundFunction(self,specialjump_jumpNextMark,"TV"),     _('jump to next mark')),
+		 'specialjump_toggleMark':          (boundFunction(self.specialjump_toggleMark,"TV"),       _('toggle mark')),
+		 'specialjump_doNothing':           (self.specialjump_doNothing, _('do nothing')),
+		 'specialjump_toggleSubtitleTrack': (self.specialjump_toggleSubtitleTrack, _('toggle subtitle track')),
+		 'specialjump_toggleAudioTrack':    (self.specialjump_toggleAudioTrack,    _('toggle audio track')),
+		 'specialjump_toggleLCDBlanking':   (self.specialjump_toggleLCDBlanking,   _('toggle LCD blanking')),
+		 'specialjump_emcpin':              (self.specialjump_emcpin,              _('enter parental control PIN for EMC hidden dirs')),
+		 'specialjump_debugmessagebox':     (self.specialjump_debugmessagebox,     _('show debug message box')),
+		 'specialjump_startTeletext':       (self.specialjump_startTeletext,       _('start teletext')),
+		 'specialjump_toggleSubtitleTrack_skipTeletext':        (self.specialjump_toggleSubtitleTrack_skipTeletext,        _('skip teletext activation'))}
+		self['SpecialJumpActions'] = HelpableActionMap(self, 'SpecialJumpActions', x, prio=-2) # -2 for priority over InfoBarSeek SeekActions seekdef:1 etc.
 	else:
 		if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG NOT isinstance(self, ...)"
 		InfoBarPlugins.__init__ = InfoBarPlugins.__init__
@@ -1792,15 +1792,16 @@ class SpecialJump():
 				messageString += _("getAudioVolume =%d\n\n" % self.getAudioVolume())
 			
 			# infobar instance
-			if False:
+			if True:
 				if isinstance(self.InfoBar_instance, InfoBarShowMovies):
 					messageString += _("Infobar is MoviePlayer\n")
 				#else:
 				#    messageString += _("Infobar is not MoviePlayer\n")
 				if isinstance(self.InfoBar_instance, InfoBarEPG):
-					messageString += _("Infobar is InfoBar\n\n")
+					messageString += _("Infobar is InfoBar\n")
 				#else:
-				#    messageString += _("Infobar is not InfoBar\n\n")  
+				#    messageString += _("Infobar is not InfoBar\n")  
+				messageString += _("\n")
 
 			# infobar seekstate
 			if True:
