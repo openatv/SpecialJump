@@ -54,6 +54,7 @@ from enigma import eDVBVolumecontrol
 from enigma import iServiceInformation
 from enigma import iPlayableService
 from enigma import eDBoxLCD
+from enigma import pNavigation
 from datetime import datetime
 from random import randint
 from Tools.Directories import *
@@ -1578,7 +1579,11 @@ class SpecialJump():
 			if self.fastZapRecService is not None:
 				self.session.nav.stopRecordService(self.fastZapRecService)
 				self.fastZapRecService = None
-			self.fastZapRecService = self.session.nav.recordService(fastZapNextService)
+			try:
+				#not all images support recording types
+				self.fastZapRecService = self.session.nav.recordService(fastZapNextService,False,pNavigation.isPseudoRecording|pNavigation.isFromSpecialJumpFastZap)
+			except:
+				self.fastZapRecService = self.session.nav.recordService(fastZapNextService)
 			if self.fastZapRecService is not None:
 				self.fastZapRecService.prepareStreaming()
 				self.fastZapRecService.start()
@@ -2082,7 +2087,7 @@ class SpecialJump():
 			seek = service.seek()
 			if seek is None:
 				self.session.open(MessageBox,_("no seek"), type = MessageBox.TYPE_ERROR,timeout = 2)
-				messageString = _("")
+				messageString = _("no seek\n")
 			elif not seek.isCurrentlySeekable():
 				length  = seek.getLength()
 				playpos = seek.getPlayPosition()
@@ -2101,7 +2106,7 @@ class SpecialJump():
 				messageString += _("getAudioVolume =%d\n\n" % self.getAudioVolume())
 			
 			# infobar instance
-			if True:
+			if False:
 				if isinstance(self.InfoBar_instance, InfoBarShowMovies):
 					messageString += _("Infobar is MoviePlayer\n")
 				#else:
@@ -2114,22 +2119,43 @@ class SpecialJump():
 
 			# (pseudo) recordings
 			if True:
-				recs = self.session.nav.getRecordings()
-				records_running = len(recs)
-				messageString += _("Currently active recordings a: %d\n" % records_running)
-				for x in recs:
-					messageString += _("Currently active recording a: %s\n" % (x))
-				messageString += _("\n")
+				try:
+					types =    {int(pNavigation.isRealRecording)          : "isRealRecording", \
+								int(pNavigation.isStreaming)              : "isStreaming", \
+								int(pNavigation.isPseudoRecording)        : "isPseudoRecording", \
+								int(pNavigation.isUnknownRecording)       : "isUnknownRecording", \
+								int(pNavigation.isFromTimer)              : "isFromTimer", 
+								int(pNavigation.isFromInstantRecording)   : "isFromInstantRecording", \
+								int(pNavigation.isFromEPGrefresh)         : "isFromEPGrefresh", \
+								int(pNavigation.isFromSpecialJumpFastZap) : "isFromSpecialJumpFastZap"}
 
+					recs = self.session.nav.getRecordingsServicesAndTypes()
+					records_running = len(recs)
+					messageString += _("Active recordings: %d\n" % records_running)
+					for x in recs:
+						typeString = _(" ")
+						for i in range(0, len(types)):
+							if (2**i & x[1]) > 0:
+								if 2**i in types:
+									typeString += _(" %s") % (types[2**i])
+								else:
+									typeString += _(" %d") % (2**i)
+						messageString += _("Active recording: %s of type%s\n" % (x[0],typeString))
+						print _("Active recording: %s of type%s\n" % (x[0],typeString))
+					messageString += _("\n")
+				except:
+					messageString += _("This image does not support 'getRecordingsServicesAndTypes()'\n")
+
+			if False:
 				recs = NavigationInstance.instance.record_event
 				records_running = len(recs)
-				messageString += _("Currently active recordings b: %d\n" % records_running)
+				messageString += _("Active record_events: %d\n" % records_running)
 				for x in recs:
-					messageString += _("Currently active recording b: %s\n" % (x))
+					messageString += _("Active record_event: %s\n" % (x))
 				messageString += _("\n")
 				
 			# PIP
-			if True:
+			if False:
 				if (InfoBarPiP.pipShown(self.InfoBar_instance) == True):
 					messageString += _("pipShown is True\n")
 				else:
@@ -2141,7 +2167,7 @@ class SpecialJump():
 				messageString += _("\n")
 				
 			# infobar seekstate
-			if True:
+			if False:
 				messageString += _("global InfoBar.instance.seekstate = (%s, %s, %s, %s)\n"   % (InfoBar.instance.seekstate[0],InfoBar.instance.seekstate[1],InfoBar.instance.seekstate[2],InfoBar.instance.seekstate[3]))
 				messageString += _("parent InfoBar_instance.seekstate = (%s, %s, %s, %s)\n\n" % (self.InfoBar_instance.seekstate[0],self.InfoBar_instance.seekstate[1],self.InfoBar_instance.seekstate[2],self.InfoBar_instance.seekstate[3]))
 
