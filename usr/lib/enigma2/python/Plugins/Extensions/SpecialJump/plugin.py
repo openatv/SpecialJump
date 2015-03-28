@@ -178,6 +178,8 @@ config.plugins.SpecialJump.fastZapBenchmarkMode           = ConfigYesNo(default=
 config.plugins.SpecialJump.fastZapMethod                  = ConfigSelection(choices = [("pip", _("Picture in Picture (debug only)")),("pip_hidden", _("Picture in Picture, hidden (not recommended)")),("record", _("fake recording"))],default = "record")
 config.plugins.SpecialJump.timeConstantz1                 = ConfigInteger(default = 500, limits  = (1, 999))
 config.plugins.SpecialJump.timeConstantz2                 = ConfigInteger(default = 500, limits  = (1, 999))
+config.plugins.SpecialJump.zapspeedMeasureTimeout_ms      = ConfigInteger(default = 5500, limits  = (1, 99999))
+config.plugins.SpecialJump.fastZapBenchmarkTime_ms        = ConfigInteger(default = 6000, limits  = (1, 99999))
 
 config.plugins.SpecialJump.separator = ConfigSelection([("na", _(" "))], default="na")
 
@@ -795,6 +797,8 @@ class SpecialJumpConfiguration(Screen, ConfigListScreen):
 		self.list.append(getConfigListEntry((_("Zap speed infobox x position")),                      config.plugins.SpecialJump.zapspeed_x))
 		self.list.append(getConfigListEntry((_("Zap speed infobox y position")),                      config.plugins.SpecialJump.zapspeed_y))
 		self.list.append(getConfigListEntry((_("Zap speed infobox anchor")),                          config.plugins.SpecialJump.zapspeed_anchor))
+		self.list.append(getConfigListEntry((_("Zap speed measurement timeout (tap error)")),         config.plugins.SpecialJump.zapspeedMeasureTimeout_ms))
+		self.list.append(getConfigListEntry((_("Auto-zap benchmark mode time between zaps")),         config.plugins.SpecialJump.fastZapBenchmarkTime_ms))
 		self.list.append(getConfigListEntry((_("Fast zap time constant z1 (author only)")),           config.plugins.SpecialJump.timeConstantz1))
 		self.list.append(getConfigListEntry((_("Fast zap time constant z2 (author only)")),           config.plugins.SpecialJump.timeConstantz2))
 
@@ -921,8 +925,6 @@ class SpecialJump():
 		self.zap_time_event_counter    = 0
 		self.zap_error_timeout_counter = 0
 		self.zap_time_event_counter_ms = 50
-		self.zap_time_event_timeout_ms = 5500
-		self.zap_benchmark_mode_ms     = 6000
 		self.zap_time                  = 0
 		self.zap_time_res_0_seen       = False
 		self.zap_success               = 'off'
@@ -994,7 +996,7 @@ class SpecialJump():
 
 	def specialJumpStartTimerShowInfoBar(self, muteTime_ms):
 		self.SJTimer.stop()
-		self.SJTimer.start(int(config.plugins.SpecialJump.specialJumpTimeout_ms.getValue()))
+		self.SJTimer.start(config.plugins.SpecialJump.specialJumpTimeout_ms.getValue())
 		if config.plugins.SpecialJump.show_infobar.getValue():
 			self.SpecialJumpInfoBar_instance.doShow(self,self.InfoBar_instance) # grandparent_InfoBar
 		self.specialJumpMute(muteTime_ms)
@@ -1062,7 +1064,7 @@ class SpecialJump():
 			for ind2 in range(0, len(self.zap_list_ind2)):
 				streams.append(('','t %s %s' % (self.zap_list_ind1[ind1],self.zap_list_ind2[ind2]), '%dms' % (self.myDivide(self.zap_time_sums[ind1][ind2],self.zap_time_nums[ind1][ind2])),self.zap_time_nums[ind1][ind2]))
 		streams.append(('','','',''))
-		streams.append(('','zap errors','>%dms' % (self.zap_time_event_timeout_ms),self.zap_error_timeout_counter))
+		streams.append(('','zap errors','>%dms' % (config.plugins.SpecialJump.zapspeedMeasureTimeout_ms.getValue()),self.zap_error_timeout_counter))
 
 		if verbosity != 'off':
 			self.zapspeedInfobox_instance.doShow(self, streams, 0, verbosity, anchor, pos_x, pos_y)
@@ -1126,7 +1128,7 @@ class SpecialJump():
 	def specialJumpZapspeedPollTimeout(self):
 		self.zap_time_event_counter += 1
 		#if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG specialJumpZapspeedPollTimeout ",self.zap_time_event_counter,' ',datetime.now()
-		if self.zap_time_event_counter == self.zap_time_event_timeout_ms / self.zap_time_event_counter_ms:
+		if self.zap_time_event_counter == config.plugins.SpecialJump.zapspeedMeasureTimeout_ms.getValue() / self.zap_time_event_counter_ms:
 			if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG illegal zap time ",datetime.now()
 			self.SJZapspeedPollTimer.stop()
 			self.zap_error_timeout_counter += 1
@@ -1463,7 +1465,7 @@ class SpecialJump():
 					direction == "zapDown"
 			else: # 33% fast zap mode off
 				config.plugins.SpecialJump.fastZapEnable.setValue(False)
-			self.SJZapBenchmarkTimer.start(self.zap_benchmark_mode_ms) # auto zap
+			self.SJZapBenchmarkTimer.start(config.plugins.SpecialJump.fastZapBenchmarkTime_ms.getValue()) # auto zap
 		else:
 			self.SJZapBenchmarkTimer.stop()
 				
