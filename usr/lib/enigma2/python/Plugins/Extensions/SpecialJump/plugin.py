@@ -996,7 +996,7 @@ class SpecialJump():
 
 	def specialJumpStartTimerShowInfoBar(self, muteTime_ms):
 		self.SJTimer.stop()
-		self.SJTimer.start(config.plugins.SpecialJump.specialJumpTimeout_ms.getValue())
+		self.SJTimer.start(int(config.plugins.SpecialJump.specialJumpTimeout_ms.getValue()))
 		if config.plugins.SpecialJump.show_infobar.getValue():
 			self.SpecialJumpInfoBar_instance.doShow(self,self.InfoBar_instance) # grandparent_InfoBar
 		self.specialJumpMute(muteTime_ms)
