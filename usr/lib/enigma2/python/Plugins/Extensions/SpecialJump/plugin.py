@@ -923,7 +923,7 @@ class SpecialJump():
 		self.services_hd_free = ['1:0:19:283D:3FB:1:C00000:0:0:0:', '1:0:19:283E:3FB:1:C00000:0:0:0:', '1:0:19:283F:3FB:1:C00000:0:0:0:', '1:0:19:2859:401:1:C00000:0:0:0:', '1:0:19:285B:401:1:C00000:0:0:0:', '1:0:19:286E:425:1:C00000:0:0:0:', '1:0:19:286F:425:1:C00000:0:0:0:', '1:0:19:2870:425:1:C00000:0:0:0:', '1:0:19:2873:425:1:C00000:0:0:0:', '1:0:19:2887:40F:1:C00000:0:0:0:', '1:0:19:2888:40F:1:C00000:0:0:0:', '1:0:19:2889:40F:1:C00000:0:0:0:', '1:0:19:2B66:3F3:1:C00000:0:0:0:', '1:0:19:2B7A:3F3:1:C00000:0:0:0:', '1:0:19:2B84:3F3:1:C00000:0:0:0:', '1:0:19:2B8E:3F2:1:C00000:0:0:0:', '1:0:19:2B98:3F2:1:C00000:0:0:0:', '1:0:19:2BA2:3F2:1:C00000:0:0:0:', '1:0:19:6EA5:4B1:1:C00000:0:0:0:']
 		self.services_sd_free = ['1:0:1:1146:404:1:C00000:0:0:0:', '1:0:1:272E:402:1:C00000:0:0:0:', '1:0:1:2742:402:1:C00000:0:0:0:', '1:0:1:2753:402:1:C00000:0:0:0:', '1:0:1:2EE3:441:1:C00000:0:0:0:', '1:0:1:2EF4:441:1:C00000:0:0:0:', '1:0:1:2F08:441:1:C00000:0:0:0:', '1:0:1:2F1C:441:1:C00000:0:0:0:', '1:0:1:2F1D:441:1:C00000:0:0:0:', '1:0:1:2F3A:441:1:C00000:0:0:0:', '1:0:1:308:5:85:C00000:0:0:0:', '1:0:1:33:21:85:C00000:0:0:0:', '1:0:1:384:21:85:C00000:0:0:0:', '1:0:1:3F:21:85:C00000:0:0:0:', '1:0:1:445C:453:1:C00000:0:0:0:', '1:0:1:445D:453:1:C00000:0:0:0:', '1:0:1:445E:453:1:C00000:0:0:0:', '1:0:1:445F:453:1:C00000:0:0:0:', '1:0:1:4461:453:1:C00000:0:0:0:', '1:0:1:7004:436:1:C00000:0:0:0:', '1:0:1:701:5:85:C00000:0:0:0:', '1:0:1:7036:41B:1:C00000:0:0:0:', '1:0:1:79E0:443:1:C00000:0:0:0:', '1:0:1:79F4:443:1:C00000:0:0:0:']
 		self.zap_time_event_counter    = 0
-		self.zap_error_timeout_counter = 0
+		self.zap_error_timeout_counter = [0, 0, 0]
 		self.zap_time_event_counter_ms = 50
 		self.zap_time                  = 0
 		self.zap_time_res_0_seen       = False
@@ -1063,8 +1063,7 @@ class SpecialJump():
 			streams.append(('','','',''))
 			for ind2 in range(0, len(self.zap_list_ind2)):
 				streams.append(('','t %s %s' % (self.zap_list_ind1[ind1],self.zap_list_ind2[ind2]), '%dms' % (self.myDivide(self.zap_time_sums[ind1][ind2],self.zap_time_nums[ind1][ind2])),self.zap_time_nums[ind1][ind2]))
-		streams.append(('','','',''))
-		streams.append(('','zap errors','>%dms' % (config.plugins.SpecialJump.zapspeedMeasureTimeout_ms.getValue()),self.zap_error_timeout_counter))
+			streams.append(('','zap errors','>%dms' % (config.plugins.SpecialJump.zapspeedMeasureTimeout_ms.getValue()),self.zap_error_timeout_counter[ind1]))
 
 		if verbosity != 'off':
 			self.zapspeedInfobox_instance.doShow(self, streams, 0, verbosity, anchor, pos_x, pos_y)
@@ -1131,7 +1130,8 @@ class SpecialJump():
 		if self.zap_time_event_counter == config.plugins.SpecialJump.zapspeedMeasureTimeout_ms.getValue() / self.zap_time_event_counter_ms:
 			if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG illegal zap time ",datetime.now()
 			self.SJZapspeedPollTimer.stop()
-			self.zap_error_timeout_counter += 1
+			ind1 = self.zap_list_ind1.index(self.zap_success)
+			self.zap_error_timeout_counter[ind1] += 1
 		else:
 			if path.exists('/proc/stb/vmpeg/0/yres'):
 				f = open('/proc/stb/vmpeg/0/yres', 'r')
