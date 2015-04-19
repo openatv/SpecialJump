@@ -173,11 +173,9 @@ config.plugins.SpecialJump.EMCdirsShowWindowTitle         = ConfigText(default =
 config.plugins.SpecialJump.EMCdirsShowText                = ConfigText(default = "Enter PIN to show EMC hidden dirs")
 config.plugins.SpecialJump.EMCdirsShowPin                 = ConfigInteger(default  = 0000, limits  = (0, 9999))
 
-config.plugins.SpecialJump.fastZapEnable                  = ConfigYesNo(default=True)
+config.plugins.SpecialJump.fastZapEnable                  = ConfigYesNo(default=False)
 config.plugins.SpecialJump.fastZapBenchmarkMode           = ConfigYesNo(default=False)
 config.plugins.SpecialJump.fastZapMethod                  = ConfigSelection(choices = [("pip", _("Picture in Picture (debug only)")),("pip_hidden", _("Picture in Picture, hidden (not recommended)")),("record", _("fake recording"))],default = "record")
-config.plugins.SpecialJump.timeConstantz1                 = ConfigInteger(default = 500, limits  = (1, 999))
-config.plugins.SpecialJump.timeConstantz2                 = ConfigInteger(default = 500, limits  = (1, 999))
 config.plugins.SpecialJump.zapspeedMeasureTimeout_ms      = ConfigInteger(default = 5500, limits  = (1, 99999))
 config.plugins.SpecialJump.fastZapBenchmarkTime_ms        = ConfigInteger(default = 6000, limits  = (1, 99999))
 
@@ -296,6 +294,9 @@ def InfoBarPlugins__init__(self):
 		 'specialjump_jumpkey3':            (boundFunction(self.specialjump_jump,"TV", "K3"), _('programmable jump key 3')),
 		 'specialjump_jumpkey6':            (boundFunction(self.specialjump_jump,"TV", "K6"), _('programmable jump key 6')),
 		 'specialjump_jumpkey9':            (boundFunction(self.specialjump_jump,"TV", "K9"), _('programmable jump key 9')),
+		 'specialjump_jumpkey2':            (boundFunction(self.specialjump_jump,"TV", "K2"), _('number zap key 2')),
+		 'specialjump_jumpkey5':            (boundFunction(self.specialjump_jump,"TV", "K5"), _('number zap key 5')),
+		 'specialjump_jumpkey8':            (boundFunction(self.specialjump_jump,"TV", "K8"), _('number zap key 8')),
 		 'specialjump_channelDown':         (boundFunction(self.specialjump_channelDown,"TV"),      _('KEY_CHANNELDOWN combined pause/zap function')),
 		 'specialjump_channelUp':           (boundFunction(self.specialjump_channelUp,  "TV"),      _('KEY_CHANNELUP   combined  play/zap function')),
 		 'specialjump_jumpPreviousMark':    (boundFunction(self.specialjump_jumpPreviousMark,"TV"), _('jump to previous mark')),
@@ -372,6 +373,9 @@ def specialjump_jump(self,mode,jumpkey):
 	elif jumpkey == 'K3': SpecialJump.fixedJump(SpecialJumpInstance, self, mode, "3", int( config.seek.selfdefined_13.getValue()), "nothing")
 	elif jumpkey == 'K6': SpecialJump.fixedJump(SpecialJumpInstance, self, mode, "6", int( config.seek.selfdefined_46.getValue()), "nothing")
 	elif jumpkey == 'K9': SpecialJump.fixedJump(SpecialJumpInstance, self, mode, "9", int( config.seek.selfdefined_79.getValue()), "nothing")
+	elif jumpkey == 'K2': SpecialJump.fixedJump(SpecialJumpInstance, self, mode, "2", int( 0), "nothing")
+	elif jumpkey == 'K5': SpecialJump.fixedJump(SpecialJumpInstance, self, mode, "5", int( 0), "nothing")
+	elif jumpkey == 'K8': SpecialJump.fixedJump(SpecialJumpInstance, self, mode, "8", int( 0), "nothing")
 
 def specialjump_toggleSubtitleTrack(self):
 	SpecialJump.toggleSubtitleTrack(SpecialJumpInstance,self)
@@ -797,10 +801,8 @@ class SpecialJumpConfiguration(Screen, ConfigListScreen):
 		self.list.append(getConfigListEntry((_("Zap speed infobox x position")),                      config.plugins.SpecialJump.zapspeed_x))
 		self.list.append(getConfigListEntry((_("Zap speed infobox y position")),                      config.plugins.SpecialJump.zapspeed_y))
 		self.list.append(getConfigListEntry((_("Zap speed infobox anchor")),                          config.plugins.SpecialJump.zapspeed_anchor))
-		self.list.append(getConfigListEntry((_("Zap speed measurement timeout (tap error)")),         config.plugins.SpecialJump.zapspeedMeasureTimeout_ms))
+		self.list.append(getConfigListEntry((_("Zap speed measurement timeout (zap error)")),         config.plugins.SpecialJump.zapspeedMeasureTimeout_ms))
 		self.list.append(getConfigListEntry((_("Auto-zap benchmark mode time between zaps")),         config.plugins.SpecialJump.fastZapBenchmarkTime_ms))
-		self.list.append(getConfigListEntry((_("Fast zap time constant z1 (author only)")),           config.plugins.SpecialJump.timeConstantz1))
-		self.list.append(getConfigListEntry((_("Fast zap time constant z2 (author only)")),           config.plugins.SpecialJump.timeConstantz2))
 
 	def changedEntry(self):
 		self.createConfigList()
@@ -886,10 +888,6 @@ class SpecialJump():
 		self.SJWorkaround1Timer.timeout.get().append(self.specialJumpWorkaround1Timeout)
 		self.SJWorkaround2Timer=eTimer()          # timer for a workaround (test)
 		self.SJWorkaround2Timer.timeout.get().append(self.specialJumpWorkaround2Timeout)
-		self.SJWorkaroundz1Timer=eTimer()         # timer for fast zap (test)
-		self.SJWorkaroundz1Timer.timeout.get().append(self.timerZ1_shopPIP)
-		self.SJWorkaroundz2Timer=eTimer()         # timer for fast zap (test)
-		self.SJWorkaroundz2Timer.timeout.get().append(self.timerZ2_zapPredictive)
 		self.SJZapBenchmarkTimer=eTimer()         # timer for fast zap benchmark mode
 		self.SJZapBenchmarkTimer.timeout.get().append(self.zapDown)
 	   
@@ -923,7 +921,7 @@ class SpecialJump():
 		self.services_hd_free = ['1:0:19:283D:3FB:1:C00000:0:0:0:', '1:0:19:283E:3FB:1:C00000:0:0:0:', '1:0:19:283F:3FB:1:C00000:0:0:0:', '1:0:19:2859:401:1:C00000:0:0:0:', '1:0:19:285B:401:1:C00000:0:0:0:', '1:0:19:286E:425:1:C00000:0:0:0:', '1:0:19:286F:425:1:C00000:0:0:0:', '1:0:19:2870:425:1:C00000:0:0:0:', '1:0:19:2873:425:1:C00000:0:0:0:', '1:0:19:2887:40F:1:C00000:0:0:0:', '1:0:19:2888:40F:1:C00000:0:0:0:', '1:0:19:2889:40F:1:C00000:0:0:0:', '1:0:19:2B66:3F3:1:C00000:0:0:0:', '1:0:19:2B7A:3F3:1:C00000:0:0:0:', '1:0:19:2B84:3F3:1:C00000:0:0:0:', '1:0:19:2B8E:3F2:1:C00000:0:0:0:', '1:0:19:2B98:3F2:1:C00000:0:0:0:', '1:0:19:2BA2:3F2:1:C00000:0:0:0:', '1:0:19:6EA5:4B1:1:C00000:0:0:0:']
 		self.services_sd_free = ['1:0:1:1146:404:1:C00000:0:0:0:', '1:0:1:272E:402:1:C00000:0:0:0:', '1:0:1:2742:402:1:C00000:0:0:0:', '1:0:1:2753:402:1:C00000:0:0:0:', '1:0:1:2EE3:441:1:C00000:0:0:0:', '1:0:1:2EF4:441:1:C00000:0:0:0:', '1:0:1:2F08:441:1:C00000:0:0:0:', '1:0:1:2F1C:441:1:C00000:0:0:0:', '1:0:1:2F1D:441:1:C00000:0:0:0:', '1:0:1:2F3A:441:1:C00000:0:0:0:', '1:0:1:308:5:85:C00000:0:0:0:', '1:0:1:33:21:85:C00000:0:0:0:', '1:0:1:384:21:85:C00000:0:0:0:', '1:0:1:3F:21:85:C00000:0:0:0:', '1:0:1:445C:453:1:C00000:0:0:0:', '1:0:1:445D:453:1:C00000:0:0:0:', '1:0:1:445E:453:1:C00000:0:0:0:', '1:0:1:445F:453:1:C00000:0:0:0:', '1:0:1:4461:453:1:C00000:0:0:0:', '1:0:1:7004:436:1:C00000:0:0:0:', '1:0:1:701:5:85:C00000:0:0:0:', '1:0:1:7036:41B:1:C00000:0:0:0:', '1:0:1:79E0:443:1:C00000:0:0:0:', '1:0:1:79F4:443:1:C00000:0:0:0:']
 		self.zap_time_event_counter    = 0
-		self.zap_error_timeout_counter = [0, 0, 0]
+		self.zap_error_counter         = [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
 		self.zap_time_event_counter_ms = 50
 		self.zap_time                  = 0
 		self.zap_time_res_0_seen       = False
@@ -1049,7 +1047,7 @@ class SpecialJump():
 		if verbosity != 'off':
 			self.SubsToggleInfobox_instance.doShow(self, streams, selected_track, verbosity, anchor, pos_x, pos_y)
 		   
-	def specialJumpStartTimerShowZapspeedBox(self,ind1,ind2):
+	def specialJumpStartTimerShowZapspeedBox(self,ind1):
 		verbosity = config.plugins.SpecialJump.zapspeedVerbosity.getValue()
 		anchor    = config.plugins.SpecialJump.zapspeed_anchor.getValue()
 		pos_x     = config.plugins.SpecialJump.zapspeed_x.getValue()
@@ -1062,8 +1060,14 @@ class SpecialJump():
 		for ind1 in range(0, len(self.zap_list_ind1)):
 			streams.append(('','','',''))
 			for ind2 in range(0, len(self.zap_list_ind2)):
-				streams.append(('','t %s %s' % (self.zap_list_ind1[ind1],self.zap_list_ind2[ind2]), '%dms' % (self.myDivide(self.zap_time_sums[ind1][ind2],self.zap_time_nums[ind1][ind2])),self.zap_time_nums[ind1][ind2]))
-			streams.append(('','zap errors','>%dms' % (config.plugins.SpecialJump.zapspeedMeasureTimeout_ms.getValue()),self.zap_error_timeout_counter[ind1]))
+				if ind2 == self.zap_list_ind2.index('tot'):
+					zap_errors = ''
+				else:
+					zap_errors = self.zap_error_counter[ind1][ind2]
+					if zap_errors == 0:
+						zap_errors = ''
+				streams.append((zap_errors,'t %s %s' % (self.zap_list_ind1[ind1],self.zap_list_ind2[ind2]), '%dms' % (self.myDivide(self.zap_time_sums[ind1][ind2],self.zap_time_nums[ind1][ind2])),self.zap_time_nums[ind1][ind2]))
+			streams.append((self.zap_error_counter[ind1][self.zap_list_ind2.index('tot')],'zap errors','>%dms' % (config.plugins.SpecialJump.zapspeedMeasureTimeout_ms.getValue()),''))
 
 		if verbosity != 'off':
 			self.zapspeedInfobox_instance.doShow(self, streams, 0, verbosity, anchor, pos_x, pos_y)
@@ -1127,11 +1131,25 @@ class SpecialJump():
 	def specialJumpZapspeedPollTimeout(self):
 		self.zap_time_event_counter += 1
 		#if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG specialJumpZapspeedPollTimeout ",self.zap_time_event_counter,' ',datetime.now()
+		ind1 = self.zap_list_ind1.index(self.zap_success)
+		cur = self.InfoBar_instance.servicelist.getCurrentSelection()
+		if cur:
+			cur = cur.toString()            
+			if cur in self.services_hd_plus:
+				ind2 = self.zap_list_ind2.index('HD+')
+			elif cur in self.services_hd_free:
+				ind2 = self.zap_list_ind2.index('HD')
+			elif cur in self.services_sd_free:
+				ind2 = self.zap_list_ind2.index('SD')
+			else:
+				ind2 = self.zap_list_ind2.index('??')
+		else:
+			ind2 = self.zap_list_ind2.index('??')
 		if self.zap_time_event_counter == config.plugins.SpecialJump.zapspeedMeasureTimeout_ms.getValue() / self.zap_time_event_counter_ms:
 			if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG illegal zap time ",datetime.now()
 			self.SJZapspeedPollTimer.stop()
-			ind1 = self.zap_list_ind1.index(self.zap_success)
-			self.zap_error_timeout_counter[ind1] += 1
+			self.zap_error_counter[ind1][ind2] += 1
+			self.zap_error_counter[ind1][self.zap_list_ind2.index('tot')] += 1
 		else:
 			if path.exists('/proc/stb/vmpeg/0/yres'):
 				f = open('/proc/stb/vmpeg/0/yres', 'r')
@@ -1142,28 +1160,15 @@ class SpecialJump():
 				elif self.zap_time_res_0_seen:
 					self.zap_time = self.zap_time_event_counter * self.zap_time_event_counter_ms
 					self.SJZapspeedPollTimer.stop()
-	
-					cur = self.InfoBar_instance.servicelist.getCurrentSelection()
-					if cur:
-						cur = cur.toString()
-						ind1 = self.zap_list_ind1.index(self.zap_success)
-						
-						if cur in self.services_hd_plus:
-							ind2 = self.zap_list_ind2.index('HD+')
-						elif cur in self.services_hd_free:
-							ind2 = self.zap_list_ind2.index('HD')
-						elif cur in self.services_sd_free:
-							ind2 = self.zap_list_ind2.index('SD')
-						else:
-							ind2 = self.zap_list_ind2.index('??')
-						self.zap_time_sums[ind1][ind2] += self.zap_time
-						self.zap_time_nums[ind1][ind2] += 1
-						
-						ind2 = self.zap_list_ind2.index('tot')
-						self.zap_time_sums[ind1][ind2] += self.zap_time
-						self.zap_time_nums[ind1][ind2] += 1
-						
-						self.specialJumpStartTimerShowZapspeedBox(ind1,ind2)
+
+					self.zap_time_sums[ind1][ind2] += self.zap_time
+					self.zap_time_nums[ind1][ind2] += 1
+
+					ind2 = self.zap_list_ind2.index('tot')
+					self.zap_time_sums[ind1][ind2] += self.zap_time
+					self.zap_time_nums[ind1][ind2] += 1
+					
+					self.specialJumpStartTimerShowZapspeedBox(ind1)
 						
 	def specialJumpZapUpTimeout(self):
 		self.SJZapUpTimer.stop()
@@ -1474,19 +1479,20 @@ class SpecialJump():
 			if (config.plugins.SpecialJump.fastZapMethod.value == "pip") or (config.plugins.SpecialJump.fastZapMethod.value == "pip_hidden"):
 				if (self.fastZapPipActive == False):
 					if (InfoBarPiP.pipShown(self.InfoBar_instance) == False):
-						if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG zapHandler ",direction," start showPiP + zapPredictive"
-						self.SJWorkaroundz1Timer.start(config.plugins.SpecialJump.timeConstantz1.getValue()) # showPiP + zapPredictive
+						if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG zapHandler ",direction," zapPredictive incl. initial showPiP"
+						self.postZap_preloadPredictive()
 					else:
-						if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG zapHandler ",direction," PIP unexpectedly active",InfoBarPiP.pipShown(self.InfoBar_instance)
+						if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG zapHandler ",direction," PIP unexpectedly active, don't touch PIP",InfoBarPiP.pipShown(self.InfoBar_instance)
 				else:
 					if (InfoBarPiP.pipShown(self.InfoBar_instance) == True):
-						if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG zapHandler ",direction," start zapPredictive"
-						self.SJWorkaroundz2Timer.start(config.plugins.SpecialJump.timeConstantz2.getValue()) # zapPredictive
+						if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG zapHandler ",direction," zapPredictive (PIP already active)"
+						self.postZap_preloadPredictive()
 					else:
-						if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG zapHandler ",direction," PIP unexpectedly inactive",InfoBarPiP.pipShown(self.InfoBar_instance)
+						if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG zapHandler ",direction," zapPredictive (PIP unexpectedly inactive)",InfoBarPiP.pipShown(self.InfoBar_instance)
+						self.postZap_preloadPredictive()
 			else:
-				if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG zapHandler ",direction," start zapPredictive"
-				self.SJWorkaroundz2Timer.start(config.plugins.SpecialJump.timeConstantz2.getValue()) # zapPredictive
+				if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG zapHandler ",direction," start zapPredictive (pseudo rec.)"
+				self.postZap_preloadPredictive()
 		elif config.plugins.SpecialJump.fastZapEnable.value:
 			print "SpecialJump DEBUG: fast zap not possible with a single tuner"
 		else:
@@ -1495,36 +1501,13 @@ class SpecialJump():
 				self.session.pip.instance.move(ePoint(config.av.pip.value[0],config.av.pip.value[1]))
 				self.session.pip.instance.resize(eSize(*(config.av.pip.value[2],config.av.pip.value[3])))
 				self.session.pip["video"].instance.resize(eSize(*(config.av.pip.value[2],config.av.pip.value[3])))
-				InfoBarPiP.showPiP(self.InfoBar_instance)
-				self.fastZapPipActive = False
-			if self.fastZapRecService is not None:
-				#stop fake recording
-				self.session.nav.stopRecordService(self.fastZapRecService)
-				self.fastZapRecService = None
-				self.zapPredictiveService = None
+			self.disablePredictiveRecOrPIP()
 
-	def timerZ1_shopPIP(self):
-		if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG shopPIP 1"
-		self.SJWorkaroundz1Timer.stop()
-		InfoBarPiP.showPiP(self.InfoBar_instance)
-		self.fastZapPipActive = True
-		self.SJWorkaroundz2Timer.start(config.plugins.SpecialJump.timeConstantz2.getValue()) # zapPredictive
-		if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG shopPIP 2"
-
-	def timerZ2_zapPredictive(self):
+	def postZap_preloadPredictive(self):
+		#start PIP or pseudo recording on the expected next service
 		if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG zapPredictive 1"
-		self.SJWorkaroundz2Timer.stop()
-		if InfoBarPiP.pipShown(self.InfoBar_instance):
-			if config.plugins.SpecialJump.fastZapMethod.value == "pip":
-				self.session.pip.instance.move(ePoint(config.av.pip.value[0],config.av.pip.value[1]))
-				self.session.pip.instance.resize(eSize(*(config.av.pip.value[2],config.av.pip.value[3])))
-				self.session.pip["video"].instance.resize(eSize(*(config.av.pip.value[2],config.av.pip.value[3])))
-			elif config.plugins.SpecialJump.fastZapMethod.value == "pip_hidden":
-				self.session.pip.instance.move(ePoint(0, 0))
-				self.session.pip.instance.resize(eSize(*(0, 0)))
-				self.session.pip["video"].instance.resize(eSize(*(0, 0)))
-				self.session.pip.setSizePosMainWindow(0,0,0,0) #------------------------- could be good against black screen ---------
-
+		self.disablePredictiveRecOrPIP()
+		
 		storeService = self.InfoBar_instance.servicelist.getCurrentSelection()
 
 		if self.fastZapDirection == "zapDown":
@@ -1571,16 +1554,32 @@ class SpecialJump():
 				self.InfoBar_instance.servicelist.moveUp()
 
 		fastZapNextService = self.InfoBar_instance.servicelist.getCurrentSelection()
+		self.enablePredictiveRecOrPIP(fastZapNextService)
+		self.zapPredictiveService = fastZapNextService.toString()
+
+		self.InfoBar_instance.servicelist.setCurrentSelection(storeService)
+		if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG zapPredictive 2"
+														
+	def enablePredictiveRecOrPIP(self, fastZapNextService):
 		if (config.plugins.SpecialJump.fastZapMethod.value == "pip") or (config.plugins.SpecialJump.fastZapMethod.value == "pip_hidden"):
-			fastZapNextService = self.session.pip.resolveAlternatePipService(fastZapNextService)
-			if fastZapNextService:
-				self.session.pip.playService(fastZapNextService)
-				if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG zapPredictive ",self.fastZapDirection," switched PIP to service ",fastZapNextService.toString()
+			if (InfoBarPiP.pipShown(self.InfoBar_instance) == False):
+				InfoBarPiP.showPiP(self.InfoBar_instance)
+				self.fastZapPipActive = True
+				fastZapNextService = self.session.pip.resolveAlternatePipService(fastZapNextService)
+				if fastZapNextService:
+					self.session.pip.playService(fastZapNextService)
+					if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG zapPredictive ",self.fastZapDirection," switched PIP to service ",fastZapNextService.toString()
+					if config.plugins.SpecialJump.fastZapMethod.value == "pip":
+						self.session.pip.instance.move(ePoint(config.av.pip.value[0],config.av.pip.value[1]))
+						self.session.pip.instance.resize(eSize(*(config.av.pip.value[2],config.av.pip.value[3])))
+						self.session.pip["video"].instance.resize(eSize(*(config.av.pip.value[2],config.av.pip.value[3])))
+					elif config.plugins.SpecialJump.fastZapMethod.value == "pip_hidden":
+						self.session.pip.instance.move(ePoint(0, 0))
+						self.session.pip.instance.resize(eSize(*(0, 0)))
+						self.session.pip["video"].instance.resize(eSize(*(0, 0)))
+						self.session.pip.setSizePosMainWindow(0,0,0,0) #------------------------- could be good against black screen ---------
 		else:
 			#fake recording from enigma2-plugins/epgrefresh/src/RecordAdapter.py
-			if self.fastZapRecService is not None:
-				self.session.nav.stopRecordService(self.fastZapRecService)
-				self.fastZapRecService = None
 			try:
 				#not all images support recording types
 				self.fastZapRecService = self.session.nav.recordService(fastZapNextService,False,pNavigation.isPseudoRecording|pNavigation.isFromSpecialJumpFastZap)
@@ -1590,11 +1589,18 @@ class SpecialJump():
 				self.fastZapRecService.prepareStreaming()
 				self.fastZapRecService.start()
 				if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG zapPredictive ",self.fastZapDirection," pseudo recording service ",fastZapNextService.toString()
-		self.zapPredictiveService = fastZapNextService.toString()
 
-		self.InfoBar_instance.servicelist.setCurrentSelection(storeService)
-		if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG zapPredictive 2"
-														
+	def disablePredictiveRecOrPIP(self):
+		if (self.fastZapPipActive == True) and (InfoBarPiP.pipShown(self.InfoBar_instance) == True):
+			#disable PIP
+			InfoBarPiP.showPiP(self.InfoBar_instance)
+			self.fastZapPipActive = False
+		if self.fastZapRecService is not None:
+			#disable fake recording
+			self.session.nav.stopRecordService(self.fastZapRecService)
+			self.fastZapRecService = None
+			self.zapPredictiveService = None
+			
 	def pauseService(self):
 		if InfoBar and self.InfoBar_instance:
 			InfoBarSeek.pauseService(self.InfoBar_instance)
@@ -1606,6 +1612,7 @@ class SpecialJump():
 	def SJnumberEntered(self, service = None, bouquet = None):
 		if service:
 			self.initZapSpeedCounter()
+			self.disablePredictiveRecOrPIP()
 			self.InfoBar_instance.selectAndStartService(service, bouquet)
 			self.zapHandler("zapDown") # P+
 			
@@ -1875,10 +1882,6 @@ class SpecialJump():
 		self.SJWorkaround1Timer = None
 		self.SJWorkaround2Timer.callback.remove(self.specialJumpWorkaround2Timeout)
 		self.SJWorkaround2Timer = None
-		self.SJWorkaroundz1Timer.callback.remove(self.timerZ1_shopPIP)
-		self.SJWorkaroundz1Timer = None
-		self.SJWorkaroundz2Timer.callback.remove(self.timerZ2_zapPredictive)
-		self.SJWorkaroundz2Timer = None
 		self.SJZapBenchmarkTimer.callback.remove(self.zapDown)
 		self.SJZapBenchmarkTimer = None
 
@@ -2183,8 +2186,8 @@ class SpecialJump():
 					sdb1_status = self.command('hdparm -C /dev/sdb1')
 				except:
 					sdb1_status = '(command failed)'
-				messageString += _("hdparm -C /dev/sdb1 = %s\n\n" % sdb1_status)               
-			
+				messageString += _("%s\n\n" % sdb1_status)               
+
 			# video geometries 1
 			if True:
 				info = service.info()

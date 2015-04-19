@@ -15,6 +15,15 @@
 	<key id="KEY_GREEN"  mapto="specialjump_forwards"             flags="b" />
 	<key id="KEY_YELLOW" mapto="specialjump_toggleAudioTrack"     flags="b" />
 	<key id="KEY_BLUE"   mapto="specialjump_toggleSubtitleTrack"  flags="b" />
+	<key id="KEY_1"      mapto="specialjump_jumpkey1"               flags="m" />
+	<key id="KEY_4"      mapto="specialjump_jumpkey4"               flags="m" />
+	<key id="KEY_7"      mapto="specialjump_jumpkey7"               flags="m" />
+	<key id="KEY_3"      mapto="specialjump_jumpkey3"               flags="m" />
+	<key id="KEY_6"      mapto="specialjump_jumpkey6"               flags="m" />
+	<key id="KEY_9"      mapto="specialjump_jumpkey9"               flags="m" />
+	<key id="KEY_2"      mapto="specialjump_jumpkey2"               flags="m" />
+	<key id="KEY_5"      mapto="specialjump_jumpkey5"               flags="m" />
+	<key id="KEY_8"      mapto="specialjump_jumpkey8"               flags="m" />
 	<key id="KEY_CHANNELDOWN" mapto="specialjump_channelDown" flags="b" />
 	<key id="KEY_CHANNELUP"   mapto="specialjump_channelUp"   flags="b" />
 </map>
