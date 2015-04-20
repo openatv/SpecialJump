@@ -173,7 +173,7 @@ config.plugins.SpecialJump.EMCdirsShowWindowTitle         = ConfigText(default =
 config.plugins.SpecialJump.EMCdirsShowText                = ConfigText(default = "Enter PIN to show EMC hidden dirs")
 config.plugins.SpecialJump.EMCdirsShowPin                 = ConfigInteger(default  = 0000, limits  = (0, 9999))
 
-config.plugins.SpecialJump.fastZapEnable                  = ConfigYesNo(default=False)
+config.plugins.SpecialJump.fastZapEnable                  = ConfigYesNo(default=True)
 config.plugins.SpecialJump.fastZapBenchmarkMode           = ConfigYesNo(default=False)
 config.plugins.SpecialJump.fastZapMethod                  = ConfigSelection(choices = [("pip", _("Picture in Picture (debug only)")),("pip_hidden", _("Picture in Picture, hidden (not recommended)")),("record", _("fake recording"))],default = "record")
 config.plugins.SpecialJump.zapspeedMeasureTimeout_ms      = ConfigInteger(default = 5500, limits  = (1, 99999))
