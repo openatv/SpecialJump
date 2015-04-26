@@ -44,6 +44,7 @@ Features Sprungfunktionen:
 Verbesserungen im Bedienkomfort:
 --------------------------------
 
+- Fast Zap Mode (beschleunigte Umschaltzeiten durch vorausschauendes Vorladen des nächsten Senders auf einem weiteren Tuner)
 - Direktes Zurückspringen in den Timeshift-Buffer aus dem Live-TV-Betrieb möglich (ohne SpecialJump nur über Pause oder Rewind möglich)
 - Mehrfachsprünge im pausierten Zustand möglich (ohne SpecialJump wird bei mehreren Sprüngen nicht um die Summe der Sprünge gesprungen, sondern nur um die Distanz des jeweils letzten Sprunges)
 - Nach dem Wegzappen aus dem Timeshift ist ein erneutes Zappen sofort möglich (ohne SpecialJump erst nach 3 Sekunden).
@@ -77,6 +78,10 @@ Build (das macht nur der Autor):
 
 Installation:
 -------------
+
+Das Plugin ist auf dem normalen openATV Feed verfügbar.
+
+Alternative manuelle Installation:
 
 > cd /tmp  
 > opkg install /tmp/enigma2-plugin-extensions-specialjump\_0.7-20140502-r0\_mips32el.ipk  
@@ -183,6 +188,8 @@ Fixed potential issues with empty subtitlelist
 Workaround for Gigablue Quad/Plus driver 2014.12.16 for jumping into TS buffer from live TV (config.plugins.SpecialJump.algoVersion=2)  
 Added EMC parental control  
 Fix infobar control by show_infobar_on_jumpPreviousNextMark
+
+For later revisions please see the commit messages at https://github.com/openatv/SpecialJump/commits/master
 
 Postponed:  
 Replaced config.xxx.getValue() by config.xxx.value / postponed for compatibility with old images where .value always returned a string for int's
