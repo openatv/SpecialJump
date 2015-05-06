@@ -1547,6 +1547,7 @@ class SpecialJump():
 					while True:
 						if config.usage.quickzap_bouquet_change.value and self.InfoBar_instance.servicelist.atEnd():
 							self.InfoBar_instance.servicelist.nextBouquet()
+							self.InfoBar_instance.servicelist.moveTop()
 						else:
 							self.InfoBar_instance.servicelist.moveDown()
 						cur = self.InfoBar_instance.servicelist.getCurrentSelection()
@@ -1566,10 +1567,11 @@ class SpecialJump():
 				if prev:
 					prev = prev.toString()
 					while True:
-						if config.usage.quickzap_bouquet_change.value:
-							if self.InfoBar_instance.servicelist.atBegin():
-								self.InfoBar_instance.servicelist.prevBouquet()
-						self.InfoBar_instance.servicelist.moveUp()
+						if config.usage.quickzap_bouquet_change.value and self.InfoBar_instance.servicelist.atBegin():
+							self.InfoBar_instance.servicelist.prevBouquet()
+							self.InfoBar_instance.servicelist.moveEnd()
+						else:
+							self.InfoBar_instance.servicelist.moveUp()
 						cur = self.InfoBar_instance.servicelist.getCurrentSelection()
 						if cur:
 							if self.InfoBar_instance.servicelist.dopipzap:
