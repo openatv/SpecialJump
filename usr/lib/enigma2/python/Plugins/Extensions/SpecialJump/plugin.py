@@ -2207,13 +2207,15 @@ class SpecialJump():
 			if False:
 				messageString += _("self.starttime = %s\n\n" % self.starttime)
 			
-			# sdb1 status
+			# HDD status
 			if True:
 				try:
-					sdb1_status = self.command('hdparm -C /dev/sdb1')
+					from  Components.Harddisk  import  harddiskmanager
+					for hdd in harddiskmanager.HDDList():
+						messageString += _("HDD %s isSleeping: %s\n" % (hdd[1].getDeviceName(),hdd[1].isSleeping()))
 				except:
-					sdb1_status = '(command failed)'
-				messageString += _("%s\n\n" % sdb1_status)               
+					messageString += _("HDD status detection failed\n")               
+			messageString += _("\n")               
 
 			# video geometries 1
 			if True:
