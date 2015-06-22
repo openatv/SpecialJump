@@ -945,15 +945,15 @@ class SpecialJump():
 		self.services_hd_free = ['1:0:19:283D:3FB:1:C00000:0:0:0:', '1:0:19:283E:3FB:1:C00000:0:0:0:', '1:0:19:283F:3FB:1:C00000:0:0:0:', '1:0:19:2859:401:1:C00000:0:0:0:', '1:0:19:285B:401:1:C00000:0:0:0:', '1:0:19:286E:425:1:C00000:0:0:0:', '1:0:19:286F:425:1:C00000:0:0:0:', '1:0:19:2870:425:1:C00000:0:0:0:', '1:0:19:2873:425:1:C00000:0:0:0:', '1:0:19:2887:40F:1:C00000:0:0:0:', '1:0:19:2888:40F:1:C00000:0:0:0:', '1:0:19:2889:40F:1:C00000:0:0:0:', '1:0:19:2B66:3F3:1:C00000:0:0:0:', '1:0:19:2B7A:3F3:1:C00000:0:0:0:', '1:0:19:2B84:3F3:1:C00000:0:0:0:', '1:0:19:2B8E:3F2:1:C00000:0:0:0:', '1:0:19:2B98:3F2:1:C00000:0:0:0:', '1:0:19:2BA2:3F2:1:C00000:0:0:0:', '1:0:19:6EA5:4B1:1:C00000:0:0:0:']
 		self.services_sd_free = ['1:0:1:1146:404:1:C00000:0:0:0:', '1:0:1:272E:402:1:C00000:0:0:0:', '1:0:1:2742:402:1:C00000:0:0:0:', '1:0:1:2753:402:1:C00000:0:0:0:', '1:0:1:2EE3:441:1:C00000:0:0:0:', '1:0:1:2EF4:441:1:C00000:0:0:0:', '1:0:1:2F08:441:1:C00000:0:0:0:', '1:0:1:2F1C:441:1:C00000:0:0:0:', '1:0:1:2F1D:441:1:C00000:0:0:0:', '1:0:1:2F3A:441:1:C00000:0:0:0:', '1:0:1:308:5:85:C00000:0:0:0:', '1:0:1:33:21:85:C00000:0:0:0:', '1:0:1:384:21:85:C00000:0:0:0:', '1:0:1:3F:21:85:C00000:0:0:0:', '1:0:1:445C:453:1:C00000:0:0:0:', '1:0:1:445D:453:1:C00000:0:0:0:', '1:0:1:445E:453:1:C00000:0:0:0:', '1:0:1:445F:453:1:C00000:0:0:0:', '1:0:1:4461:453:1:C00000:0:0:0:', '1:0:1:7004:436:1:C00000:0:0:0:', '1:0:1:701:5:85:C00000:0:0:0:', '1:0:1:7036:41B:1:C00000:0:0:0:', '1:0:1:79E0:443:1:C00000:0:0:0:', '1:0:1:79F4:443:1:C00000:0:0:0:']
 		self.zap_time_event_counter    = 0
-		self.zap_error_counter         = [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
+		self.zap_error_counter         = [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
 		self.zap_time_event_counter_ms = 50
 		self.zap_time                  = 0
 		self.zap_time_res_0_seen       = False
 		self.zap_success               = 'off'
 		self.zapPredictiveService      = None
-		self.zap_time_nums = [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
-		self.zap_time_sums = [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
-		self.zap_list_ind1  = ['off', 'miss', 'fast']
+		self.zap_time_nums = [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
+		self.zap_time_sums = [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
+		self.zap_list_ind1  = ['off', 'miss', 'fast','??']
 		self.zap_list_ind2  = ['HD+', 'HD', 'SD', '??', 'tot']
 
 	def powerOn(self):
@@ -1471,19 +1471,22 @@ class SpecialJump():
 		self.zapHandler(direction)
 
 	def zapHandler(self,direction):
-		if config.plugins.SpecialJump.fastZapEnable.value:
-			cur = self.InfoBar_instance.servicelist.getCurrentSelection()
-			if cur:
-				cur = cur.toString()
-				if cur == self.zapPredictiveService:
-					# fast zap due to previously active PIP on the new channel
-					if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG ",self.fastZapDirection," PIP predictive zap success"
-					self.zap_success = 'fast'
-				else:
-					self.zap_success = 'miss'
-					if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG ",self.fastZapDirection," PIP predictive zap guessed wrong, is ",cur," exp. ",self.zapPredictiveService
+		if self.InfoBar_instance:
+			if config.plugins.SpecialJump.fastZapEnable.value:
+				cur = self.InfoBar_instance.servicelist.getCurrentSelection()
+				if cur:
+					cur = cur.toString()
+					if cur == self.zapPredictiveService:
+						# fast zap due to previously active PIP on the new channel
+						if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG ",self.fastZapDirection," PIP predictive zap success"
+						self.zap_success = 'fast'
+					else:
+						self.zap_success = 'miss'
+						if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG ",self.fastZapDirection," PIP predictive zap guessed wrong, is ",cur," exp. ",self.zapPredictiveService
+			else:
+				self.zap_success = 'off'
 		else:
-			self.zap_success = 'off'
+			self.zap_success = '??'
 		
 		if config.plugins.SpecialJump.fastZapBenchmarkMode.value:
 			rand = randint(0,2)
