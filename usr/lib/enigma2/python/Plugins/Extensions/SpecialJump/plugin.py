@@ -1539,59 +1539,62 @@ class SpecialJump():
 		if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG zapPredictive 1"
 		self.disablePredictiveRecOrPIP()
 		
-		storeService = self.InfoBar_instance.servicelist.getCurrentSelection()
+		if self.InfoBar_instance:
+			storeService = self.InfoBar_instance.servicelist.getCurrentSelection()
 
-		if self.fastZapDirection == "zapDown":
-			#predictive zapDown: same algorithm as in InfoBarGenerics/zapDown
-			if self.InfoBar_instance.servicelist.inBouquet():
-				prev = self.InfoBar_instance.servicelist.getCurrentSelection()
-				if prev:
-					prev = prev.toString()
-					while True:
-						if config.usage.quickzap_bouquet_change.value and self.InfoBar_instance.servicelist.atEnd():
-							self.InfoBar_instance.servicelist.nextBouquet()
-							self.InfoBar_instance.servicelist.moveTop()
-						else:
-							self.InfoBar_instance.servicelist.moveDown()
-						cur = self.InfoBar_instance.servicelist.getCurrentSelection()
-						if cur:
-							if self.InfoBar_instance.servicelist.dopipzap:
-								isPlayable = self.session.pip.isPlayableForPipService(cur)
+			if self.fastZapDirection == "zapDown":
+				#predictive zapDown: same algorithm as in InfoBarGenerics/zapDown
+				if self.InfoBar_instance.servicelist.inBouquet():
+					prev = self.InfoBar_instance.servicelist.getCurrentSelection()
+					if prev:
+						prev = prev.toString()
+						while True:
+							if config.usage.quickzap_bouquet_change.value and self.InfoBar_instance.servicelist.atEnd():
+								self.InfoBar_instance.servicelist.nextBouquet()
+								self.InfoBar_instance.servicelist.moveTop()
 							else:
-								isPlayable = isPlayableForCur(cur)
-						if cur and (cur.toString() == prev or isPlayable):
-							break
+								self.InfoBar_instance.servicelist.moveDown()
+							cur = self.InfoBar_instance.servicelist.getCurrentSelection()
+							if cur:
+								if self.InfoBar_instance.servicelist.dopipzap:
+									isPlayable = self.session.pip.isPlayableForPipService(cur)
+								else:
+									isPlayable = isPlayableForCur(cur)
+							if cur and (cur.toString() == prev or isPlayable):
+								break
+				else:
+					self.InfoBar_instance.servicelist.moveDown()
 			else:
-				self.InfoBar_instance.servicelist.moveDown()
+				#predictive zapUp: same algorithm as in InfoBarGenerics/zapUp
+				if self.InfoBar_instance.servicelist.inBouquet():
+					prev = self.InfoBar_instance.servicelist.getCurrentSelection()
+					if prev:
+						prev = prev.toString()
+						while True:
+							if config.usage.quickzap_bouquet_change.value and self.InfoBar_instance.servicelist.atBegin():
+								self.InfoBar_instance.servicelist.prevBouquet()
+								self.InfoBar_instance.servicelist.moveEnd()
+							else:
+								self.InfoBar_instance.servicelist.moveUp()
+							cur = self.InfoBar_instance.servicelist.getCurrentSelection()
+							if cur:
+								if self.InfoBar_instance.servicelist.dopipzap:
+									isPlayable = self.session.pip.isPlayableForPipService(cur)
+								else:
+									isPlayable = isPlayableForCur(cur)
+							if cur and (cur.toString() == prev or isPlayable):
+								break
+				else:
+					self.InfoBar_instance.servicelist.moveUp()
+
+			fastZapNextService = self.InfoBar_instance.servicelist.getCurrentSelection()
+			self.enablePredictiveRecOrPIP(fastZapNextService)
+			self.zapPredictiveService = fastZapNextService.toString()
+
+			self.InfoBar_instance.servicelist.setCurrentSelection(storeService)
+			if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG zapPredictive 2"
 		else:
-			#predictive zapUp: same algorithm as in InfoBarGenerics/zapUp
-			if self.InfoBar_instance.servicelist.inBouquet():
-				prev = self.InfoBar_instance.servicelist.getCurrentSelection()
-				if prev:
-					prev = prev.toString()
-					while True:
-						if config.usage.quickzap_bouquet_change.value and self.InfoBar_instance.servicelist.atBegin():
-							self.InfoBar_instance.servicelist.prevBouquet()
-							self.InfoBar_instance.servicelist.moveEnd()
-						else:
-							self.InfoBar_instance.servicelist.moveUp()
-						cur = self.InfoBar_instance.servicelist.getCurrentSelection()
-						if cur:
-							if self.InfoBar_instance.servicelist.dopipzap:
-								isPlayable = self.session.pip.isPlayableForPipService(cur)
-							else:
-								isPlayable = isPlayableForCur(cur)
-						if cur and (cur.toString() == prev or isPlayable):
-							break
-			else:
-				self.InfoBar_instance.servicelist.moveUp()
-
-		fastZapNextService = self.InfoBar_instance.servicelist.getCurrentSelection()
-		self.enablePredictiveRecOrPIP(fastZapNextService)
-		self.zapPredictiveService = fastZapNextService.toString()
-
-		self.InfoBar_instance.servicelist.setCurrentSelection(storeService)
-		if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG zapPredictive 2"
+			if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG zapPredictive skipped, no InfoBar_Instance"
 														
 	def enablePredictiveRecOrPIP(self, fastZapNextService):
 		if (config.plugins.SpecialJump.fastZapMethod.value == "pip") or (config.plugins.SpecialJump.fastZapMethod.value == "pip_hidden"):
