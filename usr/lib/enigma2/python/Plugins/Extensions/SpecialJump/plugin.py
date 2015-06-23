@@ -344,6 +344,7 @@ def InfoBarPlugins__init__(self):
 
 def SJsetHistoryPath(self, doZap=True):
 	# history zap is using ChannelSelection.setHistoryPath. Disable pseudo recordings before changing service (freeing the tuner), do predictive zap afterwards.
+	SpecialJump.initInfoBar(SpecialJumpInstance,None) # 'self' isn't InfoBar, pass 'None'
 	SpecialJump.initZapSpeedCounter(SpecialJumpInstance)
 	SpecialJump.disablePredictiveRecOrPIP(SpecialJumpInstance)
 	base_ChannelSelection_setHistoryPath(self,doZap)
@@ -351,10 +352,11 @@ def SJsetHistoryPath(self, doZap=True):
 
 def SJselectAndStartService(self, service, bouquet):
 	# number zap is using InfoBarNumberZap.selectAndStartService. Disable pseudo recordings before changing service (freeing the tuner), do predictive zap afterwards.
+	SpecialJump.initInfoBar(SpecialJumpInstance,self)
 	SpecialJump.initZapSpeedCounter(SpecialJumpInstance)
 	SpecialJump.disablePredictiveRecOrPIP(SpecialJumpInstance)
 	base_InfoBarNumberZap_selectAndStartService(self, service, bouquet)
-	SpecialJump.zapHandlerParent(SpecialJumpInstance,self,"zapDown") # P+
+	SpecialJump.zapHandler(SpecialJumpInstance,"zapDown") # P+
 
 def specialjump_jumpPreviousMark(self,mode):
 	SpecialJump.jumpPreviousMark(SpecialJumpInstance,self,mode)
@@ -1460,15 +1462,17 @@ class SpecialJump():
 		InfoBarChannelSelection.zapDown(self.InfoBar_instance)
 		self.zapHandler("zapDown")
 
+	def initInfoBar(self,parent):
+		if parent is not None:
+			self.InfoBar_instance = parent
+		elif self.InfoBar_instance is None:
+			self.InfoBar_instance = InfoBar.instance # only for overloaded functions using InfoBar_instance when it has not yet been set to 'parent'
+
 	def initZapSpeedCounter(self):
 		if config.plugins.SpecialJump.zapspeed_enable.value:
 			self.SJZapspeedPollTimer.start(self.zap_time_event_counter_ms,False)#repetitive
 			self.zap_time_res_0_seen = False
 		self.zap_time_event_counter = 0
-
-	def zapHandlerParent(self,parent,direction):
-		self.InfoBar_instance = parent
-		self.zapHandler(direction)
 
 	def zapHandler(self,direction):
 		if config.plugins.SpecialJump.fastZapEnable.value:
