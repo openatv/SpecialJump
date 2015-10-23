@@ -508,6 +508,7 @@ class SpecialJumpInfoBar(Screen):
 		self.onClose.append(self.__onClose)
 		self.onShow.append(self.__onShow)
 		self.parent = None
+		self.localJumpTime = ""
 		
 		#self['Service'] = EMCCurrentService(session.nav, self.parent) # overwritten in doShow
 
@@ -521,6 +522,7 @@ class SpecialJumpInfoBar(Screen):
 	def doShow(self, parent, grandparent_InfoBar):
 		#self['Service'] = EMCCurrentService(self.session.nav, grandparent_InfoBar)
 		self.parent = parent
+		self.localJumpTime = self.parent.SJJumpTime
 		self.show()
 
 	def doHide(self):
@@ -529,12 +531,12 @@ class SpecialJumpInfoBar(Screen):
 
 	def refreshInfoBar(self):
 		try:
-			if self.parent.SJJumpTime < 0:
-				self["SJJumpTime"].setText(_("jump -%d:%02d" % (abs(int(self.parent.SJJumpTime)) // 60, abs(int(self.parent.SJJumpTime)) % 60)))
+			if int(self.localJumpTime) < 0:
+				self["SJJumpTime"].setText(_("jump -%d:%02d" % (abs(int(self.localJumpTime)) // 60, abs(int(self.localJumpTime)) % 60)))
 			else:
-				self["SJJumpTime"].setText(_("jump +%d:%02d" % (self.parent.SJJumpTime // 60, self.parent.SJJumpTime % 60)))
+				self["SJJumpTime"].setText(_("jump +%d:%02d" % (self.localJumpTime // 60, self.localJumpTime % 60)))
 		except:
-			self["SJJumpTime"].setText(_("%s" % self.parent.SJJumpTime)) # not an int
+			self["SJJumpTime"].setText(_("%s" % self.localJumpTime)) # not an int
 		if self.shown:
 			self.SJRefreshTimer.start(100,True)
 
