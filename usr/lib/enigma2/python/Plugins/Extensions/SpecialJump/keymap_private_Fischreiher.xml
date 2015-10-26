@@ -80,9 +80,19 @@
 	<key id="KEY_CHANNELUP"   mapto="specialjump_channelUp"         flags="mr" />
 	<key id="KEY_CHANNELDOWN" mapto="specialjump_doNothing"         flags="bl" />
 	<key id="KEY_CHANNELUP"   mapto="specialjump_doNothing"         flags="bl" />
-	<key id="KEY_PREVIOUS"    mapto="specialjump_jumpPreviousMark"  flags="m" />
-    <key id="KEY_0"           mapto="specialjump_toggleMark"        flags="m" />
-	<key id="KEY_NEXT"        mapto="specialjump_jumpNextMark"      flags="m" />
+	<key id="KEY_PREVIOUS"    mapto="specialjump_jumpPreviousMark"  flags="b" />
+	<key id="KEY_0"           mapto="specialjump_toggleMark"        flags="b" />
+	<key id="KEY_NEXT"        mapto="specialjump_jumpNextMark"      flags="b" />
+	<key id="KEY_PREVIOUS"    mapto="specialjump_toggleMarkIn"      flags="l" />
+<!--<key id="KEY_0"           mapto="specialjump_callMovieCut"      flags="l" /> -->
+	<key id="KEY_0"           mapto="specialjump_callCutListEditor" flags="l" />
+	<key id="KEY_NEXT"        mapto="specialjump_toggleMarkOut"     flags="l" />
+	<key id="KEY_PREVIOUS"    mapto="specialjump_clearDoubleAction" flags="m" />
+	<key id="KEY_0"           mapto="specialjump_clearDoubleAction" flags="m" />
+	<key id="KEY_NEXT"        mapto="specialjump_clearDoubleAction" flags="m" />
+	<key id="KEY_PREVIOUS"    mapto="specialjump_doNothing"         flags="r" />
+	<key id="KEY_0"           mapto="specialjump_doNothing"         flags="r" />
+	<key id="KEY_NEXT"        mapto="specialjump_doNothing"         flags="r" />
 </map>
 
 <!-- ================================================================================= -->

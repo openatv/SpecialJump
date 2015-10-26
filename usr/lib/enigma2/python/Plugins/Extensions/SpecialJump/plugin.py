@@ -47,6 +47,7 @@ from Components.ConfigList import ConfigListScreen
 from Components.VolumeControl import VolumeControl
 from Components.ServiceEventTracker import ServiceEventTracker
 from Components.SystemInfo import SystemInfo
+from Components.ServicePosition import ServicePositionGauge
 from ServiceReference import ServiceReference, isPlayableForCur
 import NavigationInstance
 from enigma import eTimer, ePoint, eSize
@@ -62,6 +63,14 @@ from Tools.BoundFunction import boundFunction
 from Tools.ISO639 import LanguageCodes
 from Tools import Notifications
 from os import path
+try:
+	from Plugins.Extensions.MovieCut.plugin import main as MovieCut
+except:
+	print "[SpecialJump] import MovieCut failed"
+try:
+	from Plugins.Extensions.CutListEditor.plugin import main as CutListEditor
+except:
+	print "[SpecialJump] import CutListEditor failed"
 
 import xml.sax.xmlreader
 import os.path
@@ -220,10 +229,15 @@ def autostart(reason, **kwargs):
 		InfoBarPlugins.specialjump_channelDown          = specialjump_channelDown
 		InfoBarPlugins.specialjump_channelUp            = specialjump_channelUp
 		InfoBarPlugins.specialjump_doNothing            = specialjump_doNothing
+		InfoBarPlugins.specialjump_clearDoubleAction    = specialjump_clearDoubleAction
 		InfoBarPlugins.specialjump_jumpPreviousMark     = specialjump_jumpPreviousMark
 		InfoBarPlugins.specialjump_jumpNextMark         = specialjump_jumpNextMark
 		InfoBarPlugins.specialjump_toggleMark           = specialjump_toggleMark
 		InfoBarPlugins.specialjump_toggleLCDBlanking    = specialjump_toggleLCDBlanking
+		InfoBarPlugins.specialjump_toggleMarkIn         = specialjump_toggleMarkIn
+		InfoBarPlugins.specialjump_toggleMarkOut        = specialjump_toggleMarkOut
+		InfoBarPlugins.specialjump_callMovieCut         = specialjump_callMovieCut
+		InfoBarPlugins.specialjump_callCutListEditor    = specialjump_callCutListEditor
 		if reason == 0:
 			if session is not None:
 				if not session.nav.wasTimerWakeup() or session.nav.RecordTimer.getNextRecordingTime() > session.nav.RecordTimer.getNextZapTime():
@@ -274,7 +288,12 @@ def InfoBarPlugins__init__(self):
 		 'specialjump_jumpPreviousMark':    (boundFunction(self.specialjump_jumpPreviousMark,"MP"), _('jump to previous mark')),
 		 'specialjump_jumpNextMark':        (boundFunction(self.specialjump_jumpNextMark,"MP"),     _('jump to next mark')),
 		 'specialjump_toggleMark':          (boundFunction(self.specialjump_toggleMark,"MP"),       _('toggle mark')),
+		 'specialjump_toggleMarkIn':        (boundFunction(self.specialjump_toggleMarkIn,"MP"),     _('toggle mark in')),
+		 'specialjump_toggleMarkOut':       (boundFunction(self.specialjump_toggleMarkOut,"MP"),    _('toggle mark out')),
+		 'specialjump_callMovieCut':        (boundFunction(self.specialjump_callMovieCut,"MP"),     _('call MovieCut plugin')),
+		 'specialjump_callCutListEditor':   (boundFunction(self.specialjump_callCutListEditor,"MP"),_('call CutListEditor plugin')),
 		 'specialjump_doNothing':           (self.specialjump_doNothing, _('do nothing')),
+		 'specialjump_clearDoubleAction':   (self.specialjump_clearDoubleAction, _('avoid double action for certain keys, call on make')),
 		 'specialjump_toggleSubtitleTrack': (self.specialjump_toggleSubtitleTrack, _('toggle subtitle track')),
 		 'specialjump_toggleAudioTrack':    (self.specialjump_toggleAudioTrack,    _('toggle audio track')),
 		 'specialjump_toggleLCDBlanking':   (self.specialjump_toggleLCDBlanking,   _('toggle LCD blanking')),
@@ -312,7 +331,12 @@ def InfoBarPlugins__init__(self):
 		 'specialjump_jumpPreviousMark':    (boundFunction(self.specialjump_jumpPreviousMark,"TV"), _('jump to previous mark')),
 		 'specialjump_jumpNextMark':        (boundFunction(self,specialjump_jumpNextMark,"TV"),     _('jump to next mark')),
 		 'specialjump_toggleMark':          (boundFunction(self.specialjump_toggleMark,"TV"),       _('toggle mark')),
+		 'specialjump_toggleMarkIn':        (boundFunction(self.specialjump_toggleMarkIn,"TV"),     _('toggle mark in')),
+		 'specialjump_toggleMarkOut':       (boundFunction(self.specialjump_toggleMarkOut,"TV"),    _('toggle mark out')),
+		 'specialjump_callMovieCut':        (boundFunction(self.specialjump_callMovieCut,"TV"),     _('call MovieCut plugin')),
+		 'specialjump_callCutListEditor':   (boundFunction(self.specialjump_callCutListEditor,"TV"),_('call CutListEditor plugin')),
 		 'specialjump_doNothing':           (self.specialjump_doNothing, _('do nothing')),
+		 'specialjump_clearDoubleAction':   (self.specialjump_clearDoubleAction, _('avoid double action for certain keys, call on make')),
 		 'specialjump_toggleSubtitleTrack': (self.specialjump_toggleSubtitleTrack, _('toggle subtitle track')),
 		 'specialjump_toggleAudioTrack':    (self.specialjump_toggleAudioTrack,    _('toggle audio track')),
 		 'specialjump_toggleLCDBlanking':   (self.specialjump_toggleLCDBlanking,   _('toggle LCD blanking')),
@@ -333,6 +357,7 @@ def InfoBarPlugins__init__(self):
 		InfoBarPlugins.specialjump_emcpin = None
 		InfoBarPlugins.specialjump_jump = None
 		InfoBarPlugins.specialjump_toggleSubtitleTrack = None
+		InfoBarPlugins.specialjump_clearDoubleAction = None
 		InfoBarPlugins.specialjump_toggleAudioTrack = None
 		InfoBarPlugins.specialjump_toggleLCDBlanking = None
 		InfoBarPlugins.specialjump_channelDown = None
@@ -340,6 +365,10 @@ def InfoBarPlugins__init__(self):
 		InfoBarPlugins.specialjump_jumpPreviousMark = None
 		InfoBarPlugins.specialjump_jumpNextMark = None
 		InfoBarPlugins.specialjump_toggleMark = None
+		InfoBarPlugins.specialjump_toggleMarkIn = None
+		InfoBarPlugins.specialjump_toggleMarkOut = None
+		InfoBarPlugins.specialjump_callMovieCut = None
+		InfoBarPlugins.specialjump_callCutListEditor = None
 	baseInfoBarPlugins__init__(self)
 
 def SJsetHistoryPath(self, doZap=True):
@@ -359,17 +388,39 @@ def SJselectAndStartService(self, service, bouquet):
 	SpecialJump.zapHandler(SpecialJumpInstance,"zapDown") # P+
 
 def specialjump_jumpPreviousMark(self,mode):
-	SpecialJump.jumpPreviousMark(SpecialJumpInstance,self,mode)
+	if not SpecialJump.doubleActionFlag: # 'break' action suppressed after 'long' key action
+		SpecialJump.jumpPreviousMark(SpecialJumpInstance,self,mode)
 
 def specialjump_jumpNextMark(self,mode):
-	SpecialJump.jumpNextMark(SpecialJumpInstance,self,mode)
+	if not SpecialJump.doubleActionFlag: # 'break' action suppressed after 'long' key action
+		SpecialJump.jumpNextMark(SpecialJumpInstance,self,mode)
 
 def specialjump_toggleMark(self,mode):
-	SpecialJump.toggleMark(SpecialJumpInstance,self,mode)
+	if not SpecialJump.doubleActionFlag: # 'break' action suppressed after 'long' key action
+		SpecialJump.toggleMark(SpecialJumpInstance,self,mode,InfoBarCueSheetSupport.CUT_TYPE_MARK)
+
+def specialjump_toggleMarkIn(self,mode):
+	SpecialJump.doubleActionFlag = True # 'long' press action, suppress 'break' action
+	SpecialJump.toggleMark(SpecialJumpInstance,self,mode,InfoBarCueSheetSupport.CUT_TYPE_IN)
+
+def specialjump_toggleMarkOut(self,mode):
+	SpecialJump.doubleActionFlag = True # 'long' press action, suppress 'break' action
+	SpecialJump.toggleMark(SpecialJumpInstance,self,mode,InfoBarCueSheetSupport.CUT_TYPE_OUT)
+
+def specialjump_callMovieCut(self,mode):
+	SpecialJump.doubleActionFlag = True # 'long' press action, suppress 'break' action
+	SpecialJump.callMovieCut(SpecialJumpInstance,self,mode)
+
+def specialjump_callCutListEditor(self,mode):
+	SpecialJump.doubleActionFlag = True # 'long' press action, suppress 'break' action
+	SpecialJump.callCutListEditor(SpecialJumpInstance,self,mode)
 
 def specialjump_doNothing(self):
 	pass
-	
+
+def specialjump_clearDoubleAction(self):
+	SpecialJump.doubleActionFlag = False
+
 def specialjump_channelDown(self,mode):
 	SpecialJump.channelDown(SpecialJumpInstance,self,mode)
 
@@ -509,6 +560,71 @@ class SpecialJumpInfoBar(Screen):
 		self.onShow.append(self.__onShow)
 		self.parent = None
 		self.localJumpTime = ""
+		
+		#self['Service'] = EMCCurrentService(session.nav, self.parent) # overwritten in doShow
+
+	def __onShow(self):
+		self.instance.move(ePoint(config.plugins.SpecialJump.bar_x.getValue(), config.plugins.SpecialJump.bar_y.getValue()))
+		self.refreshInfoBar()
+
+	def __onClose(self):
+		self.SJRefreshTimer.stop()
+
+	def doShow(self, parent, grandparent_InfoBar):
+		#self['Service'] = EMCCurrentService(self.session.nav, grandparent_InfoBar)
+		self.parent = parent
+		self.localJumpTime = self.parent.SJJumpTime
+		self.show()
+
+	def doHide(self):
+		if self.shown:
+			self.hide()
+
+	def refreshInfoBar(self):
+		try:
+			if int(self.localJumpTime) < 0:
+				self["SJJumpTime"].setText(_("jump -%d:%02d" % (abs(int(self.localJumpTime)) // 60, abs(int(self.localJumpTime)) % 60)))
+			else:
+				self["SJJumpTime"].setText(_("jump +%d:%02d" % (self.localJumpTime // 60, self.localJumpTime % 60)))
+		except:
+			self["SJJumpTime"].setText(_("%s" % self.localJumpTime)) # not an int
+		if self.shown:
+			self.SJRefreshTimer.start(100,True)
+
+#----------------------------------------------------------------------
+
+class SpecialJumpInfoBarCuts(Screen):
+	skin= """
+	<screen name="SpecialJump_SpecialJumpInfoBarCuts" title="SpecialJump InfoBar" flags="wfNoBorder" position="center,center" size="1135,70" zPosition="1" backgroundColor="black">
+		<widget source="session.CurrentService" render="Label" position="180, 15" size="150,27" font="Arial;22" halign="left" backgroundColor="black" transparent="1" zPosition="3">
+			<convert type="ServicePosition">Remaining</convert>
+		</widget>
+		<widget source="session.CurrentService" render="Label" position=" 920, 15" size=" 80,27" font="Arial;22" halign="right" backgroundColor="black" transparent="1" zPosition="3">
+			<convert type="ServicePosition">Position</convert>
+		</widget>
+		<eLabel text="/" position="1010, 15" size=" 10,27" font="Arial;22" halign="center" backgroundColor="black" transparent="1" />
+		<widget source="session.CurrentService" render="Label" position="1030, 15" size=" 80,27" font="Arial;22" halign="left" backgroundColor="black" transparent="1" zPosition="3">
+			<convert type="ServicePosition">Length</convert>
+		</widget>
+		<widget name="Timeline" position="10,49" size="1120,20" backgroundColor="#181818" pointer="skin_default/position_arrow.png:3,5" foregroundColor="blue" />
+		<widget backgroundColor="black" font="Regular; 24" halign="left" name="SJJumpTime" position="300,15" size=" 350,27" transparent="1" />
+	</screen>
+	"""
+	
+	def __init__(self, session):
+		self.session = session
+		Screen.__init__(self, session)
+		self.skinName = ["SpecialJump_" + self.__class__.__name__] # 'SpecialJump_SpecialJumpInfoBarCuts'
+		self.labels = ["SJJumpTime"]
+		for x in self.labels:
+			self[x] = Label("")
+		self.SJRefreshTimer = eTimer()
+		self.SJRefreshTimer.callback.append(self.refreshInfoBar)
+		self.onClose.append(self.__onClose)
+		self.onShow.append(self.__onShow)
+		self.parent = None
+		self.localJumpTime = ""
+		self["Timeline"] = ServicePositionGauge(self.session.nav)
 		
 		#self['Service'] = EMCCurrentService(session.nav, self.parent) # overwritten in doShow
 
@@ -933,10 +1049,13 @@ class SpecialJump():
 
 		self.starttime = self.getTime_ms()
 		
+		self.doubleActionFlag = False                  # avoid double action ('break' and 'long') for certain keys, set to False on 'make'
+		
 		self.volctrl = eDVBVolumecontrol.getInstance() # volume control # dirty
 		
 		# initialize local windows
 		self.SpecialJumpInfoBar_instance      = self.session.instantiateDialog(SpecialJumpInfoBar)
+		self.SpecialJumpInfoBarCuts_instance  = self.session.instantiateDialog(SpecialJumpInfoBarCuts)
 		self.SpecialJumpEventTracker_instance = self.session.instantiateDialog(SpecialJumpEventTracker, self)
 		self.ZapMessage_instance              = self.session.instantiateDialog(ZapMessage)
 		self.AudioToggleInfobox_instance      = self.session.instantiateDialog(AudioSubsInfobox, 'Audio')
@@ -1020,12 +1139,16 @@ class SpecialJump():
 			value = config.plugins.SpecialJump.specialJump7.getValue()
 		return value
 
-	def specialJumpStartTimerShowInfoBar(self, muteTime_ms):
+	def specialJumpStartTimerShowInfoBar(self, withCuts, muteTime_ms):
 		self.SJTimer.stop()
 		self.SJTimer.start(int(config.plugins.SpecialJump.specialJumpTimeout_ms.getValue()))
-		if config.plugins.SpecialJump.show_infobar.getValue():
-			self.SpecialJumpInfoBar_instance.doShow(self,self.InfoBar_instance) # grandparent_InfoBar
-		self.specialJumpMute(muteTime_ms)
+		if withCuts:
+			self.SpecialJumpInfoBarCuts_instance.doShow(self,self.InfoBar_instance) # grandparent_InfoBar
+		else:
+			if config.plugins.SpecialJump.show_infobar.getValue():
+				self.SpecialJumpInfoBar_instance.doShow(self,self.InfoBar_instance) # grandparent_InfoBar
+		if muteTime_ms>0:
+			self.specialJumpMute(muteTime_ms)
 
 	def specialJumpMute(self, muteTime_ms):
 		if int(muteTime_ms) > 0:
@@ -1126,6 +1249,7 @@ class SpecialJump():
 		self.SJJumpTime      = 0
 		self.SJTimer.stop()
 		self.SpecialJumpInfoBar_instance.doHide()
+		self.SpecialJumpInfoBarCuts_instance.doHide()
 
 	def specialJumpUnmute(self):
 		self.SJMuteTimer.stop()
@@ -1298,7 +1422,7 @@ class SpecialJump():
 				if needPauseService:
 					# workaround part II
 					self.pauseService()
-				self.specialJumpStartTimerShowInfoBar(MuteTime_ms)
+				self.specialJumpStartTimerShowInfoBar(False, MuteTime_ms)
 			else:
 				self.session.open(MessageBox,_("SpecialJump debug: no seek"), type = MessageBox.TYPE_ERROR,timeout = 2)
 		else:
@@ -1345,7 +1469,7 @@ class SpecialJump():
 					if needPauseService:
 						# workaround part II
 						self.pauseService()
-					self.specialJumpStartTimerShowInfoBar(MuteTime_ms)
+					self.specialJumpStartTimerShowInfoBar(False, MuteTime_ms)
 			else:
 				self.session.open(MessageBox,_("SpecialJump debug: no seek"), type = MessageBox.TYPE_ERROR,timeout = 2)
 		else:
@@ -1365,7 +1489,7 @@ class SpecialJump():
 		pts = self.WorkaroundPTS
 		MuteTime_ms = self.WorkaroundMuteTime_ms
 		InfoBarSeek.doSeekRelative(self.InfoBar_instance, pts)
-		self.specialJumpStartTimerShowInfoBar(MuteTime_ms)
+		self.specialJumpStartTimerShowInfoBar(False, MuteTime_ms)
 	
 	def channelDown(self,parent,mode):
 		self.InfoBar_instance = parent
@@ -2056,7 +2180,7 @@ class SpecialJump():
 		if config.plugins.SpecialJump.show_infobar_on_jumpPreviousNextMark.getValue() == 'yes':
 			config.usage.show_infobar_on_skip.setValue(show_infobar_on_skip_lastValue)
 		self.SJJumpTime = "jump >*"
-		#self.specialJumpStartTimerShowInfoBar(config.plugins.SpecialJump.jumpMuteTime_ms.getValue())
+		#self.specialJumpStartTimerShowInfoBar(False, config.plugins.SpecialJump.jumpMuteTime_ms.getValue())
 		self.specialJumpMute(config.plugins.SpecialJump.jumpMuteTime_ms.getValue())
 		self.SJJumpTime = 0
 
@@ -2071,18 +2195,68 @@ class SpecialJump():
 		if config.plugins.SpecialJump.show_infobar_on_jumpPreviousNextMark.getValue() == 'yes':
 			config.usage.show_infobar_on_skip.setValue(show_infobar_on_skip_lastValue)
 		self.SJJumpTime = "jump *<"
-		#self.specialJumpStartTimerShowInfoBar(config.plugins.SpecialJump.jumpMuteTime_ms.getValue())
+		#self.specialJumpStartTimerShowInfoBar(False, config.plugins.SpecialJump.jumpMuteTime_ms.getValue())
 		self.specialJumpMute(config.plugins.SpecialJump.jumpMuteTime_ms.getValue())
 		self.SJJumpTime = 0
 
-	def toggleMark(self,parent,mode):
+	def toggleMark(self,parent,mode,markType):
 		if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG toggleMark"
 		self.InfoBar_instance = parent
 		self.SJMode=mode
-		InfoBarCueSheetSupport.toggleMark(self.InfoBar_instance)
-		self.SJJumpTime = "toggle mark"
-		#self.specialJumpStartTimerShowInfoBar(config.plugins.SpecialJump.jumpMuteTime_ms.getValue())
+		if markType == InfoBarCueSheetSupport.CUT_TYPE_MARK:
+			InfoBarCueSheetSupport.toggleMark(self.InfoBar_instance)
+			self.SJJumpTime = "toggle mark"
+		else:
+			self.IBGtoggleMark(False, False, 5*90000, False, markType)
+			if markType == InfoBarCueSheetSupport.CUT_TYPE_IN:
+				self.SJJumpTime = "toggle in"
+			else:
+				self.SJJumpTime = "toggle out"
+			self.specialJumpStartTimerShowInfoBar(True, 0)
+			service = self.session.nav.getCurrentService()
+			if service is not None:
+				cue = service and service.cueSheet()
+				if cue is not None:
+					# disable cutlists. we want to freely browse around in the movie
+					print "[SpecialJump] cut lists disabled!"
+					cue.setCutListEnable(0)
+
 		self.SJJumpTime = 0
+
+	def callMovieCut(self,parent,mode):
+		try:
+			MovieCut(session=self.session, service=self.session.nav.getCurrentlyPlayingServiceReference())
+		except:
+			print "[SpecialJump] callMovieCut failed"
+
+	def callCutListEditor(self,parent,mode):
+		try:
+			CutListEditor(session=self.session, service=self.session.nav.getCurrentlyPlayingServiceReference())
+		except:
+			print "[SpecialJump] callCutListEditor failed"
+
+	#from InfoBarGenerics.py
+	def IBGtoggleMark(self, onlyremove=False, onlyadd=False, tolerance=5*90000, onlyreturn=False, markType=InfoBarCueSheetSupport.CUT_TYPE_MARK):
+		current_pos = InfoBarCueSheetSupport.cueGetCurrentPosition(self.InfoBar_instance)
+		if current_pos is None:
+#			print "not seekable"
+			return
+
+		nearest_cutpoint = InfoBarCueSheetSupport.getNearestCutPoint(self.InfoBar_instance,current_pos)
+		if config.plugins.SpecialJump.debugEnable.getValue(): print "[SpecialJump] nearest_cutpoint ",nearest_cutpoint
+
+		if nearest_cutpoint is not None and abs(nearest_cutpoint[0] - current_pos) < tolerance:
+			if onlyreturn:
+				return nearest_cutpoint
+			if not onlyadd:
+				InfoBarCueSheetSupport.removeMark(self.InfoBar_instance,nearest_cutpoint)
+				if config.plugins.SpecialJump.debugEnable.getValue(): print "[SpecialJump] removeMark ",nearest_cutpoint
+		elif not onlyremove and not onlyreturn:
+			InfoBarCueSheetSupport.addMark(self.InfoBar_instance,(current_pos, markType))
+			if config.plugins.SpecialJump.debugEnable.getValue(): print "[SpecialJump] addMark ",nearest_cutpoint
+
+		if onlyreturn:
+			return None
 
 	#from Plugins/Extensions/Infopanel/plugin.py
 	def command(self,commandline, strip=1):
