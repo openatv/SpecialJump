@@ -1591,8 +1591,9 @@ class SpecialJump():
 	def initInfoBar(self,parent):
 		if parent is not None:
 			self.InfoBar_instance = parent
-		elif self.InfoBar_instance is None:
-			self.InfoBar_instance = InfoBar.instance # only for overloaded functions using InfoBar_instance when it has not yet been set to 'parent'
+		else:
+			self.InfoBar_instance = InfoBar.instance # SJsetHistoryPath always requires standard (not EMC) InfoBar.instance
+			# note: if this doesn't work in all cases, make a copy of self.InfoBar_instance everywhere if mode == "TV" and use it here
 
 	def initZapSpeedCounter(self):
 		if config.plugins.SpecialJump.zapspeed_enable.value:
