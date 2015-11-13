@@ -36,7 +36,11 @@ from Screens.InfoBarGenerics import InfoBarPiP
 import Screens.Standby
 from Plugins.Plugin import PluginDescriptor
 from Components.Sources.List import List
-#from Components.Sources.EMCCurrentService import EMCCurrentService
+##EMCsp##try:
+##EMCsp##	from Components.Sources.EMCCurrentService import EMCCurrentService
+##EMCsp##	from Components.Renderer import EMCPositionGauge
+##EMCsp##except:
+##EMCsp##	print "[SpecialJump] import EMCCurrentService failed"
 from Components.Lcd import LCD
 from Components.MenuList import MenuList
 from Components.Label import Label
@@ -543,6 +547,15 @@ class SpecialJumpInfoBar(Screen):
 		<widget source="session.CurrentService" render="Progress" position="  10,49" size="1120,8" pixmap="DMConcinnity-HD/progress.png" transparent="1" zPosition="3">
 			<convert type="ServicePosition">Position</convert>
 		</widget>
+<!--##EMCsp##	    <widget source="Service" render="Progress" position="10,49" size="1120,8" zPosition="4" pixmap="DMConcinnity-HD/progress_rec.png" transparent="1">
+			<convert type="EMCRecordPosition">Position</convert>
+		</widget>
+		<widget source="Service" render="Progress" position="10,49" size="1120,8" zPosition="5" pixmap="DMConcinnity-HD/progress.png" transparent="1">
+			<convert type="EMCServicePosition">Position</convert>
+		</widget>
+		<widget source="Service" render="EMCPositionGauge" position="10,48" size="1120,10" zPosition="6" transparent="1">
+			<convert type="EMCServicePosition">Gauge</convert>
+		</widget>  -->
 		<widget backgroundColor="black" font="Regular; 24" halign="left" name="SJJumpTime" position="300,15" size=" 350,27" transparent="1" />
 	</screen>
 	"""
@@ -561,7 +574,7 @@ class SpecialJumpInfoBar(Screen):
 		self.parent = None
 		self.localJumpTime = ""
 		
-		#self['Service'] = EMCCurrentService(session.nav, self.parent) # overwritten in doShow
+		##EMCsp##self['Service'] = EMCCurrentService(session.nav, self.parent) # overwritten in doShow
 
 	def __onShow(self):
 		self.instance.move(ePoint(config.plugins.SpecialJump.bar_x.getValue(), config.plugins.SpecialJump.bar_y.getValue()))
@@ -571,7 +584,8 @@ class SpecialJumpInfoBar(Screen):
 		self.SJRefreshTimer.stop()
 
 	def doShow(self, parent, grandparent_InfoBar):
-		#self['Service'] = EMCCurrentService(self.session.nav, grandparent_InfoBar)
+		##EMCsp##self['Service'] = EMCCurrentService(self.session.nav, grandparent_InfoBar) ### creates a new Components.Sources.EMCCurrentService.EMCCurrentService object, we don't want that
+		##EMCsp##self['Service'] = grandparent_InfoBar['Service']                           ### gets Service from the Components.Sources.EMCCurrentService.EMCCurrentService object from EMCMediaCenter, not from EMCMoviePlayerSummary which we want
 		self.parent = parent
 		self.localJumpTime = self.parent.SJJumpTime
 		self.show()
