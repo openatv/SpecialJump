@@ -187,7 +187,7 @@ config.plugins.SpecialJump.EMCdirsShowText                = ConfigText(default =
 config.plugins.SpecialJump.EMCdirsShowPin                 = ConfigInteger(default  = 0000, limits  = (0, 9999))
 
 config.plugins.SpecialJump.fastZapEnable                  = ConfigYesNo(default=True)
-config.plugins.SpecialJump.fastZapBenchmarkMode           = ConfigYesNo(default=False)
+config.plugins.SpecialJump.fastZapBenchmarkMode           = ConfigSelection(default = "false", choices = [("random", _("random")), ("false", _("No")), ("just_zap", _("just zap"))])
 config.plugins.SpecialJump.fastZapMethod                  = ConfigSelection(choices = [("pip", _("Picture in Picture (debug only)")),("pip_hidden", _("Picture in Picture, hidden (not recommended)")),("record", _("fake recording"))],default = "record")
 config.plugins.SpecialJump.zapspeedMeasureTimeout_ms      = ConfigInteger(default = 5500, limits  = (1, 99999))
 config.plugins.SpecialJump.fastZapBenchmarkTime_ms        = ConfigInteger(default = 6000, limits  = (1, 99999))
@@ -1630,19 +1630,20 @@ class SpecialJump():
 		else:
 			self.zap_success = 'off'
 		
-		if config.plugins.SpecialJump.fastZapBenchmarkMode.value:
-			rand = randint(0,2)
-			if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG Benchmark Mode ",rand
-			if rand == 0: # 33% fast zap
-				config.plugins.SpecialJump.fastZapEnable.setValue(True)
-			elif rand == 1: # 33% inverted direction for intentional wrong prediction
-				config.plugins.SpecialJump.fastZapEnable.setValue(True)
-				if direction == "zapDown":
-					direction = "zapUp"
-				else:
-					direction == "zapDown"
-			else: # 33% fast zap mode off
-				config.plugins.SpecialJump.fastZapEnable.setValue(False)
+		if config.plugins.SpecialJump.fastZapBenchmarkMode.value != "false":
+			if config.plugins.SpecialJump.fastZapBenchmarkMode.value == "random":
+				rand = randint(0,2)
+				if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG Benchmark Mode ",rand
+				if rand == 0: # 33% fast zap
+					config.plugins.SpecialJump.fastZapEnable.setValue(True)
+				elif rand == 1: # 33% inverted direction for intentional wrong prediction
+					config.plugins.SpecialJump.fastZapEnable.setValue(True)
+					if direction == "zapDown":
+						direction = "zapUp"
+					else:
+						direction == "zapDown"
+				else: # 33% fast zap mode off
+					config.plugins.SpecialJump.fastZapEnable.setValue(False)
 			self.SJZapBenchmarkTimer.start(config.plugins.SpecialJump.fastZapBenchmarkTime_ms.getValue()) # auto zap
 		else:
 			self.SJZapBenchmarkTimer.stop()
