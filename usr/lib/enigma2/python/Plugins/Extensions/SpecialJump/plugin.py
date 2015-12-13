@@ -70,11 +70,11 @@ from os import path
 try:
 	from Plugins.Extensions.MovieCut.plugin import main as MovieCut
 except:
-	print "[SpecialJump] import MovieCut failed"
+	print "import MovieCut failed"
 try:
 	from Plugins.Extensions.CutListEditor.plugin import main as CutListEditor
 except:
-	print "[SpecialJump] import CutListEditor failed"
+	print "import CutListEditor failed"
 
 import xml.sax.xmlreader
 import os.path
@@ -208,7 +208,6 @@ def autostart(reason, **kwargs):
 	global SpecialJumpInstance
 	if config.plugins.SpecialJump.enable.value:
 		print "SpecialJump enabled: ",config.plugins.SpecialJump.enable.getValue()
-		print datetime.now()
 		session = kwargs['session']
 		if SpecialJumpInstance is None:
 			SpecialJumpInstance = SpecialJump(session)
@@ -267,8 +266,7 @@ def Plugins(**kwargs):
 
 def InfoBarPlugins__init__(self):
 	if isinstance(self, InfoBarShowMovies):
-		if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG isinstance(self, InfoBarShowMovies)"
-		if config.plugins.SpecialJump.debugEnable.getValue(): print datetime.now()
+		if config.plugins.SpecialJump.debugEnable.getValue(): print "isinstance(self, InfoBarShowMovies)"
 		x = {'specialjump_forwards':        (boundFunction(self.specialjump_forwards,"MP","normal"),  _('SpecialJump forwards')),
 		 'specialjump_backwards':           (boundFunction(self.specialjump_backwards,"MP","normal"), _('SpecialJump backwards')),
 		 'specialjump_forwards_small':      (boundFunction(self.specialjump_forwards,"MP","small"),  _('SpecialJump forwards small')),
@@ -307,8 +305,7 @@ def InfoBarPlugins__init__(self):
 		 'specialjump_toggleSubtitleTrack_skipTeletext':        (self.specialjump_toggleSubtitleTrack_skipTeletext,        _('skip teletext activation'))}
 		self['SpecialJumpMoviePlayerActions'] = HelpableActionMap(self, 'SpecialJumpMoviePlayerActions', x, prio=-2) # -2 for priority over InfoBarSeek SeekActions seekdef:1 etc.
 	elif isinstance(self, InfoBarEPG):
-		if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG isinstance(self, InfoBarEPG)"
-		if config.plugins.SpecialJump.debugEnable.getValue(): print datetime.now()
+		if config.plugins.SpecialJump.debugEnable.getValue(): print "isinstance(self, InfoBarEPG)"
 		x = {'specialjump_forwards':        (boundFunction(self.specialjump_forwards,"TV","normal"),  _('SpecialJump forwards')),
 		 'specialjump_backwards':           (boundFunction(self.specialjump_backwards,"TV","normal"), _('SpecialJump backwards')),
 		 'specialjump_forwards_small':      (boundFunction(self.specialjump_forwards,"TV","small"),  _('SpecialJump forwards small')),
@@ -350,7 +347,7 @@ def InfoBarPlugins__init__(self):
 		 'specialjump_toggleSubtitleTrack_skipTeletext':        (self.specialjump_toggleSubtitleTrack_skipTeletext,        _('skip teletext activation'))}
 		self['SpecialJumpActions'] = HelpableActionMap(self, 'SpecialJumpActions', x, prio=-2) # -2 for priority over InfoBarSeek SeekActions seekdef:1 etc.
 	else:
-		if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG NOT isinstance(self, ...)"
+		if config.plugins.SpecialJump.debugEnable.getValue(): print "NOT isinstance(self, ...)"
 		InfoBarPlugins.__init__ = InfoBarPlugins.__init__
 		InfoBarPlugins.specialjump_doNothing = None
 		InfoBarPlugins.specialjump_forwards = None
@@ -502,19 +499,19 @@ class SpecialJumpEventTracker(Screen):
 			})
 
 	def __serviceChanged(self):
-		if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG __serviceChanged"
+		if config.plugins.SpecialJump.debugEnable.getValue(): print "__serviceChanged"
 		if not self.parent.SJMuteTimerActive:
 			self.SJChangedTimer.start(100,1) #1 = once / false = repetitively
 
 	def serviceChanged_delayed(self):
-		if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG serviceChanged_delayed 1"
+		#if config.plugins.SpecialJump.debugEnable.getValue(): print "serviceChanged_delayed 1"
 		self.SJChangedTimer.stop()
 		if self.parent is not None:
-			if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG serviceChanged_delayed 2"
+			#if config.plugins.SpecialJump.debugEnable.getValue(): print "serviceChanged_delayed 2"
 			self.parent.checkSetNewVolumeOnChange()
 
 			if not self.parent.SJLCDon and config.plugins.SpecialJump.LCDonOnEventChange.getValue():
-				if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG serviceChanged_delayed turned on LCD"
+				#if config.plugins.SpecialJump.debugEnable.getValue(): print "serviceChanged_delayed turned on LCD"
 				self.parent.restoreLCDBrightness()
 
 	def __onShow(self):
@@ -753,7 +750,7 @@ class AudioSubsInfobox(Screen):
 		idx = 0
 		fields = ["","","",""] # see self.labels
 		for value in self.streams:
-			if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG updateInfo"
+			if config.plugins.SpecialJump.debugEnable.getValue(): print "updateInfo"
 			if config.plugins.SpecialJump.debugEnable.getValue(): print value
 			if (self.verbosity == 'line_per_track') or (idx == self.selected_track) or (self.screenType == 'Volume'):
 				lin += 1
@@ -1000,7 +997,7 @@ class SpecialJump():
 		config.misc.standbyCounter.addNotifier(self._onStandby, initial_call = False)
 		
 		self.SJLCDon = True                    # for toggling LCD brightness
-		if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG __init__ SJLCDon = True"
+		if config.plugins.SpecialJump.debugEnable.getValue(): print "__init__ SJLCDon = True"
 		self.SJNextJumpIndex = 0               # next jump (0 = before 1st direction change)        
 		self.SJLastJumpDir   = 0               # last jump direction (0=none, 1=forward, -1=backward)        
 		self.SJJumpTime      = 0               # accumulated jump time since last timeout        
@@ -1048,6 +1045,8 @@ class SpecialJump():
 		self.SJWorkaround2Timer.timeout.get().append(self.specialJumpWorkaround2Timeout)
 		self.SJZapBenchmarkTimer=eTimer()         # timer for fast zap benchmark mode
 		self.SJZapBenchmarkTimer.timeout.get().append(self.zapDown)
+		self.executeCyclicTimer=eTimer() 
+		self.executeCyclicTimer.timeout.get().append(self.executeCyclic)
 	   
 		self.WorkaroundPTS = 0
 		
@@ -1094,8 +1093,7 @@ class SpecialJump():
 		self.zap_list_ind2  = ['HD+', 'HD', 'SD', '??', 'tot']
 
 	def powerOn(self):
-		if config.plugins.SpecialJump.debugEnable.getValue(): print datetime.now()
-		if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump powerOn"
+		if config.plugins.SpecialJump.debugEnable.getValue(): print "powerOn"
 		self.SJLCDon = True
 		self.fastZapPipActive = False
 		if config.plugins.SpecialJump.EMCdirsHideOnPowerup.getValue():
@@ -1103,16 +1101,14 @@ class SpecialJump():
 				#/etc/engima2/emc-hide.cfg
 				config.EMC.cfghide_enable.setValue(True)
 			except:
-				if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump could not set config.EMC.cfghide_enable True"
+				if config.plugins.SpecialJump.debugEnable.getValue(): print "could not set config.EMC.cfghide_enable True"
 		
 	def powerOff(self):
-		if config.plugins.SpecialJump.debugEnable.getValue(): print datetime.now()
-		if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump powerOff"
+		if config.plugins.SpecialJump.debugEnable.getValue(): print "powerOff"
 		pass
 
 	def _onStandby(self, element):
-		if config.plugins.SpecialJump.debugEnable.getValue(): print datetime.now()
-		if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump _onStandby"
+		if config.plugins.SpecialJump.debugEnable.getValue(): print "_onStandby"
 		from Screens.Standby import inStandby
 		inStandby.onClose.append(self.powerOn)
 		self.powerOff()
@@ -1124,13 +1120,13 @@ class SpecialJump():
 	def checkEMCpin(self, ret):
 		if ret is not None:
 			if ret:
-				if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump EMC PIN correct"
+				if config.plugins.SpecialJump.debugEnable.getValue(): print "EMC PIN correct"
 				try:
 					config.EMC.cfghide_enable.setValue(False)
 				except:
-					if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump could not set config.EMC.cfghide_enable False"
+					if config.plugins.SpecialJump.debugEnable.getValue(): print "could not set config.EMC.cfghide_enable False"
 			else:
-				if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump EMC PIN incorrect"
+				if config.plugins.SpecialJump.debugEnable.getValue(): print "EMC PIN incorrect"
 
 		
 	def specialJumpValue(self,index):
@@ -1296,7 +1292,7 @@ class SpecialJump():
 
 	def specialJumpZapspeedPollTimeout(self):
 		self.zap_time_event_counter += 1
-		#if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG specialJumpZapspeedPollTimeout ",self.zap_time_event_counter,' ',datetime.now()
+		#if config.plugins.SpecialJump.debugEnable.getValue(): print "specialJumpZapspeedPollTimeout ",self.zap_time_event_counter
 		ind1 = self.zap_list_ind1.index(self.zap_success)
 		cur = self.InfoBar_instance.servicelist.getCurrentSelection()
 		if cur:
@@ -1312,7 +1308,7 @@ class SpecialJump():
 		else:
 			ind2 = self.zap_list_ind2.index('??')
 		if self.zap_time_event_counter == config.plugins.SpecialJump.zapspeedMeasureTimeout_ms.getValue() / self.zap_time_event_counter_ms:
-			if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG illegal zap time ",datetime.now()
+			if config.plugins.SpecialJump.debugEnable.getValue(): print "illegal zap time "
 			self.SJZapspeedPollTimer.stop()
 			self.zap_error_counter[ind1][ind2] += 1
 			self.zap_error_counter[ind1][self.zap_list_ind2.index('tot')] += 1
@@ -1389,7 +1385,6 @@ class SpecialJump():
 			print '-----------------------------------------'
 			print '[SpecialJump] ', locationString
 			print '-----------------------------------------'
-			print 'date:',datetime.now()
 			seek = self.getSeek()
 			print 'self.InfoBar_instance:', self.InfoBar_instance
 			print 'seek:', seek
@@ -1419,7 +1414,7 @@ class SpecialJump():
 			self.activateTimeshiftIfNecessaryAndDoSeekRelative_2(pts, MuteTime_ms)
 			
 	def activateTimeshiftIfNecessaryAndDoSeekRelative_1(self, pts, MuteTime_ms):
-		if config.plugins.SpecialJump.debugEnable.getValue(): print '[SpecialJump] activateTimeshiftIfNecessaryAndDoSeekRelative_1', pts, ' ', MuteTime_ms
+		if config.plugins.SpecialJump.debugEnable.getValue(): print 'activateTimeshiftIfNecessaryAndDoSeekRelative_1', pts, ' ', MuteTime_ms
 		if InfoBar and self.InfoBar_instance:
 			seek = self.getSeek()
 			if seek is not None:
@@ -1438,13 +1433,12 @@ class SpecialJump():
 					self.pauseService()
 				self.specialJumpStartTimerShowInfoBar(False, MuteTime_ms)
 			else:
-				self.session.open(MessageBox,_("SpecialJump debug: no seek"), type = MessageBox.TYPE_ERROR,timeout = 2)
+				self.session.open(MessageBox,_("no seek"), type = MessageBox.TYPE_ERROR,timeout = 2)
 		else:
-			self.session.open(MessageBox,_("SpecialJump debug: no (InfoBar and self.InfoBar_instance)"), type = MessageBox.TYPE_ERROR,timeout = 2)
+			self.session.open(MessageBox,_("no (InfoBar and self.InfoBar_instance)"), type = MessageBox.TYPE_ERROR,timeout = 2)
 			
 	def activateTimeshiftIfNecessaryAndDoSeekRelative_2(self, pts, MuteTime_ms):
-		if config.plugins.SpecialJump.debugEnable.getValue(): print '[SpecialJump] activateTimeshiftIfNecessaryAndDoSeekRelative_2', pts, ' ', MuteTime_ms
-		print datetime.now()
+		if config.plugins.SpecialJump.debugEnable.getValue(): print '[activateTimeshiftIfNecessaryAndDoSeekRelative_2', pts, ' ', MuteTime_ms
 		if InfoBar and self.InfoBar_instance:
 			seek = self.getSeek()
 			if seek is not None:
@@ -1485,9 +1479,9 @@ class SpecialJump():
 						self.pauseService()
 					self.specialJumpStartTimerShowInfoBar(False, MuteTime_ms)
 			else:
-				self.session.open(MessageBox,_("SpecialJump debug: no seek"), type = MessageBox.TYPE_ERROR,timeout = 2)
+				self.session.open(MessageBox,_("no seek"), type = MessageBox.TYPE_ERROR,timeout = 2)
 		else:
-			self.session.open(MessageBox,_("SpecialJump debug: no (InfoBar and self.InfoBar_instance)"), type = MessageBox.TYPE_ERROR,timeout = 2)
+			self.session.open(MessageBox,_("no (InfoBar and self.InfoBar_instance)"), type = MessageBox.TYPE_ERROR,timeout = 2)
 
 	def specialJumpWorkaround1Timeout(self):
 		self.SJWorkaround1Timer.stop()
@@ -1511,34 +1505,33 @@ class SpecialJump():
 		if mode == "MP":
 			self.pauseService()
 		if mode == "TV":
-			if config.plugins.SpecialJump.debugEnable.getValue(): print datetime.now()
 			if self.isCurrentlySeekable(): # timeshift active and play position "in the past"
 				if self.SJZapDownTimerActive:  # quickly pressed twice
-					#if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG A-"
+					#if config.plugins.SpecialJump.debugEnable.getValue(): print "A-"
 					self.zapUp() # zapUp = P-
 				else:
 					if self.isSeekstatePaused():
-						#if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG B-"
+						#if config.plugins.SpecialJump.debugEnable.getValue(): print "B-"
 						self.specialJumpStartZapDownTimer()
 						self.specialJumpShowZapWarning()
 					else:
-						#if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG C-"
+						#if config.plugins.SpecialJump.debugEnable.getValue(): print "C-"
 						self.pauseService()
 			else: # live TV
 				if self.SJZapDownTimerActive:  # quickly pressed twice
-					#if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG D-"
+					#if config.plugins.SpecialJump.debugEnable.getValue(): print "D-"
 					self.zapUp() # zapUp = P-
 				else:
 					length = self.getTimeshiftFileSize_kB() # length of timeshift buffer (estimated: 1kB ~ 1ms)
 					if (length > int(config.plugins.SpecialJump.zapM_ProtectTimeshiftBuffer_ms.getValue())) and not (int(config.plugins.SpecialJump.zapM_ProtectTimeshiftBuffer_ms.getValue()) == -1): # protect timeshift buffer unless "no protection" is selected
-						#if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG E-"
+						#if config.plugins.SpecialJump.debugEnable.getValue(): print "E-"
 						self.specialJumpStartZapDownTimer()
 						self.specialJumpShowZapWarning()
 						InfoBarTimeshift.activateTimeshiftEndAndPause(self.InfoBar_instance) # not just self.pauseService()
 					else: # zap with speed limit
-						#if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG F-"
+						#if config.plugins.SpecialJump.debugEnable.getValue(): print "F-"
 						if not self.SJZapTimerActive:
-							#if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG G-"
+							#if config.plugins.SpecialJump.debugEnable.getValue(): print "G-"
 							self.zapUp() # zapUp = P-
 							self.SJZapDownTimer.stop()
 
@@ -1548,34 +1541,33 @@ class SpecialJump():
 		if mode == "MP":
 			self.unPauseService()
 		if mode == "TV":
-			if config.plugins.SpecialJump.debugEnable.getValue(): print datetime.now()
 			if self.isCurrentlySeekable(): # timeshift active and play position "in the past"
 				if self.SJZapUpTimerActive:  # quickly pressed twice
-					#if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG A+"
+					#if config.plugins.SpecialJump.debugEnable.getValue(): print "A+"
 					#InfoBarTimeshift.stopTimeshift(self.InfoBar_instance) # not just zap, or zapping will be impossible for ~2s -- didn't help
 					self.zapDown() # zapDown = P+
 				else:
 					if not self.isSeekstatePaused():
-						#if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG B+"
+						#if config.plugins.SpecialJump.debugEnable.getValue(): print "B+"
 						self.specialJumpStartZapUpTimer()
 						self.specialJumpShowZapWarning()
 					else:
-						#if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG C+"
+						#if config.plugins.SpecialJump.debugEnable.getValue(): print "C+"
 						self.unPauseService()
 			else: # live TV
 				if self.SJZapUpTimerActive:  # quickly pressed twice
-					#if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG D+"
+					#if config.plugins.SpecialJump.debugEnable.getValue(): print "D+"
 					self.zapDown() # zapDown = P+
 				else:
 					length = self.getTimeshiftFileSize_kB() # length of timeshift buffer (estimated: 1kB ~ 1ms)
 					if (length > int(config.plugins.SpecialJump.zapP_ProtectTimeshiftBuffer_ms.getValue())) and not (int(config.plugins.SpecialJump.zapP_ProtectTimeshiftBuffer_ms.getValue()) == -1): # protect timeshift buffer unless "no protection" is selected
-						#if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG E+"
+						#if config.plugins.SpecialJump.debugEnable.getValue(): print "E+"
 						self.specialJumpStartZapUpTimer()
 						self.specialJumpShowZapWarning()
 					else: # zap with speed limit
-						#if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG F+"
+						#if config.plugins.SpecialJump.debugEnable.getValue(): print "F+"
 						if not self.SJZapTimerActive:
-							#if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG G+"
+							#if config.plugins.SpecialJump.debugEnable.getValue(): print "G+"
 							self.zapDown() # zapDown = P+
 							self.SJZapUpTimer.stop()
 
@@ -1587,7 +1579,7 @@ class SpecialJump():
 		try:
 			self.InfoBar_instance.pts_blockZap_timer.stop()
 		except:
-			print "SpecialJump DEBUG self.InfoBar_instance.pts_blockZap_timer.stop() failed in zapUp"
+			print "self.InfoBar_instance.pts_blockZap_timer.stop() failed in zapUp"
 		InfoBarChannelSelection.zapUp(self.InfoBar_instance)     
 		self.zapHandler("zapUp")
 				
@@ -1598,7 +1590,7 @@ class SpecialJump():
 		try:
 			self.InfoBar_instance.pts_blockZap_timer.stop()
 		except:
-			print "SpecialJump DEBUG self.InfoBar_instance.pts_blockZap_timer.stop() failed in zapDown"
+			print "self.InfoBar_instance.pts_blockZap_timer.stop() failed in zapDown"
 		InfoBarChannelSelection.zapDown(self.InfoBar_instance)
 		self.zapHandler("zapDown")
 
@@ -1622,18 +1614,18 @@ class SpecialJump():
 				cur = cur.toString()
 				if cur == self.zapPredictiveService:
 					# fast zap due to previously active PIP on the new channel
-					if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG ",self.fastZapDirection," PIP predictive zap success"
+					if config.plugins.SpecialJump.debugEnable.getValue(): print self.fastZapDirection," PIP predictive zap success"
 					self.zap_success = 'fast'
 				else:
 					self.zap_success = 'miss'
-					if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG ",self.fastZapDirection," PIP predictive zap guessed wrong, is ",cur," exp. ",self.zapPredictiveService
+					if config.plugins.SpecialJump.debugEnable.getValue(): print self.fastZapDirection," PIP predictive zap guessed wrong, is ",cur," exp. ",self.zapPredictiveService
 		else:
 			self.zap_success = 'off'
 		
 		if config.plugins.SpecialJump.fastZapBenchmarkMode.value != "false":
 			if config.plugins.SpecialJump.fastZapBenchmarkMode.value == "random":
 				rand = randint(0,2)
-				if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG Benchmark Mode ",rand
+				if config.plugins.SpecialJump.debugEnable.getValue(): print "Benchmark Mode ",rand
 				if rand == 0: # 33% fast zap
 					config.plugins.SpecialJump.fastZapEnable.setValue(True)
 				elif rand == 1: # 33% inverted direction for intentional wrong prediction
@@ -1653,22 +1645,22 @@ class SpecialJump():
 			if (config.plugins.SpecialJump.fastZapMethod.value == "pip") or (config.plugins.SpecialJump.fastZapMethod.value == "pip_hidden"):
 				if (self.fastZapPipActive == False):
 					if (InfoBarPiP.pipShown(self.InfoBar_instance) == False):
-						if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG zapHandler ",direction," zapPredictive incl. initial showPiP"
+						if config.plugins.SpecialJump.debugEnable.getValue(): print direction," zapPredictive incl. initial showPiP"
 						self.postZap_preloadPredictive()
 					else:
-						if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG zapHandler ",direction," PIP unexpectedly active, don't touch PIP",InfoBarPiP.pipShown(self.InfoBar_instance)
+						if config.plugins.SpecialJump.debugEnable.getValue(): print direction," PIP unexpectedly active, don't touch PIP",InfoBarPiP.pipShown(self.InfoBar_instance)
 				else:
 					if (InfoBarPiP.pipShown(self.InfoBar_instance) == True):
-						if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG zapHandler ",direction," zapPredictive (PIP already active)"
+						if config.plugins.SpecialJump.debugEnable.getValue(): print direction," zapPredictive (PIP already active)"
 						self.postZap_preloadPredictive()
 					else:
-						if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG zapHandler ",direction," zapPredictive (PIP unexpectedly inactive)",InfoBarPiP.pipShown(self.InfoBar_instance)
+						if config.plugins.SpecialJump.debugEnable.getValue(): print direction," zapPredictive (PIP unexpectedly inactive)",InfoBarPiP.pipShown(self.InfoBar_instance)
 						self.postZap_preloadPredictive()
 			else:
-				if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG zapHandler ",direction," start zapPredictive (pseudo rec.)"
+				if config.plugins.SpecialJump.debugEnable.getValue(): print direction," start zapPredictive (pseudo rec.)"
 				self.postZap_preloadPredictive()
 		elif config.plugins.SpecialJump.fastZapEnable.value:
-			print "SpecialJump DEBUG: fast zap not possible with a single tuner"
+			print "fast zap not possible with a single tuner"
 		else:
 			if (self.fastZapPipActive == True):
 				#not using PIP any more, restore size and turn off PIP
@@ -1679,7 +1671,7 @@ class SpecialJump():
 
 	def postZap_preloadPredictive(self):
 		#start PIP or pseudo recording on the expected next service
-		if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG zapPredictive 1"
+		if config.plugins.SpecialJump.debugEnable.getValue(): print "zapPredictive 1"
 		self.disablePredictiveRecOrPIP()
 		
 		storeService = self.InfoBar_instance.servicelist.getCurrentSelection()
@@ -1734,7 +1726,7 @@ class SpecialJump():
 		self.zapPredictiveService = fastZapNextService.toString()
 
 		self.InfoBar_instance.servicelist.setCurrentSelection(storeService)
-		if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG zapPredictive 2"
+		if config.plugins.SpecialJump.debugEnable.getValue(): print "zapPredictive 2"
 														
 	def enablePredictiveRecOrPIP(self, fastZapNextService):
 		if (config.plugins.SpecialJump.fastZapMethod.value == "pip") or (config.plugins.SpecialJump.fastZapMethod.value == "pip_hidden"):
@@ -1744,7 +1736,7 @@ class SpecialJump():
 				fastZapNextService = self.session.pip.resolveAlternatePipService(fastZapNextService)
 				if fastZapNextService:
 					self.session.pip.playService(fastZapNextService)
-					if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG zapPredictive ",self.fastZapDirection," switched PIP to service ",fastZapNextService.toString()
+					if config.plugins.SpecialJump.debugEnable.getValue(): print "zapPredictive ",self.fastZapDirection," switched PIP to service ",fastZapNextService.toString()
 					if config.plugins.SpecialJump.fastZapMethod.value == "pip":
 						self.session.pip.instance.move(ePoint(config.av.pip.value[0],config.av.pip.value[1]))
 						self.session.pip.instance.resize(eSize(*(config.av.pip.value[2],config.av.pip.value[3])))
@@ -1764,7 +1756,7 @@ class SpecialJump():
 			if self.fastZapRecService is not None:
 				self.fastZapRecService.prepareStreaming()
 				self.fastZapRecService.start()
-				if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG zapPredictive ",self.fastZapDirection," pseudo recording service ",fastZapNextService.toString()
+				if config.plugins.SpecialJump.debugEnable.getValue(): print "zapPredictive ",self.fastZapDirection," pseudo recording service ",fastZapNextService.toString()
 
 	def disablePredictiveRecOrPIP(self):
 		if (self.fastZapPipActive == True) and (InfoBarPiP.pipShown(self.InfoBar_instance) == True):
@@ -1844,19 +1836,19 @@ class SpecialJump():
 
 	def setNewVolumeWithBox(self,newVolume):
 		lastVolume = self.getAudioVolume()
-		if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG setNewVolumeWithBox 1"
-		if config.plugins.SpecialJump.debugEnable.getValue(): print lastVolume
-		if config.plugins.SpecialJump.debugEnable.getValue(): print newVolume
+		#if config.plugins.SpecialJump.debugEnable.getValue(): print "setNewVolumeWithBox 1"
+		#if config.plugins.SpecialJump.debugEnable.getValue(): print lastVolume
+		#if config.plugins.SpecialJump.debugEnable.getValue(): print newVolume
 		if newVolume != 'no_change':
 			if int(newVolume) != int(lastVolume):
-				if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG setNewVolumeWithBox 2"
+				#if config.plugins.SpecialJump.debugEnable.getValue(): print "setNewVolumeWithBox 2"
 				self.setAudioVolume(newVolume)
 				self.specialJumpStartTimerShowAudioVolumeBox(newVolume)
 
 	def checkSetNewVolumeOnChange(self):
-		if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG checkSetNewVolumeOnChange 1"
+		#if config.plugins.SpecialJump.debugEnable.getValue(): print "checkSetNewVolumeOnChange 1"
 		if InfoBar and self.InfoBar_instance:
-			if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG checkSetNewVolumeOnChange 2"
+			#if config.plugins.SpecialJump.debugEnable.getValue(): print "checkSetNewVolumeOnChange 2"
 			ref = self.session.nav.getCurrentlyPlayingServiceReference()
 			if ref is not None:
 				try:
@@ -1865,16 +1857,16 @@ class SpecialJump():
 					mypath = ''
 				if mypath != '':
 					if mypath.endswith('.ts'):
-						if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG __serviceChanged/ playing .ts file"
+						if config.plugins.SpecialJump.debugEnable.getValue(): print "__serviceChanged/ playing .ts file"
 						serviceType = "TVorTSvideo"
 					else:
-						if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG __serviceChanged/ playing other (non .ts) file"
+						if config.plugins.SpecialJump.debugEnable.getValue(): print "__serviceChanged/ playing other (non .ts) file"
 						serviceType = "nonTSvideo"
 				else:
-					if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG __serviceChanged/ no path, presumably live TV"
+					if config.plugins.SpecialJump.debugEnable.getValue(): print "__serviceChanged/ no path, presumably live TV"
 					serviceType = "TVorTSvideo"
 			else:
-				if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG __serviceChanged/ no service reference"
+				if config.plugins.SpecialJump.debugEnable.getValue(): print "__serviceChanged/ no service reference"
 				serviceType = "none"
 			
 			if serviceType == "TVorTSvideo":
@@ -2057,6 +2049,8 @@ class SpecialJump():
 		self.SJWorkaround2Timer = None
 		self.SJZapBenchmarkTimer.callback.remove(self.zapDown)
 		self.SJZapBenchmarkTimer = None
+		self.executeCyclicTimer.callback.remove(self.executeCyclic)
+		self.executeCyclicTimer = None
 
 	def getSeek(self):
 		service = self.session.nav.getCurrentService()
@@ -2154,7 +2148,6 @@ class SpecialJump():
 				self.setAudioTrack(selected_track)
 				(n, AudioTrackList, selected_track) = self.getAudioTrackList()
 				self.specialJumpStartTimerShowAudioBox(AudioTrackList, selected_track)
-				if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG toggleAudioTrack"
 				if config.plugins.SpecialJump.debugEnable.getValue(): print selected_track
 
 	def toggleLCDBlanking(self,parent):
@@ -2162,11 +2155,11 @@ class SpecialJump():
 		# config.lcd.standby = ConfigSlider(default=standby_default, limits=(0, 10))
 		# config.lcd.bright  = ConfigSlider(default=5, limits=(0, 10))
 		if self.SJLCDon:
-			if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG toggleLCDBlanking if SJLCDon"
+			if config.plugins.SpecialJump.debugEnable.getValue(): print "SJLCDon"
 			self.setLCDBrightness(0)
 			self.SJLCDon = False
 		else:
-			if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG toggleLCDBlanking if not SJLCDon"
+			if config.plugins.SpecialJump.debugEnable.getValue(): print "not SJLCDon"
 			self.restoreLCDBrightness()
 
 	def setLCDBrightness(self, value):
@@ -2178,7 +2171,7 @@ class SpecialJump():
 		eDBoxLCD.getInstance().setLCDBrightness(value)
 
 	def restoreLCDBrightness(self):
-		if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG restoreLCDBrightness"
+		if config.plugins.SpecialJump.debugEnable.getValue(): print "restoreLCDBrightness"
 		if Screens.Standby.inStandby:
 			self.setLCDBrightness(config.lcd.standby.getValue())
 		else:
@@ -2186,7 +2179,7 @@ class SpecialJump():
 		self.SJLCDon = True
 
 	def jumpPreviousMark(self,parent,mode):
-		if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG jumpPreviousMark"
+		if config.plugins.SpecialJump.debugEnable.getValue(): print "jumpPreviousMark"
 		self.InfoBar_instance = parent
 		self.SJMode=mode
 		if config.plugins.SpecialJump.show_infobar_on_jumpPreviousNextMark.getValue() == 'yes':
@@ -2201,7 +2194,7 @@ class SpecialJump():
 		self.SJJumpTime = 0
 
 	def jumpNextMark(self,parent,mode):
-		if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG jumpNextMark"
+		if config.plugins.SpecialJump.debugEnable.getValue(): print "jumpNextMark"
 		self.InfoBar_instance = parent
 		self.SJMode=mode
 		if config.plugins.SpecialJump.show_infobar_on_jumpPreviousNextMark.getValue() == 'yes':
@@ -2216,7 +2209,7 @@ class SpecialJump():
 		self.SJJumpTime = 0
 
 	def toggleMark(self,parent,mode,markType):
-		if config.plugins.SpecialJump.debugEnable.getValue(): print "SpecialJump DEBUG toggleMark"
+		if config.plugins.SpecialJump.debugEnable.getValue(): print "toggleMark"
 		self.InfoBar_instance = parent
 		self.SJMode=mode
 		if markType == InfoBarCueSheetSupport.CUT_TYPE_MARK:
@@ -2234,7 +2227,7 @@ class SpecialJump():
 				cue = service and service.cueSheet()
 				if cue is not None:
 					# disable cutlists. we want to freely browse around in the movie
-					print "[SpecialJump] cut lists disabled!"
+					print "cut lists disabled!"
 					cue.setCutListEnable(0)
 
 		self.SJJumpTime = 0
@@ -2243,13 +2236,13 @@ class SpecialJump():
 		try:
 			MovieCut(session=self.session, service=self.session.nav.getCurrentlyPlayingServiceReference())
 		except:
-			print "[SpecialJump] callMovieCut failed"
+			print "callMovieCut failed"
 
 	def callCutListEditor(self,parent,mode):
 		try:
 			CutListEditor(session=self.session, service=self.session.nav.getCurrentlyPlayingServiceReference())
 		except:
-			print "[SpecialJump] callCutListEditor failed"
+			print "callCutListEditor failed"
 
 	#from InfoBarGenerics.py
 	def IBGtoggleMark(self, onlyremove=False, onlyadd=False, tolerance=5*90000, onlyreturn=False, markType=InfoBarCueSheetSupport.CUT_TYPE_MARK):
@@ -2259,17 +2252,17 @@ class SpecialJump():
 			return
 
 		nearest_cutpoint = InfoBarCueSheetSupport.getNearestCutPoint(self.InfoBar_instance,current_pos)
-		if config.plugins.SpecialJump.debugEnable.getValue(): print "[SpecialJump] nearest_cutpoint ",nearest_cutpoint
+		if config.plugins.SpecialJump.debugEnable.getValue(): print "nearest_cutpoint ",nearest_cutpoint
 
 		if nearest_cutpoint is not None and abs(nearest_cutpoint[0] - current_pos) < tolerance:
 			if onlyreturn:
 				return nearest_cutpoint
 			if not onlyadd:
 				InfoBarCueSheetSupport.removeMark(self.InfoBar_instance,nearest_cutpoint)
-				if config.plugins.SpecialJump.debugEnable.getValue(): print "[SpecialJump] removeMark ",nearest_cutpoint
+				if config.plugins.SpecialJump.debugEnable.getValue(): print "removeMark ",nearest_cutpoint
 		elif not onlyremove and not onlyreturn:
 			InfoBarCueSheetSupport.addMark(self.InfoBar_instance,(current_pos, markType))
-			if config.plugins.SpecialJump.debugEnable.getValue(): print "[SpecialJump] addMark ",nearest_cutpoint
+			if config.plugins.SpecialJump.debugEnable.getValue(): print "addMark ",nearest_cutpoint
 
 		if onlyreturn:
 			return None
@@ -2497,4 +2490,35 @@ class SpecialJump():
 					messageString += _("AudioTrack %s / %s / %s / %s\n" % (x[0],x[1],x[2],x[3]))
 					
 			self.session.open(MessageBox, messageString, type = MessageBox.TYPE_ERROR,timeout = 10)
+			
+			# write getBufferCharge (or other things) to a file periodically
+			if False:
+				self.executeCyclicTimer.start(500,False)#repetitive
+
+	def executeCyclic(self):
+		if self.session:
+			if self.session.nav:
+				if self.session.nav.getCurrentService():
+					if self.session.nav.getCurrentService().streamed():
+						f = open("/tmp/executeCyclic.log", "w")
+						bufferInfo = self.session.nav.getCurrentService().streamed().getBufferCharge()
+						f.write("%s %s\n" % (datetime.now(),bufferInfo[0]))
+						f.close()
+					else:
+						f = open("/tmp/executeCyclic.log", "w")
+						f.write("%s %s\n" % (datetime.now(),"no nav"))
+						f.close()
+				else:
+					f = open("/tmp/executeCyclic.log", "w")
+					f.write("%s %s\n" % (datetime.now(),"no CurrentService"))
+					f.close()
+			else:
+				f = open("/tmp/executeCyclic.log", "w")
+				f.write("%s %s\n" % (datetime.now(),"not streamed"))
+				f.close()
+		else:
+			f = open("/tmp/executeCyclic.log", "w")
+			f.write("%s %s\n" % (datetime.now(),"no session"))
+			f.close()
+			
 	
