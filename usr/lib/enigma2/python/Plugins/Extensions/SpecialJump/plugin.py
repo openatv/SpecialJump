@@ -1432,8 +1432,8 @@ class SpecialJump():
 					# workaround part II
 					self.pauseService()
 				self.specialJumpStartTimerShowInfoBar(False, MuteTime_ms)
-			else:
-				self.session.open(MessageBox,_("no seek"), type = MessageBox.TYPE_ERROR,timeout = 2)
+			#else:
+			#	self.session.open(MessageBox,_("no seek"), type = MessageBox.TYPE_ERROR,timeout = 2)
 		else:
 			self.session.open(MessageBox,_("no (InfoBar and self.InfoBar_instance)"), type = MessageBox.TYPE_ERROR,timeout = 2)
 			
@@ -1478,8 +1478,8 @@ class SpecialJump():
 						# workaround part II
 						self.pauseService()
 					self.specialJumpStartTimerShowInfoBar(False, MuteTime_ms)
-			else:
-				self.session.open(MessageBox,_("no seek"), type = MessageBox.TYPE_ERROR,timeout = 2)
+			#else:
+			#	self.session.open(MessageBox,_("no seek"), type = MessageBox.TYPE_ERROR,timeout = 2)
 		else:
 			self.session.open(MessageBox,_("no (InfoBar and self.InfoBar_instance)"), type = MessageBox.TYPE_ERROR,timeout = 2)
 
@@ -2307,7 +2307,6 @@ class SpecialJump():
 		else:
 			seek = service.seek()
 			if seek is None:
-				self.session.open(MessageBox,_("no seek"), type = MessageBox.TYPE_ERROR,timeout = 2)
 				messageString = _("no seek\n")
 			elif not seek.isCurrentlySeekable():
 				length  = seek.getLength()
@@ -2496,6 +2495,15 @@ class SpecialJump():
 				self.executeCyclicTimer.start(500,False)#repetitive
 
 	def executeCyclic(self):
+		from Components.Harddisk import harddiskmanager
+		f = open("/tmp/executeCyclic.log", "a")
+		f.write("%s" % datetime.now())
+		for hdd in harddiskmanager.HDDList():
+			f.write(" %s sleeping %s" % (hdd[1].getDeviceName(),hdd[1].isSleeping()))
+		f.write("\n")
+		f.close()
+			
+	def executeCyclic2(self):
 		if self.session:
 			if self.session.nav:
 				if self.session.nav.getCurrentService():
