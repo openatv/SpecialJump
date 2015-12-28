@@ -187,7 +187,7 @@ config.plugins.SpecialJump.EMCdirsShowText                = ConfigText(default =
 config.plugins.SpecialJump.EMCdirsShowPin                 = ConfigInteger(default  = 0000, limits  = (0, 9999))
 
 config.plugins.SpecialJump.fastZapEnable                  = ConfigYesNo(default=True)
-config.plugins.SpecialJump.fastZapBenchmarkMode           = ConfigSelection(default = "false", choices = [("random", _("random")), ("false", _("No")), ("just_zap", _("just zap"))])
+config.plugins.SpecialJump.fastZapBenchmarkMode           = ConfigSelection(default = "false", choices = [("random", _("random")), ("random_stop", _("random, stop at error")), ("false", _("No")), ("just_zap", _("just zap")), ("just_zap_stop", _("just zap, stop at error"))])
 config.plugins.SpecialJump.fastZapMethod                  = ConfigSelection(choices = [("pip", _("Picture in Picture (debug only)")),("pip_hidden", _("Picture in Picture, hidden (not recommended)")),("record", _("fake recording"))],default = "record")
 config.plugins.SpecialJump.zapspeedMeasureTimeout_ms      = ConfigInteger(default = 5500, limits  = (1, 99999))
 config.plugins.SpecialJump.fastZapBenchmarkTime_ms        = ConfigInteger(default = 6000, limits  = (1, 99999))
@@ -1077,7 +1077,7 @@ class SpecialJump():
 		self.zapspeedInfobox_instance         = self.session.instantiateDialog(AudioSubsInfobox, 'Zapspeed')
 		
 		# for zap speed display
-		self.services_hd_plus = ['1:0:19:2E9B:411:1:C00000:0:0:0:', '1:0:19:2EAF:411:1:C00000:0:0:0:', '1:0:19:5274:41D:1:C00000:0:0:0:', '1:0:19:EF10:421:1:C00000:0:0:0:', '1:0:19:EF11:421:1:C00000:0:0:0:', '1:0:19:EF14:421:1:C00000:0:0:0:', '1:0:19:EF15:421:1:C00000:0:0:0:', '1:0:19:EF74:3F9:1:C00000:0:0:0:', '1:0:19:EF75:3F9:1:C00000:0:0:0:', '1:0:19:EF76:3F9:1:C00000:0:0:0:', '1:0:19:EF77:3F9:1:C00000:0:0:0:', '1:0:19:EF78:3F9:1:C00000:0:0:0:']
+		self.services_hd_plus = ['1:0:19:151A:455:1:C00000:0:0:0:', '1:0:19:2E9B:411:1:C00000:0:0:0:', '1:0:19:2EAF:411:1:C00000:0:0:0:', '1:0:19:5274:41D:1:C00000:0:0:0:', '1:0:19:EF10:421:1:C00000:0:0:0:', '1:0:19:EF11:421:1:C00000:0:0:0:', '1:0:19:EF14:421:1:C00000:0:0:0:', '1:0:19:EF15:421:1:C00000:0:0:0:', '1:0:19:EF74:3F9:1:C00000:0:0:0:', '1:0:19:EF75:3F9:1:C00000:0:0:0:', '1:0:19:EF76:3F9:1:C00000:0:0:0:', '1:0:19:EF77:3F9:1:C00000:0:0:0:', '1:0:19:EF78:3F9:1:C00000:0:0:0:']
 		self.services_hd_free = ['1:0:19:283D:3FB:1:C00000:0:0:0:', '1:0:19:283E:3FB:1:C00000:0:0:0:', '1:0:19:283F:3FB:1:C00000:0:0:0:', '1:0:19:2859:401:1:C00000:0:0:0:', '1:0:19:285B:401:1:C00000:0:0:0:', '1:0:19:286E:425:1:C00000:0:0:0:', '1:0:19:286F:425:1:C00000:0:0:0:', '1:0:19:2870:425:1:C00000:0:0:0:', '1:0:19:2873:425:1:C00000:0:0:0:', '1:0:19:2887:40F:1:C00000:0:0:0:', '1:0:19:2888:40F:1:C00000:0:0:0:', '1:0:19:2889:40F:1:C00000:0:0:0:', '1:0:19:2B66:3F3:1:C00000:0:0:0:', '1:0:19:2B7A:3F3:1:C00000:0:0:0:', '1:0:19:2B84:3F3:1:C00000:0:0:0:', '1:0:19:2B8E:3F2:1:C00000:0:0:0:', '1:0:19:2B98:3F2:1:C00000:0:0:0:', '1:0:19:2BA2:3F2:1:C00000:0:0:0:', '1:0:19:6EA5:4B1:1:C00000:0:0:0:']
 		self.services_sd_free = ['1:0:1:1146:404:1:C00000:0:0:0:', '1:0:1:272E:402:1:C00000:0:0:0:', '1:0:1:2742:402:1:C00000:0:0:0:', '1:0:1:2753:402:1:C00000:0:0:0:', '1:0:1:2EE3:441:1:C00000:0:0:0:', '1:0:1:2EF4:441:1:C00000:0:0:0:', '1:0:1:2F08:441:1:C00000:0:0:0:', '1:0:1:2F1C:441:1:C00000:0:0:0:', '1:0:1:2F1D:441:1:C00000:0:0:0:', '1:0:1:2F3A:441:1:C00000:0:0:0:', '1:0:1:308:5:85:C00000:0:0:0:', '1:0:1:33:21:85:C00000:0:0:0:', '1:0:1:384:21:85:C00000:0:0:0:', '1:0:1:3F:21:85:C00000:0:0:0:', '1:0:1:445C:453:1:C00000:0:0:0:', '1:0:1:445D:453:1:C00000:0:0:0:', '1:0:1:445E:453:1:C00000:0:0:0:', '1:0:1:445F:453:1:C00000:0:0:0:', '1:0:1:4461:453:1:C00000:0:0:0:', '1:0:1:7004:436:1:C00000:0:0:0:', '1:0:1:701:5:85:C00000:0:0:0:', '1:0:1:7036:41B:1:C00000:0:0:0:', '1:0:1:79E0:443:1:C00000:0:0:0:', '1:0:1:79F4:443:1:C00000:0:0:0:']
 		self.zap_time_event_counter    = 0
@@ -1308,10 +1308,16 @@ class SpecialJump():
 		else:
 			ind2 = self.zap_list_ind2.index('??')
 		if self.zap_time_event_counter == config.plugins.SpecialJump.zapspeedMeasureTimeout_ms.getValue() / self.zap_time_event_counter_ms:
-			if config.plugins.SpecialJump.debugEnable.getValue(): print "illegal zap time "
-			self.SJZapspeedPollTimer.stop()
-			self.zap_error_counter[ind1][ind2] += 1
-			self.zap_error_counter[ind1][self.zap_list_ind2.index('tot')] += 1
+			if self.zap_time_res_0_seen:
+				if config.plugins.SpecialJump.debugEnable.getValue(): print "illegal zap time"
+				if (config.plugins.SpecialJump.fastZapBenchmarkMode.value == "just_zap_stop") or (config.plugins.SpecialJump.fastZapBenchmarkMode.value == "random_stop"):
+					self.SJZapBenchmarkTimer.stop()
+				self.SJZapspeedPollTimer.stop()
+				self.zap_error_counter[ind1][ind2] += 1
+				self.zap_error_counter[ind1][self.zap_list_ind2.index('tot')] += 1
+			else:
+				if config.plugins.SpecialJump.debugEnable.getValue(): print "could not determine zap time (yres 0 not seen until timeout)"
+				self.SJZapspeedPollTimer.stop()
 		else:
 			if path.exists('/proc/stb/vmpeg/0/yres'):
 				f = open('/proc/stb/vmpeg/0/yres', 'r')
@@ -1623,7 +1629,7 @@ class SpecialJump():
 			self.zap_success = 'off'
 		
 		if config.plugins.SpecialJump.fastZapBenchmarkMode.value != "false":
-			if config.plugins.SpecialJump.fastZapBenchmarkMode.value == "random":
+			if (config.plugins.SpecialJump.fastZapBenchmarkMode.value == "random") or (config.plugins.SpecialJump.fastZapBenchmarkMode.value == "random_stop"):
 				rand = randint(0,2)
 				if config.plugins.SpecialJump.debugEnable.getValue(): print "Benchmark Mode ",rand
 				if rand == 0: # 33% fast zap
@@ -2491,7 +2497,7 @@ class SpecialJump():
 			self.session.open(MessageBox, messageString, type = MessageBox.TYPE_ERROR,timeout = 10)
 			
 			# write getBufferCharge (or other things) to a file periodically
-			if False:
+			if True:
 				self.executeCyclicTimer.start(500,False)#repetitive
 
 	def executeCyclic(self):
@@ -2502,7 +2508,7 @@ class SpecialJump():
 			f.write(" %s sleeping %s" % (hdd[1].getDeviceName(),hdd[1].isSleeping()))
 		f.write("\n")
 		f.close()
-			
+
 	def executeCyclic2(self):
 		if self.session:
 			if self.session.nav:
@@ -2528,5 +2534,13 @@ class SpecialJump():
 			f = open("/tmp/executeCyclic.log", "w")
 			f.write("%s %s\n" % (datetime.now(),"no session"))
 			f.close()
-			
+
+	def executeCyclic3(self):
+		f = open('/proc/stb/vmpeg/0/yres', 'r')
+		video_height = int(f.read(), 16)
+		f.close()
+		f = open("/tmp/executeCyclic.log", "a")
+		f.write("%s %d\n" % (datetime.now(),video_height))
+		f.close()
+
 	
