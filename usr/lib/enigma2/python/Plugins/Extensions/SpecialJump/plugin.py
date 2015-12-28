@@ -2497,7 +2497,7 @@ class SpecialJump():
 			self.session.open(MessageBox, messageString, type = MessageBox.TYPE_ERROR,timeout = 10)
 			
 			# write getBufferCharge (or other things) to a file periodically
-			if True:
+			if False:
 				self.executeCyclicTimer.start(500,False)#repetitive
 
 	def executeCyclic(self):
