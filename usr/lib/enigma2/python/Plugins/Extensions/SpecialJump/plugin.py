@@ -389,38 +389,38 @@ def SJselectAndStartService(self, service, bouquet):
 	SpecialJump.zapHandler(SpecialJumpInstance,"zapDown") # P+
 
 def specialjump_jumpPreviousMark(self,mode):
-	if not SpecialJump.doubleActionFlag: # 'break' action suppressed after 'long' key action
+	if not SpecialJumpInstance.doubleActionFlag: # 'break' action suppressed after 'long' key action
 		SpecialJump.jumpPreviousMark(SpecialJumpInstance,self,mode)
 
 def specialjump_jumpNextMark(self,mode):
-	if not SpecialJump.doubleActionFlag: # 'break' action suppressed after 'long' key action
+	if not SpecialJumpInstance.doubleActionFlag: # 'break' action suppressed after 'long' key action
 		SpecialJump.jumpNextMark(SpecialJumpInstance,self,mode)
 
 def specialjump_toggleMark(self,mode):
-	if not SpecialJump.doubleActionFlag: # 'break' action suppressed after 'long' key action
+	if not SpecialJumpInstance.doubleActionFlag: # 'break' action suppressed after 'long' key action
 		SpecialJump.toggleMark(SpecialJumpInstance,self,mode,InfoBarCueSheetSupport.CUT_TYPE_MARK)
 
 def specialjump_toggleMarkIn(self,mode):
-	SpecialJump.doubleActionFlag = True # 'long' press action, suppress 'break' action
+	SpecialJumpInstance.doubleActionFlag = True # 'long' press action, suppress 'break' action
 	SpecialJump.toggleMark(SpecialJumpInstance,self,mode,InfoBarCueSheetSupport.CUT_TYPE_IN)
 
 def specialjump_toggleMarkOut(self,mode):
-	SpecialJump.doubleActionFlag = True # 'long' press action, suppress 'break' action
+	SpecialJumpInstance.doubleActionFlag = True # 'long' press action, suppress 'break' action
 	SpecialJump.toggleMark(SpecialJumpInstance,self,mode,InfoBarCueSheetSupport.CUT_TYPE_OUT)
 
 def specialjump_callMovieCut(self,mode):
-	SpecialJump.doubleActionFlag = True # 'long' press action, suppress 'break' action
+	SpecialJumpInstance.doubleActionFlag = True # 'long' press action, suppress 'break' action
 	SpecialJump.callMovieCut(SpecialJumpInstance,self,mode)
 
 def specialjump_callCutListEditor(self,mode):
-	SpecialJump.doubleActionFlag = True # 'long' press action, suppress 'break' action
+	SpecialJumpInstance.doubleActionFlag = True # 'long' press action, suppress 'break' action
 	SpecialJump.callCutListEditor(SpecialJumpInstance,self,mode)
 
 def specialjump_doNothing(self):
 	pass
 
 def specialjump_clearDoubleAction(self):
-	SpecialJump.doubleActionFlag = False
+	SpecialJumpInstance.doubleActionFlag = False
 
 def specialjump_channelDown(self,mode):
 	SpecialJump.channelDown(SpecialJumpInstance,self,mode)
