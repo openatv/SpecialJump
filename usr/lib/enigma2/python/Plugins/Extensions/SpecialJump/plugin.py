@@ -2222,7 +2222,7 @@ class SpecialJump():
 			InfoBarCueSheetSupport.toggleMark(self.InfoBar_instance)
 			self.SJJumpTime = "toggle mark"
 		else:
-			self.IBGtoggleMark(False, False, 5*90000, False, markType)
+			self.myIBGtoggleMark(False, False, 10*90000, False, markType)
 			if markType == InfoBarCueSheetSupport.CUT_TYPE_IN:
 				self.SJJumpTime = "toggle in"
 			else:
@@ -2251,13 +2251,17 @@ class SpecialJump():
 			print "callCutListEditor failed"
 
 	#from InfoBarGenerics.py
-	def IBGtoggleMark(self, onlyremove=False, onlyadd=False, tolerance=5*90000, onlyreturn=False, markType=InfoBarCueSheetSupport.CUT_TYPE_MARK):
+	#added argument markType, allows setting IN and OUT points
+	def myIBGtoggleMark(self, onlyremove=False, onlyadd=False, tolerance=10*90000, onlyreturn=False, markType=InfoBarCueSheetSupport.CUT_TYPE_MARK):
 		current_pos = InfoBarCueSheetSupport.cueGetCurrentPosition(self.InfoBar_instance)
 		if current_pos is None:
 #			print "not seekable"
 			return
 
-		nearest_cutpoint = InfoBarCueSheetSupport.getNearestCutPoint(self.InfoBar_instance,current_pos)
+		if markType == InfoBarCueSheetSupport.CUT_TYPE_MARK:
+			nearest_cutpoint = InfoBarCueSheetSupport.getNearestCutPoint(self.InfoBar_instance,current_pos)
+		else:
+			nearest_cutpoint = self.myIBGgetNearestCutPointInOut(pts=current_pos,markType=markType)
 		if config.plugins.SpecialJump.debugEnable.getValue(): print "nearest_cutpoint ",nearest_cutpoint
 
 		if nearest_cutpoint is not None and abs(nearest_cutpoint[0] - current_pos) < tolerance:
@@ -2268,10 +2272,39 @@ class SpecialJump():
 				if config.plugins.SpecialJump.debugEnable.getValue(): print "removeMark ",nearest_cutpoint
 		elif not onlyremove and not onlyreturn:
 			InfoBarCueSheetSupport.addMark(self.InfoBar_instance,(current_pos, markType))
-			if config.plugins.SpecialJump.debugEnable.getValue(): print "addMark ",nearest_cutpoint
+			if config.plugins.SpecialJump.debugEnable.getValue(): print "addMark ",markType
 
 		if onlyreturn:
 			return None
+
+	#from InfoBarGenerics.py getNearestCutPoint
+	#added argument markType, allows searching ONLY among IN or OUT points
+	def myIBGgetNearestCutPointInOut(self, pts, cmp=abs, start=False, markType=InfoBarCueSheetSupport.CUT_TYPE_IN):
+		service = self.session.nav.getCurrentService()
+		if service is not None:
+			cue = service and service.cueSheet()
+			if cue is not None:
+				self.cut_list = cue.getCutList()
+			else:
+				self.cut_list = [ ]
+		else:
+			self.cut_list = [ ]
+		# can be optimized
+		nearest = None
+		bestdiff = -1
+		if start:
+			bestdiff = cmp(0 - pts)
+			if bestdiff >= 0:
+				nearest = [0, False]
+		for cp in self.cut_list:
+			print "Fisch",cp,markType,cp[0],pts
+			if cp[1] == markType:
+				diff = cmp(cp[0] - pts)
+				if diff >= 0 and (nearest is None or bestdiff > diff):
+					nearest = cp
+					bestdiff = diff
+				
+		return nearest
 
 	#from Plugins/Extensions/Infopanel/plugin.py
 	def command(self,commandline, strip=1):
