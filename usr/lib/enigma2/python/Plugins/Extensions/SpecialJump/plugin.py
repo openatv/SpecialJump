@@ -1735,6 +1735,7 @@ class SpecialJump():
 		if config.plugins.SpecialJump.debugEnable.getValue(): print "zapPredictive 2"
 														
 	def enablePredictiveRecOrPIP(self, fastZapNextService):
+		if config.plugins.SpecialJump.debugEnable.getValue(): print "enablePredictiveRecOrPIP ",fastZapNextService.toString()
 		if (config.plugins.SpecialJump.fastZapMethod.value == "pip") or (config.plugins.SpecialJump.fastZapMethod.value == "pip_hidden"):
 			if (InfoBarPiP.pipShown(self.InfoBar_instance) == False):
 				InfoBarPiP.showPiP(self.InfoBar_instance)
@@ -1765,6 +1766,7 @@ class SpecialJump():
 				if config.plugins.SpecialJump.debugEnable.getValue(): print "zapPredictive ",self.fastZapDirection," pseudo recording service ",fastZapNextService.toString()
 
 	def disablePredictiveRecOrPIP(self):
+		if config.plugins.SpecialJump.debugEnable.getValue(): print "disablePredictiveRecOrPIP"
 		if (self.fastZapPipActive == True) and (InfoBarPiP.pipShown(self.InfoBar_instance) == True):
 			#disable PIP
 			InfoBarPiP.showPiP(self.InfoBar_instance)
