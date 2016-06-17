@@ -423,9 +423,11 @@ def specialjump_clearDoubleAction(self):
 	SpecialJumpInstance.doubleActionFlag = False
 
 def specialjump_channelDown(self,mode):
+	SpecialJump.showTimeBetweenKeys(SpecialJumpInstance)	
 	SpecialJump.channelDown(SpecialJumpInstance,self,mode)
 
 def specialjump_channelUp(self,mode):
+	SpecialJump.showTimeBetweenKeys(SpecialJumpInstance)	
 	SpecialJump.channelUp(SpecialJumpInstance,self,mode)
 
 def specialjump_forwards(self,mode,size):
@@ -437,6 +439,7 @@ def specialjump_backwards(self,mode,size):
 	elif size == 'small':  SpecialJump.specialJumpBackwards(SpecialJumpInstance,self,mode,int(config.plugins.SpecialJump.smallSpecialJumpStart.getValue()))
 
 def specialjump_jump(self,mode,jumpkey):
+	SpecialJump.showTimeBetweenKeys(SpecialJumpInstance)	
 	if   jumpkey == 'J1': SpecialJump.fixedJump(SpecialJumpInstance, self, mode, "-", int( config.plugins.SpecialJump.jump1.getValue()),config.plugins.SpecialJump.jump1action.getValue())
 	elif jumpkey == 'J2': SpecialJump.fixedJump(SpecialJumpInstance, self, mode, "-", int( config.plugins.SpecialJump.jump2.getValue()),config.plugins.SpecialJump.jump2action.getValue())
 	elif jumpkey == 'J3': SpecialJump.fixedJump(SpecialJumpInstance, self, mode, "-", int( config.plugins.SpecialJump.jump3.getValue()),config.plugins.SpecialJump.jump3action.getValue())
@@ -1091,6 +1094,13 @@ class SpecialJump():
 		self.zap_time_sums = [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
 		self.zap_list_ind1  = ['off', 'miss', 'fast']
 		self.zap_list_ind2  = ['HD+', 'HD', 'SD', '??', 'tot']
+		
+		self.lastZapTime = None
+		
+	def showTimeBetweenKeys(self):
+		if self.lastZapTime is not None:
+			if config.plugins.SpecialJump.debugEnable.getValue(): print "Time since last KEY:",datetime.now()-self.lastZapTime
+		self.lastZapTime = datetime.now()
 
 	def powerOn(self):
 		if config.plugins.SpecialJump.debugEnable.getValue(): print "powerOn"
