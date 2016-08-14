@@ -1,0 +1,536 @@
+# German translations for SpecialJump.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-08-13 19:05+0200\n"
+"PO-Revision-Date: 2016-08-13 19:53+0200\n"
+"Language-Team: openATV\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.3\n"
+"Last-Translator: Fischreiher\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: de\n"
+
+#: plugin.py:87 plugin.py:296 plugin.py:338
+msgid "do nothing"
+msgstr "nichts tun"
+
+#: plugin.py:87
+msgid "change to audio track 1"
+msgstr "zu Tonspur 1 wechseln"
+
+#: plugin.py:87
+msgid "change to audio track 2"
+msgstr "zu Tonspur 2 wechseln"
+
+#: plugin.py:87
+msgid "change to audio track 3"
+msgstr "zu Tonspur 3 wechseln"
+
+#: plugin.py:87
+msgid "change to audio track 4"
+msgstr "zu Tonspur 4 wechseln"
+
+#: plugin.py:87
+msgid "activate subtitle track 1"
+msgstr "Untertitelspur 1 aktivieren"
+
+#: plugin.py:87
+msgid "activate subtitle track 2"
+msgstr "Untertitelspur 2 aktivieren"
+
+#: plugin.py:87
+msgid "activate subtitle track 3"
+msgstr "Untertitelspur 3 aktivieren"
+
+#: plugin.py:87
+msgid "activate subtitle track 4"
+msgstr "Untertitelspur 4 aktivieren"
+
+#: plugin.py:88
+msgid "no change"
+msgstr "keine Änderung"
+
+#: plugin.py:90
+msgid "no protection, always zap"
+msgstr "kein Schutz, immer zappen"
+
+#: plugin.py:91
+msgid "no limit"
+msgstr "unbegrenzt"
+
+#: plugin.py:97
+msgid "yes"
+msgstr "ja"
+
+#: plugin.py:97
+msgid "default"
+msgstr "standard"
+
+#: plugin.py:148 plugin.py:149 plugin.py:150
+msgid "top"
+msgstr "oben"
+
+#: plugin.py:148 plugin.py:149 plugin.py:150
+msgid "bottom"
+msgstr "unten"
+
+#: plugin.py:152 plugin.py:153
+msgid "no mute"
+msgstr "nicht stummschalten"
+
+#: plugin.py:155
+msgid "never zap"
+msgstr "nie zappen"
+
+#: plugin.py:156
+msgid "no message"
+msgstr "ohne Meldung"
+
+#: plugin.py:159 plugin.py:160
+msgid "1-2-n-off-1-2-n-off"
+msgstr "1-2-n-aus-1-2-n-aus"
+
+#: plugin.py:159 plugin.py:160
+msgid "on-off-on-off"
+msgstr "an-aus-an-aus"
+
+#: plugin.py:162 plugin.py:163 plugin.py:164 plugin.py:165
+msgid "no infobox"
+msgstr "keine Infobox"
+
+#: plugin.py:162 plugin.py:163 plugin.py:164 plugin.py:165
+msgid "single line"
+msgstr "einzeilig"
+
+#: plugin.py:162 plugin.py:163
+msgid "one line per track"
+msgstr "eine Zeile pro Spur"
+
+#: plugin.py:165
+msgid "full statistics"
+msgstr "volle Statistik"
+
+#: plugin.py:189
+msgid "random"
+msgstr "zufällig"
+
+#: plugin.py:189
+msgid "random, stop at error"
+msgstr "zufällig, bei Fehler stoppen"
+
+#: plugin.py:189
+msgid "No"
+msgstr "Nein"
+
+#: plugin.py:189
+msgid "just zap"
+msgstr "nur zappen"
+
+#: plugin.py:189
+msgid "just zap, stop at error"
+msgstr "nur zappen, bei Fehler stoppen"
+
+#: plugin.py:190
+msgid "Picture in Picture (debug only)"
+msgstr "Bild in Bild (zu Debug-Zwecken)"
+
+#: plugin.py:190
+msgid "Picture in Picture, hidden (not recommended)"
+msgstr "Bild in Bild, versteckt (nicht empfohlen)"
+
+#: plugin.py:190
+msgid "fake recording"
+msgstr "Pseudo-Aufnahme"
+
+#: plugin.py:255
+msgid "SpecialJump"
+msgstr "SpecialJump"
+
+#: plugin.py:260 plugin.py:261 plugin.py:263
+msgid "Fast manual skipping of commercials, and more..."
+msgstr "Schnelles manuelles Überspringen von Werbung, und mehr..."
+
+#: plugin.py:862
+msgid "__ General settings __"
+msgstr "__ Allgemeine Einstellungen __"
+
+#: plugin.py:863
+msgid "Enable SpecialJump plugin [restart GUI]"
+msgstr "SpecialJump Plugin aktivieren [erfordert GUI-Neustart]"
+
+#: plugin.py:864
+msgid "SpecialJump entry in main menu [restart GUI]"
+msgstr "SpecialJump-Eintrag im Hauptmenü [erfordert GUI-Neustart]"
+
+#: plugin.py:865
+msgid "Enable SpecialJump debug output in normal logfile"
+msgstr "SpecialJump Debug-Ausgaben im normalen Logfile aktivieren"
+
+#: plugin.py:867
+msgid ""
+"[OSD settings] Show infobar on skip (set to 'no' when using SpecialJump "
+"infobar)"
+msgstr ""
+"[OSD Einstellungen] Zeige Infoleiste bei Sprüngen (mit SpecialJump "
+"Infoleiste auf 'nein' setzen)"
+
+#: plugin.py:868
+msgid "[Timeshift settings] Show timeshift infobar"
+msgstr "[Timeshift Einstellungen] Zeige Timeshift Infoleiste"
+
+#: plugin.py:869
+msgid "Show SpecialJump infobar (set to 'yes')"
+msgstr "Zeige SpecialJump Infoleiste (auf 'ja' stellen)"
+
+#: plugin.py:870
+msgid ""
+"Show SpecialJump infobar on jumpNextMark/jumpPreviousMark (set to 'yes')"
+msgstr ""
+"SpecialJump Infoleiste beim Sprung zur nächsten Marke zeigen (auf 'ja' "
+"stellen)"
+
+#: plugin.py:868
+msgid "__ keymap settings ____________________________________"
+msgstr "__ Einstellung der Tastenbelegung _____________________________"
+
+#: plugin.py:869
+msgid "edit your local keymap.xml or global keymap.usr"
+msgstr "Bitte die lokale keymap.xml oder die globale keymap.usr editieren"
+
+#: plugin.py:870
+msgid "for details search the web for 'SpecialJump openATV forum'"
+msgstr "und im Internet nach 'SpecialJump openATV Forum' suchen"
+
+#: plugin.py:872
+msgid "__ Special jump (fast manual skipping of commercials using 2 keys) __"
+msgstr "__ SpecialJump (Werbung manuell überspringen mit 2 Tasten) __"
+
+#: plugin.py:873
+msgid "Special jump 0 (initial value)"
+msgstr "SpecialJump Sprung 0 (erster Wert)"
+
+#: plugin.py:874
+msgid "Special jump 1 after 1st direction change"
+msgstr "SpecialJump Sprung 1 nach erstem Richtungswechsel"
+
+#: plugin.py:875
+msgid "Special jump 2 (subsequent jump)"
+msgstr "SpecialJump Sprung 2 (nächster Sprung)"
+
+#: plugin.py:876
+msgid "Special jump 3 (subsequent jump)"
+msgstr "SpecialJump Sprung 3 (nächster Sprung)"
+
+#: plugin.py:877
+msgid "Special jump 4 (subsequent jump)"
+msgstr "SpecialJump Sprung 4 (nächster Sprung)"
+
+#: plugin.py:878
+msgid "Special jump 5 (subsequent jump)"
+msgstr "SpecialJump Sprung 5 (nächster Sprung)"
+
+#: plugin.py:879
+msgid "Special jump 6 (subsequent jump)"
+msgstr "SpecialJump Sprung 6 (nächster Sprung)"
+
+#: plugin.py:880
+msgid "Special jump 7 (subsequent jump)"
+msgstr "SpecialJump Sprung 7 (nächster Sprung)"
+
+#: plugin.py:881
+msgid "Special jump timeout"
+msgstr "SpecialJump Sprung Timeout"
+
+#: plugin.py:882
+msgid "Mute after SpecialJump"
+msgstr "Stumm schalten nach SpecialJump-Sprung"
+
+#: plugin.py:883
+msgid "Small SpecialJump: start at initial value no."
+msgstr "Kleiner SpecialJump-Sprung: Verwende als ersten Wert Nummer ..."
+
+#: plugin.py:884
+msgid "SpecialJump infobar x position"
+msgstr "SpecialJump Infoleiste: X-Position"
+
+#: plugin.py:885
+msgid "SpecialJump infobar y position"
+msgstr "SpecialJump Infoleiste: Y-Position"
+
+#: plugin.py:887
+msgid "__ Programmable jumps using up to 8 keys __"
+msgstr "__ Programmierbare Sprünge (auf bis zu 8 Tasten) __"
+
+#: plugin.py:888
+msgid "Programmable jump 1"
+msgstr "Programmierbarer Sprung 1"
+
+#: plugin.py:889
+msgid "Programmable jump 1 action"
+msgstr "Programmierbarer Sprung 1, nachfolgende Aktion"
+
+#: plugin.py:890
+msgid "Programmable jump 2"
+msgstr "Programmierbarer Sprung 2"
+
+#: plugin.py:891
+msgid "Programmable jump 2 action"
+msgstr "Programmierbarer Sprung 2, nachfolgende Aktion"
+
+#: plugin.py:892
+msgid "Programmable jump 3"
+msgstr "Programmierbarer Sprung 3"
+
+#: plugin.py:893
+msgid "Programmable jump 3 action"
+msgstr "Programmierbarer Sprung 3, nachfolgende Aktion"
+
+#: plugin.py:894
+msgid "Programmable jump 4"
+msgstr "Programmierbarer Sprung 4"
+
+#: plugin.py:895
+msgid "Programmable jump 4 action"
+msgstr "Programmierbarer Sprung 4, nachfolgende Aktion"
+
+#: plugin.py:896
+msgid "Programmable jump 5"
+msgstr "Programmierbarer Sprung 5"
+
+#: plugin.py:897
+msgid "Programmable jump 5 action"
+msgstr "Programmierbarer Sprung 5, nachfolgende Aktion"
+
+#: plugin.py:898
+msgid "Programmable jump 6"
+msgstr "Programmierbarer Sprung 6"
+
+#: plugin.py:899
+msgid "Programmable jump 6 action"
+msgstr "Programmierbarer Sprung 6, nachfolgende Aktion"
+
+#: plugin.py:900
+msgid "Programmable jump 7"
+msgstr "Programmierbarer Sprung 7"
+
+#: plugin.py:901
+msgid "Programmable jump 7 action"
+msgstr "Programmierbarer Sprung 7, nachfolgende Aktion"
+
+#: plugin.py:902
+msgid "Programmable jump 8"
+msgstr "Programmierbarer Sprung 8"
+
+#: plugin.py:903
+msgid "Programmable jump 8 action"
+msgstr "Programmierbarer Sprung 8, nachfolgende Aktion"
+
+#: plugin.py:904
+msgid "Mute after programmable jump"
+msgstr "Stumm schalten nach programmierbarem Sprung"
+
+#: plugin.py:906
+msgid "__ Zap (dual function P+/P- and play/pause) __"
+msgstr "__ Zappen (Doppelfunktion P+/P- und Play/Pause) __"
+
+#: plugin.py:907
+msgid "Zap speed limit"
+msgstr "Geschwindigkeits-Limit beim Zappen"
+
+#: plugin.py:908
+msgid "Zap from timeshift by pressing P+/P- twice within"
+msgstr "Schutz des Timeshift-Puffers gegen P+/P- aufheben durch 2* Drücken innerhalb ..."
+
+#: plugin.py:909
+msgid "Zap from timeshift, warning message duration"
+msgstr "Schutz des Timeshift-Puffers, Anzeigedauer der Warnung"
+
+#: plugin.py:910
+msgid "Zap from timeshift, warning message x position"
+msgstr "Schutz des Timeshift-Puffers, X-Position der Warnung"
+
+#: plugin.py:911
+msgid "Zap from timeshift, warning message y position"
+msgstr "Schutz des Timeshift-Puffers, Y-Position der Warnung"
+
+#: plugin.py:912
+msgid "Protect large timeshift buffer in live TV (P+ required twice)"
+msgstr "Timeshift-Puffer gegen P+ schützen (aufheben mit 2* P+) ab Pufferinhalt"
+
+#: plugin.py:913
+msgid "Protect large timeshift buffer in live TV (P- required twice)"
+msgstr "Timeshift-Puffer gegen P- schützen (aufheben mit 2* P-) ab Pufferinhalt"
+
+#: plugin.py:915
+msgid "__ Subtitle and audio toggling with a single key each __"
+msgstr "__ Untertitel und Tonspur mir je einer Taste ein/aus/umschalten __"
+
+#: plugin.py:916
+msgid "Subtitle toggle mode when pressing key only once within infobox timeout"
+msgstr ""
+"Untertitel-Umschalt-Reihenfolge bei einzelnem Tastendruck innerhalb des "
+"Timeouts"
+
+#: plugin.py:917
+msgid ""
+"Subtitle toggle mode when pressing multiple times within infobox timeout"
+msgstr ""
+"Untertitel-Umschalt-Reihenfolge bei mehrfachem Tastendruck innerhalb des "
+"Timeouts"
+
+#: plugin.py:918
+msgid "Subtitle toggle infobox timeout"
+msgstr "Untertitel-Unschaltung, Anzeigedauer der Infobox"
+
+#: plugin.py:919
+msgid "Subtitle toggle infobox verbosity"
+msgstr "Untertitel-Unschaltung, Ausführlichkeit der Infobox"
+
+#: plugin.py:920
+msgid "Subtitle infobox x position"
+msgstr "Untertitel-Unschaltung, X-Position der Infobox"
+
+#: plugin.py:921
+msgid "Subtitle infobox y position"
+msgstr "Untertitel-Unschaltung, Y-Position der Infobox"
+
+#: plugin.py:922
+msgid "Subtitle infobox anchor"
+msgstr "Untertitel-Unschaltung, Verankerung der Infobox"
+
+#: plugin.py:923
+msgid "Audio toggle infobox timeout"
+msgstr "Tonspur-Unschaltung, Anzeigedauer der Infobox"
+
+#: plugin.py:924
+msgid "Audio toggle infobox verbosity"
+msgstr "Tonspur-Unschaltung, Ausführlichkeit der Infobox"
+
+#: plugin.py:925
+msgid "Audio toggle infobox x position"
+msgstr "Tonspur-Unschaltung, X-Position der Infobox"
+
+#: plugin.py:926
+msgid "Audio toggle infobox y position"
+msgstr "Tonspur-Unschaltung, Y-Position der Infobox"
+
+#: plugin.py:927
+msgid "Audio toggle infobox anchor"
+msgstr "Tonspur-Unschaltung, Verankerung der Infobox"
+
+#: plugin.py:929
+msgid "__ Fixed audio volumes (when remove controls TV volume) __"
+msgstr "__ Feste Lautstärkewerte pro Tonspur (Nachregelung am Fernseher) __"
+
+#: plugin.py:930
+msgid "Volume for TV and recorded TV (.ts files)"
+msgstr "Lautstärke für TV und Aufnahmen (.ts Dateien)"
+
+#: plugin.py:931
+msgid "Volume for non .ts videos, audio track 1"
+msgstr "Lautstärke für andere Dateien, Tonspur 1"
+
+#: plugin.py:932
+msgid "Volume for non .ts videos, audio track 2"
+msgstr "Lautstärke für andere Dateien, Tonspur 2"
+
+#: plugin.py:933
+msgid "Volume for non .ts videos, audio track 3"
+msgstr "Lautstärke für andere Dateien, Tonspur 3"
+
+#: plugin.py:934
+msgid "Volume for non .ts videos, audio track 4"
+msgstr "Lautstärke für andere Dateien, Tonspur 4"
+
+#: plugin.py:935
+msgid "Volume for (nearly) muting after a jump"
+msgstr "Lautstärke für (beinahe) Stummschaltung nach einem Sprung"
+
+#: plugin.py:936
+msgid "Volume infobox timeout"
+msgstr "Lautstärke-Unschaltung, Anzeigedauer der Infobox"
+
+#: plugin.py:937
+msgid "Volume infobox x position"
+msgstr "Lautstärke-Unschaltung, X-Position der Infobox"
+
+#: plugin.py:938
+msgid "Volume infobox y position"
+msgstr "Lautstärke-Unschaltung, X-Position der Infobox"
+
+#: plugin.py:939
+msgid "Volume infobox verbosity"
+msgstr "Lautstärke-Unschaltung, Ausführlichkeit der Infobox"
+
+#: plugin.py:940
+msgid "[from AV menu] Audio auto volume level"
+msgstr "[AV Menü] Automatische Lautstärkeanpassung"
+
+#: plugin.py:942
+msgid "__ Toggle LCD brightness by key __"
+msgstr "__ LCD-Display mit einer Taste dunkel schalten __"
+
+#: plugin.py:943
+msgid "Turn LCD on again on event change"
+msgstr "Display bei Senderwechsel wieder hell schalten"
+
+#: plugin.py:950
+msgid "__ Fast zapping __"
+msgstr "__ Fast Zap Mode (beschleunigte Umschaltzeiten) __"
+
+#: plugin.py:951
+msgid "Enable predictive fast zap mode"
+msgstr "Zappen beschleunigen"
+
+#: plugin.py:952
+msgid "Fast zap mode method of activating next channel"
+msgstr "Methode, wie der nächste Sender vorgeladen wird"
+
+#: plugin.py:953
+msgid "Auto-zap benchmark mode (debug only, random hit/miss/off)"
+msgstr "Auto-Zap Benchmark Modus (zu Debug-Zwecken)"
+
+#: plugin.py:954
+msgid "Enable zap speed measurement"
+msgstr "Messung der Umschaltzeiten aktivieren"
+
+#: plugin.py:955
+msgid "Zap speed infobox verbosity"
+msgstr "Anzeige der Umschaltzeiten, Ausführlichkeit der Infobox"
+
+#: plugin.py:956
+msgid "Zap speed infobox timeout"
+msgstr "Anzeige der Umschaltzeiten, Anzeigedauer der Infobox"
+
+#: plugin.py:957
+msgid "Zap speed infobox x position"
+msgstr "Anzeige der Umschaltzeiten, X-Position der Infobox"
+
+#: plugin.py:958
+msgid "Zap speed infobox y position"
+msgstr "Anzeige der Umschaltzeiten, Y-Position der Infobox"
+
+#: plugin.py:959
+msgid "Zap speed infobox anchor"
+msgstr "Anzeige der Umschaltzeiten, Verankerung der Infobox"
+
+#: plugin.py:960
+msgid "Zap speed measurement timeout (zap error) [ms]"
+msgstr "Timeout bei Messung der Umschaltzeiten (Wertung als Tuning-Fehler) [in ms]"
+
+#: plugin.py:961
+msgid "Auto-zap benchmark mode time between zaps [ms]"
+msgstr "Auto-Zap Benchmark Modus, Zeit zwischen Umschaltvorgängen [in ms]"
+
+#: plugin.py:968
+msgid "SpecialJump Configuration"
+msgstr "SpecialJump Einstellungen"
+
+#: plugin.py:978
+msgid "Quit without saving changes ?"
+msgstr "Wirklich ohne Sicherung der Einstellungen beenden?"

@@ -50,6 +50,7 @@ from Components.config import config, ConfigInteger, ConfigSubsection, ConfigYes
 from Components.ConfigList import ConfigListScreen
 from Components.VolumeControl import VolumeControl
 from Components.ServiceEventTracker import ServiceEventTracker
+from Components.Sources.StaticText import StaticText
 from Components.SystemInfo import SystemInfo
 from Components.ServicePosition import ServicePositionGauge
 from ServiceReference import ServiceReference, isPlayableForCur
@@ -81,23 +82,22 @@ import os.path
 import os
 import time
 import keymapparser
-#from __init__ import _
+from __init__ import _
 
-fixedJumpValues  = [("-3600", _("-1:00:00")), ("-3000", _("-50:00")), ("-2400", _("-40:00")), ("-1800", _("-30:00")), ("-1500", _("-25:00")), ("-1200", _("-20:00")), ("-900", _("-15:00")), ("-840", _("-14:00")), ("-780", _("-13:00")), ("-720", _("-12:00")), ("-660", _("-11:00")), ("-600", _("-10:00")), ("-540", _("-9:00")), ("-480", _("-8:00")), ("-420", _("-7:00")), ("-360", _("-6:00")), ("-300", _("-5:00")), ("-270", _("-4:30")), ("-240", _("-4:00")), ("-210", _("-3:30")), ("-180", _("-3:00")), ("-165", _("-2:45")), ("-150", _("-2:30")), ("-135", _("-2:15")), ("-120", _("-2:00")), ("-110", _("-1:50")), ("-100", _("-1:40")), ("-90", _("-1:30")), ("-80", _("-1:20")), ("-70", _("-1:10")), ("-60", _("-1:00")), ("-55", _("-0:55")), ("-50", _("-0:50")), ("-45", _("-0:45")), ("-40", _("-0:40")), ("-35", _("-0:35")), ("-30", _("-0:30")), ("-25", _("-0:25")), ("-20", _("-0:20")), ("-15", _("-0:15")), ("-12", _("-0:12")), ("-10", _("-0:10")), ("-9", _("-0:09")), ("-8", _("-0:08")), ("-7", _("-0:07")), ("-6", _("-0:06")), ("-5", _("-0:05")), ("-4", _("-0:04")), ("-3", _("-0:03")), ("-2", _("-0:02")), ("-1", _("-0:01")), ("0", _("0:00")), ("1", _("+0:01")), ("2", _("+0:02")), ("3", _("+0:03")), ("4", _("+0:04")), ("5", _("+0:05")), ("6", _("+0:06")), ("7", _("+0:07")), ("8", _("+0:08")), ("9", _("+0:09")), ("10", _("+0:10")), ("12", _("+0:12")), ("15", _("+0:15")), ("20", _("+0:20")), ("25", _("+0:25")), ("30", _("+0:30")), ("35", _("+0:35")), ("40", _("+0:40")), ("45", _("+0:45")), ("50", _("+0:50")), ("55", _("+0:55")), ("60", _("+1:00")), ("70", _("+1:10")), ("80", _("+1:20")), ("90", _("+1:30")), ("100", _("+1:40")), ("110", _("+1:50")), ("120", _("+2:00")), ("135", _("+2:15")), ("150", _("+2:30")), ("165", _("+2:45")), ("180", _("+3:00")), ("210", _("+3:30")), ("240", _("+4:00")), ("270", _("+4:30")), ("300", _("+5:00")), ("360", _("+6:00")), ("420", _("+7:00")), ("480", _("+8:00")), ("540", _("+9:00")), ("600", _("+10:00")), ("660", _("+11:00")), ("720", _("+12:00")), ("780", _("+13:00")), ("840", _("+14:00")), ("900", _("+15:00")), ("1200", _("+20:00")), ("1500", _("+25:00")), ("1800", _("+30:00")), ("2400", _("+40:00")), ("3000", _("+50:00")), ("3600", _("+1:00:00"))]
+fixedJumpValues  = [("-3600", "-1:00:00"), ("-3000", "-50:00"), ("-2400", "-40:00"), ("-1800", "-30:00"), ("-1500", "-25:00"), ("-1200", "-20:00"), ("-900", "-15:00"), ("-840", "-14:00"), ("-780", "-13:00"), ("-720", "-12:00"), ("-660", "-11:00"), ("-600", "-10:00"), ("-540", "-9:00"), ("-480", "-8:00"), ("-420", "-7:00"), ("-360", "-6:00"), ("-300", "-5:00"), ("-270", "-4:30"), ("-240", "-4:00"), ("-210", "-3:30"), ("-180", "-3:00"), ("-165", "-2:45"), ("-150", "-2:30"), ("-135", "-2:15"), ("-120", "-2:00"), ("-110", "-1:50"), ("-100", "-1:40"), ("-90", "-1:30"), ("-80", "-1:20"), ("-70", "-1:10"), ("-60", "-1:00"), ("-55", "-0:55"), ("-50", "-0:50"), ("-45", "-0:45"), ("-40", "-0:40"), ("-35", "-0:35"), ("-30", "-0:30"), ("-25", "-0:25"), ("-20", "-0:20"), ("-15", "-0:15"), ("-12", "-0:12"), ("-10", "-0:10"), ("-9", "-0:09"), ("-8", "-0:08"), ("-7", "-0:07"), ("-6", "-0:06"), ("-5", "-0:05"), ("-4", "-0:04"), ("-3", "-0:03"), ("-2", "-0:02"), ("-1", "-0:01"), ("0", "0:00"), ("1", "+0:01"), ("2", "+0:02"), ("3", "+0:03"), ("4", "+0:04"), ("5", "+0:05"), ("6", "+0:06"), ("7", "+0:07"), ("8", "+0:08"), ("9", "+0:09"), ("10", "+0:10"), ("12", "+0:12"), ("15", "+0:15"), ("20", "+0:20"), ("25", "+0:25"), ("30", "+0:30"), ("35", "+0:35"), ("40", "+0:40"), ("45", "+0:45"), ("50", "+0:50"), ("55", "+0:55"), ("60", "+1:00"), ("70", "+1:10"), ("80", "+1:20"), ("90", "+1:30"), ("100", "+1:40"), ("110", "+1:50"), ("120", "+2:00"), ("135", "+2:15"), ("150", "+2:30"), ("165", "+2:45"), ("180", "+3:00"), ("210", "+3:30"), ("240", "+4:00"), ("270", "+4:30"), ("300", "+5:00"), ("360", "+6:00"), ("420", "+7:00"), ("480", "+8:00"), ("540", "+9:00"), ("600", "+10:00"), ("660", "+11:00"), ("720", "+12:00"), ("780", "+13:00"), ("840", "+14:00"), ("900", "+15:00"), ("1200", "+20:00"), ("1500", "+25:00"), ("1800", "+30:00"), ("2400", "+40:00"), ("3000", "+50:00"), ("3600", "+1:00:00")]
 fixedJumpActions = [("nothing", _("do nothing")), ("audio1", _("change to audio track 1")), ("audio2", _("change to audio track 2")), ("audio3", _("change to audio track 3")), ("audio4", _("change to audio track 4")), ("sub1", _("activate subtitle track 1")), ("sub2", _("activate subtitle track 2")), ("sub3", _("activate subtitle track 3")), ("sub4", _("activate subtitle track 4"))]
-audioVolumes     = [("no_change", _("no change")), ("0", _("0")), ("1", _("1")), ("2", _("2")), ("5", _("5")), ("10", _("10")), ("20", _("20")), ("30", _("30")), ("40", _("40")), ("50", _("50")), ("60", _("60")), ("70", _("70")), ("80", _("80")), ("90", _("90")), ("100", _("100"))]
-timeoutValues    = [("500", _("0.5s")), ("1000", _("1s")), ("1500", _("1.5s")), ("2000", _("2s")), ("2500", _("2.5s")), ("3000", _("3s")), ("4000", _("4s")), ("5000", _("5s"))]
-protectValues    = [("-1", _("no protection, always zap")), ("5000", _("5s")), ("10000", _("10s")), ("20000", _("20s")), ("30000", _("30s")), ("60000", _("1min")), ("120000", _("2min")), ("300000", _("5min")), ("600000", _("10min")), ("900000", _("15min")), ("1800000", _("30min")), ("3600000", _("60min"))]
-zapSpeedLimits   = [("0", _("no limit")),      ("60", _("0.06s")), ("70", _("0.07s")), ("80", _("0.08s")), ("90", _("0.09s")), ("100", _("0.1s")), ("120", _("0.12s")), ("150", _("0.15s")), ("200", _("0.2s")), ("300", _("0.3s")), ("400", _("0.4s")), ("500", _("0.5s")), ("600", _("0.6s")), ("700", _("0.7s")), ("800", _("0.8s")), ("900", _("0.9s")), ("1000", _("1.0s")), ("1100", _("1.1s")), ("1200", _("1.2s")), ("1500", _("1.5s")), ("2000", _("2.0s"))]
+audioVolumes     = [("no_change", _("no change")), ("0", "0"), ("1", "1"), ("2", "2"), ("5", "5"), ("10", "10"), ("20", "20"), ("30", "30"), ("40", "40"), ("50", "50"), ("60", "60"), ("70", "70"), ("80", "80"), ("90", "90"), ("100", "100")]
+timeoutValues    = [("500", "0.5s"), ("1000", "1s"), ("1500", "1.5s"), ("2000", "2s"), ("2500", "2.5s"), ("3000", "3s"), ("4000", "4s"), ("5000", "5s")]
+protectValues    = [("-1", _("no protection, always zap")), ("5000", "5s"), ("10000", "10s"), ("20000", "20s"), ("30000", "30s"), ("60000", "1min"), ("120000", "2min"), ("300000", "5min"), ("600000", "10min"), ("900000", "15min"), ("1800000", "30min"), ("3600000", "60min")]
+zapSpeedLimits   = [("0", _("no limit")),      ("60", "0.06s"), ("70", "0.07s"), ("80", "0.08s"), ("90", "0.09s"), ("100", "0.1s"), ("120", "0.12s"), ("150", "0.15s"), ("200", "0.2s"), ("300", "0.3s"), ("400", "0.4s"), ("500", "0.5s"), ("600", "0.6s"), ("700", "0.7s"), ("800", "0.8s"), ("900", "0.9s"), ("1000", "1.0s"), ("1100", "1.1s"), ("1200", "1.2s"), ("1500", "1.5s"), ("2000", "2.0s")]
 
 config.plugins.SpecialJump = ConfigSubsection()
 config.plugins.SpecialJump.enable = ConfigYesNo(default=True)
 config.plugins.SpecialJump.zapspeed_enable = ConfigYesNo(default=True)
 config.plugins.SpecialJump.mainmenu = ConfigYesNo(default=False)
-config.plugins.SpecialJump.show_infobar_on_jumpPreviousNextMark = ConfigSelection([("yes", _("yes")),("default", _("default"))], default="default")
+config.plugins.SpecialJump.show_infobar_on_jumpPreviousNextMark = ConfigSelection([("yes", _("Yes")),("default", _("default"))], default="default")
 config.plugins.SpecialJump.show_infobar = ConfigYesNo(default=True)
 config.plugins.SpecialJump.debugEnable = ConfigYesNo(default=False)
-#config.plugins.SpecialJump.keyPriority = ConfigSelection([("0", _("0")),("-1", _("-1")),("-2", _("-2"))], default="0")
 
 config.plugins.SpecialJump.jump1         = ConfigSelection(fixedJumpValues,  default  ="-15")
 config.plugins.SpecialJump.jump2         = ConfigSelection(fixedJumpValues,  default  ="15")
@@ -124,7 +124,7 @@ config.plugins.SpecialJump.specialJump4  = ConfigInteger(default  =  91, limits 
 config.plugins.SpecialJump.specialJump5  = ConfigInteger(default  =  51, limits  = (1, 999))
 config.plugins.SpecialJump.specialJump6  = ConfigInteger(default  =  11, limits  = (1, 999))
 config.plugins.SpecialJump.specialJump7  = ConfigInteger(default  =   7, limits  = (1, 999))
-config.plugins.SpecialJump.smallSpecialJumpStart  = ConfigSelection([("1", _("1")),("2", _("2")),("3", _("3")),("4", _("4")),("5", _("5")),("6", _("6")),("7", _("7"))], default="3")
+config.plugins.SpecialJump.smallSpecialJumpStart  = ConfigSelection([("1", "1"),("2", "2"),("3", "3"),("4", "4"),("5", "5"),("6", "6"),("7", "7")], default="3")
 
 #SpecialJump infobar default coordinates
 config.plugins.SpecialJump.bar_x         = ConfigInteger(default  =  70, limits  = (0, 1919))
@@ -177,10 +177,6 @@ config.plugins.SpecialJump.audioVolumeNonTSVideoTrack3    = ConfigSelection(audi
 config.plugins.SpecialJump.audioVolumeNonTSVideoTrack4    = ConfigSelection(audioVolumes, default="no_change")
 config.plugins.SpecialJump.audioVolumeMuteDuringJump      = ConfigSelection(audioVolumes, default="0")
 
-config.plugins.SpecialJump.timeConstant1                  = ConfigInteger(default = 50,  limits  = (1, 999))
-config.plugins.SpecialJump.timeConstant2                  = ConfigInteger(default = 100, limits  = (1, 999))
-config.plugins.SpecialJump.algoVersion                    = ConfigSelection([("1", _("1")),("2", _("2")),("3", _("3")),("4", _("4")),("5", _("5")),("6", _("6")),("7", _("7"))], default="1")
-
 config.plugins.SpecialJump.EMCdirsHideOnPowerup           = ConfigYesNo(default=False)
 config.plugins.SpecialJump.EMCdirsShowWindowTitle         = ConfigText(default = "EMC parental control")
 config.plugins.SpecialJump.EMCdirsShowText                = ConfigText(default = "Enter PIN to show EMC hidden dirs")
@@ -192,7 +188,7 @@ config.plugins.SpecialJump.fastZapMethod                  = ConfigSelection(choi
 config.plugins.SpecialJump.zapspeedMeasureTimeout_ms      = ConfigInteger(default = 5500, limits  = (1, 99999))
 config.plugins.SpecialJump.fastZapBenchmarkTime_ms        = ConfigInteger(default = 6000, limits  = (1, 99999))
 
-config.plugins.SpecialJump.separator = ConfigSelection([("na", _(" "))], default="na")
+config.plugins.SpecialJump.separator = ConfigSelection([("na", " ")], default="na")
 
 SpecialJumpInstance = None
 baseInfoBarPlugins__init__ = None
@@ -597,11 +593,11 @@ class SpecialJumpInfoBar(Screen):
 	def refreshInfoBar(self):
 		try:
 			if int(self.localJumpTime) < 0:
-				self["SJJumpTime"].setText(_("jump -%d:%02d" % (abs(int(self.localJumpTime)) // 60, abs(int(self.localJumpTime)) % 60)))
+				self["SJJumpTime"].setText("jump -%d:%02d" % (abs(int(self.localJumpTime)) // 60, abs(int(self.localJumpTime)) % 60))
 			else:
-				self["SJJumpTime"].setText(_("jump +%d:%02d" % (self.localJumpTime // 60, self.localJumpTime % 60)))
+				self["SJJumpTime"].setText("jump +%d:%02d" % (self.localJumpTime // 60, self.localJumpTime % 60))
 		except:
-			self["SJJumpTime"].setText(_("%s" % self.localJumpTime)) # not an int
+			self["SJJumpTime"].setText("%s" % self.localJumpTime) # not an int
 		if self.shown:
 			self.SJRefreshTimer.start(100,True)
 
@@ -662,11 +658,11 @@ class SpecialJumpInfoBarCuts(Screen):
 	def refreshInfoBar(self):
 		try:
 			if int(self.localJumpTime) < 0:
-				self["SJJumpTime"].setText(_("jump -%d:%02d" % (abs(int(self.localJumpTime)) // 60, abs(int(self.localJumpTime)) % 60)))
+				self["SJJumpTime"].setText("jump -%d:%02d" % (abs(int(self.localJumpTime)) // 60, abs(int(self.localJumpTime)) % 60))
 			else:
-				self["SJJumpTime"].setText(_("jump +%d:%02d" % (self.localJumpTime // 60, self.localJumpTime % 60)))
+				self["SJJumpTime"].setText("jump +%d:%02d" % (self.localJumpTime // 60, self.localJumpTime % 60))
 		except:
-			self["SJJumpTime"].setText(_("%s" % self.localJumpTime)) # not an int
+			self["SJJumpTime"].setText("%s" % self.localJumpTime) # not an int
 		if self.shown:
 			self.SJRefreshTimer.start(100,True)
 
@@ -829,7 +825,7 @@ class SpecialJumpConfiguration(Screen, ConfigListScreen):
 		<widget source="global.CurrentTime" render="Label" position="110,20" size="140,25" font="Regular;23" foregroundColor="blue" backgroundColor="white" transparent="1">
 			<convert type="ClockToText">Format:%d.%m.%Y</convert>
 		</widget>
-		<eLabel text="SpecialJump Configuration" position="270,15" size="800,43" font="Regular;35" halign="right" foregroundColor="black" backgroundColor="white" transparent="1" />
+		<widget source="title" render="Label" position="270,15" size="800,43" font="Regular;35" halign="right" foregroundColor="black" backgroundColor="white" transparent="1" />
 		<widget name="config" position="30,90" size="1040,440" itemHeight="30" scrollbarMode="showOnDemand" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/images/sel1040x30.png" backgroundColor="black" transparent="1" />
 		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/buttons/red.png" position=" 30,570" size="35,27" alphatest="blend" />
 		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/buttons/green.png" position="290,570" size="35,27" alphatest="blend" />
@@ -843,10 +839,10 @@ class SpecialJumpConfiguration(Screen, ConfigListScreen):
 		Screen.__init__(self, session)
 
 		self.createConfigList()
-		self.onShown.append(self.setWindowTitle)
 		ConfigListScreen.__init__(self, self.list, session = self.session, on_change = self.changedEntry)
 		self.skinName = ["SpecialJump_" + self.__class__.__name__] # 'SpecialJump_SpecialJumpConfiguration'
-
+		
+		self["title"] = StaticText(_("SpecialJump Configuration"))
 		self["key_red"] = Label(_("Cancel"))
 		self["key_green"] = Label(_("OK"))
 		self["setupActions"] = ActionMap(["SetupActions", "ColorActions"],
@@ -864,14 +860,17 @@ class SpecialJumpConfiguration(Screen, ConfigListScreen):
 		self.list.append(getConfigListEntry((_("Enable SpecialJump plugin [restart GUI]")),           config.plugins.SpecialJump.enable))
 		self.list.append(getConfigListEntry((_("SpecialJump entry in main menu [restart GUI]")),      config.plugins.SpecialJump.mainmenu))
 		self.list.append(getConfigListEntry((_("Enable SpecialJump debug output in normal logfile")), config.plugins.SpecialJump.debugEnable))
-		#self.list.append(getConfigListEntry((_("Use image color buttons (set to 'no' when using color keys in SpecialJump)")),        config.plisettings.ColouredButtons))
-		#self.list.append(getConfigListEntry((_("Key priority (0 for image color buttons, -2 for SJ number keys")),                    config.plugins.SpecialJump.keyPriority))
 		self.list.append(getConfigListEntry((_("[OSD settings] Show infobar on skip (set to 'no' when using SpecialJump infobar)")),   config.usage.show_infobar_on_skip))
 		self.list.append(getConfigListEntry((_("[Timeshift settings] Show timeshift infobar")),                                        config.timeshift.showinfobar))
 		self.list.append(getConfigListEntry((_("Show SpecialJump infobar (set to 'yes')")),           config.plugins.SpecialJump.show_infobar))
 		self.list.append(getConfigListEntry((_("Show SpecialJump infobar on jumpNextMark/jumpPreviousMark (set to 'yes')")),           config.plugins.SpecialJump.show_infobar_on_jumpPreviousNextMark))
-		self.list.append(getConfigListEntry((_(" ")),                                                 config.plugins.SpecialJump.separator))
-		self.list.append(getConfigListEntry((_("__ Special jump __")),                                config.plugins.SpecialJump.separator))
+		self.list.append(getConfigListEntry((" "),                                                                                     config.plugins.SpecialJump.separator))
+		self.list.append(getConfigListEntry((_("__ keymap settings ____________________________________")),                            config.plugins.SpecialJump.separator))
+		self.list.append(getConfigListEntry((_("edit your local keymap.xml or global keymap.usr")),                                    config.plugins.SpecialJump.separator))
+		self.list.append(getConfigListEntry((_("for details search the web for 'SpecialJump openATV forum'")),                         config.plugins.SpecialJump.separator))
+		self.list.append(getConfigListEntry((_("_______________________________________________________")),                            config.plugins.SpecialJump.separator))
+		self.list.append(getConfigListEntry((" "),                                                                                     config.plugins.SpecialJump.separator))
+		self.list.append(getConfigListEntry((_("__ Special jump (fast manual skipping of commercials using 2 keys) __")),              config.plugins.SpecialJump.separator))
 		self.list.append(getConfigListEntry((_("Special jump 0 (initial value)")),                    config.plugins.SpecialJump.specialJump0))
 		self.list.append(getConfigListEntry((_("Special jump 1 after 1st direction change")),         config.plugins.SpecialJump.specialJump1))
 		self.list.append(getConfigListEntry((_("Special jump 2 (subsequent jump)")),                  config.plugins.SpecialJump.specialJump2))
@@ -885,8 +884,8 @@ class SpecialJumpConfiguration(Screen, ConfigListScreen):
 		self.list.append(getConfigListEntry((_("Small SpecialJump: start at initial value no.")),     config.plugins.SpecialJump.smallSpecialJumpStart))
 		self.list.append(getConfigListEntry((_("SpecialJump infobar x position")),                    config.plugins.SpecialJump.bar_x))
 		self.list.append(getConfigListEntry((_("SpecialJump infobar y position")),                    config.plugins.SpecialJump.bar_y))
-		self.list.append(getConfigListEntry((_(" ")),                                                 config.plugins.SpecialJump.separator))
-		self.list.append(getConfigListEntry((_("__ Programmable jumps __")),                          config.plugins.SpecialJump.separator))
+		self.list.append(getConfigListEntry((" "),                                                    config.plugins.SpecialJump.separator))
+		self.list.append(getConfigListEntry((_("__ Programmable jumps using up to 8 keys __")),       config.plugins.SpecialJump.separator))
 		self.list.append(getConfigListEntry((_("Programmable jump 1")),                               config.plugins.SpecialJump.jump1))
 		self.list.append(getConfigListEntry((_("Programmable jump 1 action")),                        config.plugins.SpecialJump.jump1action))
 		self.list.append(getConfigListEntry((_("Programmable jump 2")),                               config.plugins.SpecialJump.jump2))
@@ -904,7 +903,7 @@ class SpecialJumpConfiguration(Screen, ConfigListScreen):
 		self.list.append(getConfigListEntry((_("Programmable jump 8")),                               config.plugins.SpecialJump.jump8))
 		self.list.append(getConfigListEntry((_("Programmable jump 8 action")),                        config.plugins.SpecialJump.jump8action))
 		self.list.append(getConfigListEntry((_("Mute after programmable jump")),                      config.plugins.SpecialJump.jumpMuteTime_ms))
-		self.list.append(getConfigListEntry((_(" ")),                                                 config.plugins.SpecialJump.separator))
+		self.list.append(getConfigListEntry((" "),                                                    config.plugins.SpecialJump.separator))
 		self.list.append(getConfigListEntry((_("__ Zap (dual function P+/P- and play/pause) __")),    config.plugins.SpecialJump.separator))
 		self.list.append(getConfigListEntry((_("Zap speed limit")),                                   config.plugins.SpecialJump.zapSpeedLimit_ms))
 		self.list.append(getConfigListEntry((_("Zap from timeshift by pressing P+/P- twice within")), config.plugins.SpecialJump.zapFromTimeshiftTime_ms))
@@ -913,8 +912,8 @@ class SpecialJumpConfiguration(Screen, ConfigListScreen):
 		self.list.append(getConfigListEntry((_("Zap from timeshift, warning message y position")),    config.plugins.SpecialJump.zap_y))
 		self.list.append(getConfigListEntry((_("Protect large timeshift buffer in live TV (P+ required twice)")), config.plugins.SpecialJump.zapP_ProtectTimeshiftBuffer_ms))
 		self.list.append(getConfigListEntry((_("Protect large timeshift buffer in live TV (P- required twice)")), config.plugins.SpecialJump.zapM_ProtectTimeshiftBuffer_ms))
-		self.list.append(getConfigListEntry((_(" ")),                                                 config.plugins.SpecialJump.separator))
-		self.list.append(getConfigListEntry((_("__ Subtitle and audio toggling __")),                 config.plugins.SpecialJump.separator))
+		self.list.append(getConfigListEntry((" "),                                                    config.plugins.SpecialJump.separator))
+		self.list.append(getConfigListEntry((_("__ Subtitle and audio toggling with a single key each __")),                 config.plugins.SpecialJump.separator))
 		self.list.append(getConfigListEntry((_("Subtitle toggle mode when pressing key only once within infobox timeout")),  config.plugins.SpecialJump.subToggleMode_single))
 		self.list.append(getConfigListEntry((_("Subtitle toggle mode when pressing multiple times within infobox timeout")), config.plugins.SpecialJump.subToggleMode_multi))
 		self.list.append(getConfigListEntry((_("Subtitle toggle infobox timeout")),                   config.plugins.SpecialJump.subToggleTimeout_ms))
@@ -927,7 +926,7 @@ class SpecialJumpConfiguration(Screen, ConfigListScreen):
 		self.list.append(getConfigListEntry((_("Audio toggle infobox x position")),                   config.plugins.SpecialJump.audio_x))
 		self.list.append(getConfigListEntry((_("Audio toggle infobox y position")),                   config.plugins.SpecialJump.audio_y))
 		self.list.append(getConfigListEntry((_("Audio toggle infobox anchor")),                       config.plugins.SpecialJump.audio_anchor))
-		self.list.append(getConfigListEntry((_(" ")),                                                 config.plugins.SpecialJump.separator))
+		self.list.append(getConfigListEntry((" "),                                                    config.plugins.SpecialJump.separator))
 		self.list.append(getConfigListEntry((_("__ Fixed audio volumes (when remove controls TV volume) __")), config.plugins.SpecialJump.separator))
 		self.list.append(getConfigListEntry((_("Volume for TV and recorded TV (.ts files)")),         config.plugins.SpecialJump.audioVolumeTVorTSvideo))
 		self.list.append(getConfigListEntry((_("Volume for non .ts videos, audio track 1")),          config.plugins.SpecialJump.audioVolumeNonTSVideoTrack1))
@@ -940,15 +939,10 @@ class SpecialJumpConfiguration(Screen, ConfigListScreen):
 		self.list.append(getConfigListEntry((_("Volume infobox y position")),                         config.plugins.SpecialJump.audioVolume_y))
 		self.list.append(getConfigListEntry((_("Volume infobox verbosity")),                          config.plugins.SpecialJump.audioVolumeVerbosity))
 		self.list.append(getConfigListEntry((_("[from AV menu] Audio auto volume level")),            config.av.autovolume))
-		self.list.append(getConfigListEntry((_(" ")),                                                 config.plugins.SpecialJump.separator))
+		self.list.append(getConfigListEntry((" "),                                                    config.plugins.SpecialJump.separator))
 		self.list.append(getConfigListEntry((_("__ Toggle LCD brightness by key __")),                config.plugins.SpecialJump.separator))
 		self.list.append(getConfigListEntry((_("Turn LCD on again on event change")),                 config.plugins.SpecialJump.LCDonOnEventChange))
-		self.list.append(getConfigListEntry((_(" ")),                                                 config.plugins.SpecialJump.separator))
-		self.list.append(getConfigListEntry((_("__ Gigablue Quad/Plus driver workaround __")),        config.plugins.SpecialJump.separator))
-		self.list.append(getConfigListEntry((_("Use algorithm (2=Quad/Plus, 1=others)")),             config.plugins.SpecialJump.algoVersion))
-		self.list.append(getConfigListEntry((_("Quad/Plus time constant 1 (author only)")),           config.plugins.SpecialJump.timeConstant1))
-		self.list.append(getConfigListEntry((_("Quad/Plus time constant 2 (author only)")),           config.plugins.SpecialJump.timeConstant2))
-		self.list.append(getConfigListEntry((_(" ")),                                                 config.plugins.SpecialJump.separator))
+		self.list.append(getConfigListEntry((" "),                                                    config.plugins.SpecialJump.separator))
 		self.list.append(getConfigListEntry((_("__ Fast zapping __")),                                config.plugins.SpecialJump.separator))
 		self.list.append(getConfigListEntry((_("Enable predictive fast zap mode")),                   config.plugins.SpecialJump.fastZapEnable))
 		self.list.append(getConfigListEntry((_("Fast zap mode method of activating next channel")),   config.plugins.SpecialJump.fastZapMethod))
@@ -959,15 +953,12 @@ class SpecialJumpConfiguration(Screen, ConfigListScreen):
 		self.list.append(getConfigListEntry((_("Zap speed infobox x position")),                      config.plugins.SpecialJump.zapspeed_x))
 		self.list.append(getConfigListEntry((_("Zap speed infobox y position")),                      config.plugins.SpecialJump.zapspeed_y))
 		self.list.append(getConfigListEntry((_("Zap speed infobox anchor")),                          config.plugins.SpecialJump.zapspeed_anchor))
-		self.list.append(getConfigListEntry((_("Zap speed measurement timeout (zap error)")),         config.plugins.SpecialJump.zapspeedMeasureTimeout_ms))
-		self.list.append(getConfigListEntry((_("Auto-zap benchmark mode time between zaps")),         config.plugins.SpecialJump.fastZapBenchmarkTime_ms))
+		self.list.append(getConfigListEntry((_("Zap speed measurement timeout (zap error) [ms]")),    config.plugins.SpecialJump.zapspeedMeasureTimeout_ms))
+		self.list.append(getConfigListEntry((_("Auto-zap benchmark mode time between zaps [ms]")),    config.plugins.SpecialJump.fastZapBenchmarkTime_ms))
 
 	def changedEntry(self):
 		self.createConfigList()
 		self["config"].setList(self.list)
-
-	def setWindowTitle(self):
-		self.setTitle(_("SpecialJump Configuration"))
 
 	def save(self):
 		for x in self["config"].list:
@@ -1042,17 +1033,11 @@ class SpecialJump():
 		self.SJZapDownTimer.timeout.get().append(self.specialJumpZapDownTimeout)
 		self.SJZapTimer=eTimer()               # timer for zapping speed limit
 		self.SJZapTimer.timeout.get().append(self.specialJumpZapTimeout)
-		self.SJWorkaround1Timer=eTimer()          # timer for a workaround (test)
-		self.SJWorkaround1Timer.timeout.get().append(self.specialJumpWorkaround1Timeout)
-		self.SJWorkaround2Timer=eTimer()          # timer for a workaround (test)
-		self.SJWorkaround2Timer.timeout.get().append(self.specialJumpWorkaround2Timeout)
 		self.SJZapBenchmarkTimer=eTimer()         # timer for fast zap benchmark mode
 		self.SJZapBenchmarkTimer.timeout.get().append(self.zapDown)
 		self.executeCyclicTimer=eTimer() 
 		self.executeCyclicTimer.timeout.get().append(self.executeCyclic)
-	   
-		self.WorkaroundPTS = 0
-		
+	   		
 		self.InfoBar_instance         = None # always passed as an argument
 		# always use self.InfoBar_instance from parent (not global InfoBar.instance):
 		# there are separate InfoBar.instance.seekstate for InfoBarEPG and InfoBarShowMovies
@@ -1424,13 +1409,7 @@ class SpecialJump():
 		playpos = seek.getPlayPosition()
 			
 	def activateTimeshiftIfNecessaryAndDoSeekRelative(self, pts, MuteTime_ms):
-		if config.plugins.SpecialJump.algoVersion.getValue() == '1':
-			self.activateTimeshiftIfNecessaryAndDoSeekRelative_1(pts, MuteTime_ms)
-		if config.plugins.SpecialJump.algoVersion.getValue() == '2':
-			self.activateTimeshiftIfNecessaryAndDoSeekRelative_2(pts, MuteTime_ms)
-			
-	def activateTimeshiftIfNecessaryAndDoSeekRelative_1(self, pts, MuteTime_ms):
-		if config.plugins.SpecialJump.debugEnable.getValue(): print 'activateTimeshiftIfNecessaryAndDoSeekRelative_1', pts, ' ', MuteTime_ms
+		if config.plugins.SpecialJump.debugEnable.getValue(): print 'activateTimeshiftIfNecessaryAndDoSeekRelative', pts, ' ', MuteTime_ms
 		if InfoBar and self.InfoBar_instance:
 			seek = self.getSeek()
 			if seek is not None:
@@ -1453,68 +1432,6 @@ class SpecialJump():
 		else:
 			self.session.open(MessageBox,_("no (InfoBar and self.InfoBar_instance)"), type = MessageBox.TYPE_ERROR,timeout = 2)
 			
-	def activateTimeshiftIfNecessaryAndDoSeekRelative_2(self, pts, MuteTime_ms):
-		if config.plugins.SpecialJump.debugEnable.getValue(): print '[activateTimeshiftIfNecessaryAndDoSeekRelative_2', pts, ' ', MuteTime_ms
-		if InfoBar and self.InfoBar_instance:
-			seek = self.getSeek()
-			if seek is not None:
-				if not seek.isCurrentlySeekable():
-					# OK without workarounds on Gigablue Quad with driver up to 2014.11.22
-					# Gigablue Quad driver 2014.12.16 requires workarounds:
-					# - pauses between steps (by timers)
-					# - 4 to 6 calls of "self.fixGigablueDriverProb" for jumping into TS buffer from live TV (95% OK with 6 calls, 85% OK with 4 calls)
-					#
-					# also the following sequence no longer works with Gigablue Quad driver 2014.12.16:
-					# - play a .ts file
-					# - jump to A
-					# - rewind to B
-					# - OK  -> playback continues at A, not at B
-					# - infobar combinations:
-					# -- SJ-bar + InfoBar   SJ-bar causes the problem during jump
-					# -- SJ-bar             SJ-bar causes the problem during jump + "SJ-bar only" is affected during rewind
-					# -- InfoBar            nothing
-					# -- no bar             nothing
-					
-					# need to activate timeshift first
-					self.fixGigablueDriverProb('activateTimeshiftIfNecessaryAndDoSeekRelative_2 not seekable 1 / mandatory')
-					InfoBarTimeshift.activateTimeshiftEndAndPause(self.InfoBar_instance)
-					self.fixGigablueDriverProb('activateTimeshiftIfNecessaryAndDoSeekRelative_2 not seekable 2 / mandatory')
-					self.WorkaroundPTS = pts
-					self.WorkaroundMuteTime_ms = MuteTime_ms
-					self.SJWorkaround1Timer.start(config.plugins.SpecialJump.timeConstant1.getValue())
-					self.fixGigablueDriverProb('activateTimeshiftIfNecessaryAndDoSeekRelative_2 not seekable 3 started timer')
-				else:
-					needPauseService = False
-					if self.isSeekstatePaused():
-						# workaround for the bug that, when paused, multiple jumps are not possible (only the last one has effect at a time)
-						self.unPauseService()
-						needPauseService = True
-					InfoBarSeek.doSeekRelative(self.InfoBar_instance, pts)
-					if needPauseService:
-						# workaround part II
-						self.pauseService()
-					self.specialJumpStartTimerShowInfoBar(False, MuteTime_ms)
-			#else:
-			#	self.session.open(MessageBox,_("no seek"), type = MessageBox.TYPE_ERROR,timeout = 2)
-		else:
-			self.session.open(MessageBox,_("no (InfoBar and self.InfoBar_instance)"), type = MessageBox.TYPE_ERROR,timeout = 2)
-
-	def specialJumpWorkaround1Timeout(self):
-		self.SJWorkaround1Timer.stop()
-		self.fixGigablueDriverProb('activateTimeshiftIfNecessaryAndDoSeekRelative_2 timer 1 a / mandatory')
-		InfoBarSeek.unPauseService(self.InfoBar_instance)
-		self.fixGigablueDriverProb('activateTimeshiftIfNecessaryAndDoSeekRelative_2 timer 1 b / mandatory')
-		self.SJWorkaround2Timer.start(config.plugins.SpecialJump.timeConstant2.getValue())
-
-	def specialJumpWorkaround2Timeout(self):
-		self.SJWorkaround2Timer.stop()
-		self.fixGigablueDriverProb('activateTimeshiftIfNecessaryAndDoSeekRelative_2 timer 2 a')
-		seek = self.getSeek()
-		pts = self.WorkaroundPTS
-		MuteTime_ms = self.WorkaroundMuteTime_ms
-		InfoBarSeek.doSeekRelative(self.InfoBar_instance, pts)
-		self.specialJumpStartTimerShowInfoBar(False, MuteTime_ms)
-	
 	def channelDown(self,parent,mode):
 		self.InfoBar_instance = parent
 		self.SJMode=mode
@@ -2061,10 +1978,6 @@ class SpecialJump():
 		self.SJZapDownTimer = None
 		self.SJZapTimer.callback.remove(self.specialJumpZapTimeout)
 		self.SJZapTimer = None
-		self.SJWorkaround1Timer.callback.remove(self.specialJumpWorkaround1Timeout)
-		self.SJWorkaround1Timer = None
-		self.SJWorkaround2Timer.callback.remove(self.specialJumpWorkaround2Timeout)
-		self.SJWorkaround2Timer = None
 		self.SJZapBenchmarkTimer.callback.remove(self.zapDown)
 		self.SJZapBenchmarkTimer = None
 		self.executeCyclicTimer.callback.remove(self.executeCyclic)
@@ -2362,19 +2275,19 @@ class SpecialJump():
 			elif not seek.isCurrentlySeekable():
 				length  = seek.getLength()
 				playpos = seek.getPlayPosition()
-				messageString = _("seek not currently seekable.\nLength=%d\nPlayPostition=%d\n" % (length[1]/90000, playpos[1]/90000))
+				messageString = "seek not currently seekable.\nLength=%d\nPlayPostition=%d\n" % (length[1]/90000, playpos[1]/90000)
 			else:
 				length  = seek.getLength()
 				playpos = seek.getPlayPosition()
-				messageString = _("seek is currently seekable.\nLength=%d\nPlayPostition=%d\n" % (length[1]/90000, playpos[1]/90000))
-			messageString += _("\n")
+				messageString = "seek is currently seekable.\nLength=%d\nPlayPostition=%d\n" % (length[1]/90000, playpos[1]/90000)
+			messageString += "\n"
 			
 			timeshift_file_kB = self.getTimeshiftFileSize_kB()
-			messageString += _("timeshift file length =%d kbytes / estimated %ds\n\n" % (timeshift_file_kB,timeshift_file_kB/1000))
+			messageString += "timeshift file length =%d kbytes / estimated %ds\n\n" % (timeshift_file_kB,timeshift_file_kB/1000)
 
 			# audio volume
 			if False:
-				messageString += _("getAudioVolume =%d\n\n" % self.getAudioVolume())
+				messageString += "getAudioVolume =%d\n\n" % self.getAudioVolume()
 			
 			# infobar instance
 			if False:
@@ -2386,7 +2299,7 @@ class SpecialJump():
 					messageString += _("Infobar is InfoBar\n")
 				#else:
 				#    messageString += _("Infobar is not InfoBar\n")  
-				messageString += _("\n")
+				messageString += "\n"
 
 			# (pseudo) recordings
 			if True:
@@ -2402,28 +2315,28 @@ class SpecialJump():
 
 					recs = self.session.nav.getRecordingsServicesAndTypes()
 					records_running = len(recs)
-					messageString += _("Active recordings: %d\n" % records_running)
+					messageString += "Active recordings: %d\n" % records_running
 					for x in recs:
-						typeString = _(" ")
+						typeString = " "
 						for i in range(0, len(types)):
 							if (2**i & x[1]) > 0:
 								if 2**i in types:
-									typeString += _(" %s") % (types[2**i])
+									typeString += " %s" % (types[2**i])
 								else:
-									typeString += _(" %d") % (2**i)
-						messageString += _("Active recording: %s of type%s\n" % (x[0],typeString))
-						print _("Active recording: %s of type%s\n" % (x[0],typeString))
-					messageString += _("\n")
+									typeString += " %d" % (2**i)
+						messageString += "Active recording: %s of type%s\n" % (x[0],typeString)
+						print "Active recording: %s of type%s\n" % (x[0],typeString)
+					messageString += "\n"
 				except:
 					messageString += _("This image does not support 'getRecordingsServicesAndTypes()'\n")
 
 			if False:
 				recs = NavigationInstance.instance.record_event
 				records_running = len(recs)
-				messageString += _("Active record_events: %d\n" % records_running)
+				messageString += "Active record_events: %d\n" % records_running
 				for x in recs:
-					messageString += _("Active record_event: %s\n" % (x))
-				messageString += _("\n")
+					messageString += "Active record_event: %s\n" % (x)
+				messageString += "\n"
 				
 			# PIP
 			if False:
@@ -2435,26 +2348,26 @@ class SpecialJump():
 					messageString += _("fastZapPipActive is True\n")
 				else:
 					messageString += _("fastZapPipActive is False\n")
-				messageString += _("\n")
+				messageString += "\n"
 				
 			# infobar seekstate
 			if False:
-				messageString += _("global InfoBar.instance.seekstate = (%s, %s, %s, %s)\n"   % (InfoBar.instance.seekstate[0],InfoBar.instance.seekstate[1],InfoBar.instance.seekstate[2],InfoBar.instance.seekstate[3]))
-				messageString += _("parent InfoBar_instance.seekstate = (%s, %s, %s, %s)\n\n" % (self.InfoBar_instance.seekstate[0],self.InfoBar_instance.seekstate[1],self.InfoBar_instance.seekstate[2],self.InfoBar_instance.seekstate[3]))
+				messageString += "global InfoBar.instance.seekstate = (%s, %s, %s, %s)\n"   % (InfoBar.instance.seekstate[0],InfoBar.instance.seekstate[1],InfoBar.instance.seekstate[2],InfoBar.instance.seekstate[3])
+				messageString += "parent InfoBar_instance.seekstate = (%s, %s, %s, %s)\n\n" % (self.InfoBar_instance.seekstate[0],self.InfoBar_instance.seekstate[1],self.InfoBar_instance.seekstate[2],self.InfoBar_instance.seekstate[3])
 
 			# start time
 			if False:
-				messageString += _("self.starttime = %s\n\n" % self.starttime)
+				messageString += "self.starttime = %s\n\n" % self.starttime
 			
 			# HDD status
 			if True:
 				try:
 					from  Components.Harddisk  import  harddiskmanager
 					for hdd in harddiskmanager.HDDList():
-						messageString += _("HDD %s isSleeping: %s\n" % (hdd[1].getDeviceName(),hdd[1].isSleeping()))
+						messageString += "HDD %s isSleeping: %s\n" % (hdd[1].getDeviceName(),hdd[1].isSleeping())
 				except:
 					messageString += _("HDD status detection failed\n")               
-			messageString += _("\n")               
+			messageString += "\n"               
 
 			# video geometries 1
 			if True:
@@ -2463,7 +2376,7 @@ class SpecialJump():
 				video_width = int(info.getInfo(iServiceInformation.sVideoWidth))
 				video_pol = ('i', 'p')[info.getInfo(iServiceInformation.sProgressive)]
 				video_rate = int(info.getInfo(iServiceInformation.sFrameRate))
-				messageString += _("Video content: %ix%i%s %iHz\n") % (video_width, video_height, video_pol, (video_rate + 500) / 1000)
+				messageString += "Video content: %ix%i%s %iHz\n" % (video_width, video_height, video_pol, (video_rate + 500) / 1000)
 
 			# video clipping
 			if False:
@@ -2491,7 +2404,7 @@ class SpecialJump():
 					f.close()
 				else:
 					clip_height = -999
-				messageString += _("/proc/stb/vmpeg/0 clip: left=%i/w=%i / top=%i/h=%i/\n" % (clip_left, clip_width, clip_top, clip_height))
+				messageString += "/proc/stb/vmpeg/0 clip: left=%i/w=%i / top=%i/h=%i/\n" % (clip_left, clip_width, clip_top, clip_height)
   
 			# video geometries 2
 			if True:
@@ -2514,30 +2427,30 @@ class SpecialJump():
 					except:
 						video_rate = -999
 					f.close()
-				messageString += _("/proc/stb/vmpeg/0: %ix%i%s / %i\n" % (video_width, video_height, video_pol, video_rate))
+				messageString += "/proc/stb/vmpeg/0: %ix%i%s / %i\n" % (video_width, video_height, video_pol, video_rate)
 			
 			# video mode
 			if True:
 				f = open('/proc/stb/video/videomode')
 				current_mode = f.read()[:-1].replace('\n', '')
 				f.close()
-				messageString += _("/proc/stb/video/videomode=%s\n\n" % current_mode)
+				messageString += "/proc/stb/video/videomode=%s\n\n" % current_mode
 
 			# subtitle tracks
 			if False:
 				(n,SubtitleTrackList,selectedidx) = self.getSubtitleTrackList()
 				for x in SubtitleTrackList:
-					messageString += _("ST (%d, %d, %d, %d) / %s / %s / %s / %s\n" % (x[4][0], x[4][1], x[4][2], x[4][3], x[0],x[1],x[2],x[3]))
+					messageString += "ST (%d, %d, %d, %d) / %s / %s / %s / %s\n" % (x[4][0], x[4][1], x[4][2], x[4][3], x[0],x[1],x[2],x[3])
 				if self.InfoBar_instance.selected_subtitle:
-					messageString += _("self.InfoBar_instance.selected_subtitle=(%d, %d, %d, %d)\n\n" % (self.InfoBar_instance.selected_subtitle[0], self.InfoBar_instance.selected_subtitle[1], self.InfoBar_instance.selected_subtitle[2], self.InfoBar_instance.selected_subtitle[3]))
+					messageString += "self.InfoBar_instance.selected_subtitle=(%d, %d, %d, %d)\n\n" % (self.InfoBar_instance.selected_subtitle[0], self.InfoBar_instance.selected_subtitle[1], self.InfoBar_instance.selected_subtitle[2], self.InfoBar_instance.selected_subtitle[3])
 				else:
-					messageString += _("self.InfoBar_instance.selected_subtitle=None\n\n")
+					messageString += "self.InfoBar_instance.selected_subtitle=None\n\n"
 
 			# audio tracks
 			if False:
 				(n,AudioTrackList,selectedidx) = self.getAudioTrackList()        
 				for x in AudioTrackList:
-					messageString += _("AudioTrack %s / %s / %s / %s\n" % (x[0],x[1],x[2],x[3]))
+					messageString += "AudioTrack %s / %s / %s / %s\n" % (x[0],x[1],x[2],x[3])
 					
 			self.session.open(MessageBox, messageString, type = MessageBox.TYPE_ERROR,timeout = 10)
 			
