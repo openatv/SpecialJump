@@ -64,8 +64,8 @@ msgid "no limit"
 msgstr "unbegrenzt"
 
 #: plugin.py:97
-msgid "yes"
-msgstr "ja"
+msgid "Yes"
+msgstr "Ja"
 
 #: plugin.py:97
 msgid "default"
