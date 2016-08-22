@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-08-13 19:05+0200\n"
-"PO-Revision-Date: 2016-08-13 19:53+0200\n"
+"PO-Revision-Date: 2016-08-21 19:53+0200\n"
 "Language-Team: openATV\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -14,6 +14,14 @@ msgstr ""
 "Last-Translator: Fischreiher\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Language: de\n"
+
+#
+msgid "OK"
+msgstr "OK"
+
+#
+msgid "Cancel"
+msgstr "Abbrechen"
 
 #: plugin.py:87 plugin.py:296 plugin.py:338
 msgid "do nothing"
@@ -195,16 +203,16 @@ msgstr ""
 "stellen)"
 
 #: plugin.py:868
-msgid "__ keymap settings ____________________________________"
-msgstr "__ Einstellung der Tastenbelegung _____________________________"
+msgid "__ Keymap selection __"
+msgstr "__ Einstellung der Tastenbelegung __"
 
 #: plugin.py:869
-msgid "edit your local keymap.xml or global keymap.usr"
-msgstr "Bitte die lokale keymap.xml oder die globale keymap.usr editieren"
+msgid "Local keymap file"
+msgstr "Lokale keymap Datei"
 
 #: plugin.py:870
-msgid "for details search the web for 'SpecialJump openATV forum'"
-msgstr "und im Internet nach 'SpecialJump openATV Forum' suchen"
+msgid "Create your own keymap (instructions in the file):"
+msgstr "Bau Deine eigene keymap (Anleitung in der Datei):"
 
 #: plugin.py:872
 msgid "__ Special jump (fast manual skipping of commercials using 2 keys) __"
@@ -372,16 +380,11 @@ msgstr "__ Untertitel und Tonspur mir je einer Taste ein/aus/umschalten __"
 
 #: plugin.py:916
 msgid "Subtitle toggle mode when pressing key only once within infobox timeout"
-msgstr ""
-"Untertitel-Umschalt-Reihenfolge bei einzelnem Tastendruck innerhalb des "
-"Timeouts"
+msgstr Untertitel-Umschalt-Reihenfolge bei 1 Tastendruck innerhalb des Timeouts"
 
 #: plugin.py:917
-msgid ""
-"Subtitle toggle mode when pressing multiple times within infobox timeout"
-msgstr ""
-"Untertitel-Umschalt-Reihenfolge bei mehrfachem Tastendruck innerhalb des "
-"Timeouts"
+msgid "Subtitle toggle mode when pressing multiple times within infobox timeout"
+msgstr "Untertitel-Umschalt-Reihenfolge bei >1 Tastendruck innerhalb des Timeouts"
 
 #: plugin.py:918
 msgid "Subtitle toggle infobox timeout"

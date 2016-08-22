@@ -1,160 +1,132 @@
-<!-- "m" = make             -->
-<!-- "b" = break            -->
-<!-- "r" = repeated         -->
-<!-- "l" = long             -->
-<!-- "mr" = make or repeated-->
-
-<keymap>
-<map context="SpecialJumpActions">
-	<key id="KEY_F1"     mapto="specialjump_toggleLCDBlanking"      flags="b" />
-	<key id="KEY_F1"     mapto="specialjump_debugmessagebox"        flags="l" />
-	<!--         F2 on remote generates KEY_F6 event -->
-	<key id="KEY_F6"     mapto="specialjump_backwards_small"        flags="m" />
-	<key id="KEY_F3"     mapto="specialjump_forwards_small"         flags="m" />
-	<key id="KEY_F4"     mapto="specialjump_jump8"                  flags="m" />
-	<key id="KEY_LEFT"   mapto="specialjump_backwards"              flags="m" />
-	<key id="KEY_RIGHT"  mapto="specialjump_forwards"               flags="m" />
-	<key id="KEY_RED"    mapto="specialjump_jump1"                  flags="m" />
-	<key id="KEY_GREEN"  mapto="specialjump_jump2"                  flags="m" />
-	<key id="KEY_YELLOW" mapto="specialjump_jump3"                  flags="m" />
-	<key id="KEY_BLUE"   mapto="specialjump_jump4"                  flags="m" />
-	<key id="KEY_AUDIO"  mapto="specialjump_toggleAudioTrack"       flags="m" />
-	<key id="KEY_TEXT"   mapto="specialjump_toggleSubtitleTrack"    flags="l" />
-	<key id="KEY_TEXT"   mapto="specialjump_doNothing"              flags="m" />
-	<key id="KEY_F1"     mapto="specialjump_doNothing"              flags="mr" />
-	<key id="KEY_F6"     mapto="specialjump_doNothing"              flags="brl" />
-	<key id="KEY_F3"     mapto="specialjump_doNothing"              flags="brl" />
-	<key id="KEY_F4"     mapto="specialjump_doNothing"              flags="brl" />
-	<key id="KEY_LEFT"   mapto="specialjump_doNothing"              flags="brl" />
-	<key id="KEY_RIGHT"  mapto="specialjump_doNothing"              flags="brl" />
-	<key id="KEY_RED"    mapto="specialjump_doNothing"              flags="brl" />
-	<key id="KEY_GREEN"  mapto="specialjump_doNothing"              flags="brl" />
-	<key id="KEY_YELLOW" mapto="specialjump_doNothing"              flags="brl" />
-	<key id="KEY_BLUE"   mapto="specialjump_doNothing"              flags="brl" />
-	<key id="KEY_1"      mapto="specialjump_jumpkey1"               flags="m" />
-	<key id="KEY_4"      mapto="specialjump_jumpkey4"               flags="m" />
-	<key id="KEY_7"      mapto="specialjump_jumpkey7"               flags="m" />
-	<key id="KEY_3"      mapto="specialjump_jumpkey3"               flags="m" />
-	<key id="KEY_6"      mapto="specialjump_jumpkey6"               flags="m" />
-	<key id="KEY_9"      mapto="specialjump_jumpkey9"               flags="m" />
-	<key id="KEY_CHANNELDOWN" mapto="specialjump_channelDown"       flags="mr" />
-	<key id="KEY_CHANNELUP"   mapto="specialjump_channelUp"         flags="mr" />
-	<key id="KEY_CHANNELDOWN" mapto="specialjump_doNothing"         flags="bl" />
-	<key id="KEY_CHANNELUP"   mapto="specialjump_doNothing"         flags="bl" />
-</map>
-<map context="SpecialJumpMoviePlayerActions">
-	<key id="KEY_F1"     mapto="specialjump_toggleLCDBlanking"      flags="b" />
-	<key id="KEY_F1"     mapto="specialjump_debugmessagebox"        flags="l" />
-	<!--         F2 on remote generates KEY_F6 event -->
-	<key id="KEY_F6"     mapto="specialjump_backwards_small"        flags="m" />
-	<key id="KEY_F3"     mapto="specialjump_forwards_small"         flags="m" />
-	<key id="KEY_F4"     mapto="specialjump_jump8"                  flags="m" />
-	<key id="KEY_LEFT"   mapto="specialjump_backwards"              flags="m" />
-	<key id="KEY_RIGHT"  mapto="specialjump_forwards"               flags="m" />
-	<key id="KEY_RED"    mapto="specialjump_jump1"                  flags="m" />
-	<key id="KEY_GREEN"  mapto="specialjump_jump2"                  flags="m" />
-	<key id="KEY_YELLOW" mapto="specialjump_jump3"                  flags="m" />
-	<key id="KEY_BLUE"   mapto="specialjump_jump4"                  flags="m" />
-	<key id="KEY_AUDIO"  mapto="specialjump_toggleAudioTrack"       flags="m" />
-	<key id="KEY_TEXT"   mapto="specialjump_toggleSubtitleTrack"    flags="b" />
-	<key id="KEY_TEXT"   mapto="specialjump_doNothing"              flags="m" />
-	<key id="KEY_F1"     mapto="specialjump_doNothing"              flags="mr" />
-	<key id="KEY_F6"     mapto="specialjump_doNothing"              flags="brl" />
-	<key id="KEY_F3"     mapto="specialjump_doNothing"              flags="brl" />
-	<key id="KEY_F4"     mapto="specialjump_doNothing"              flags="brl" />
-	<key id="KEY_LEFT"   mapto="specialjump_doNothing"              flags="brl" />
-	<key id="KEY_RIGHT"  mapto="specialjump_doNothing"              flags="brl" />
-	<key id="KEY_RED"    mapto="specialjump_doNothing"              flags="brl" />
-	<key id="KEY_GREEN"  mapto="specialjump_doNothing"              flags="brl" />
-	<key id="KEY_YELLOW" mapto="specialjump_doNothing"              flags="brl" />
-	<key id="KEY_BLUE"   mapto="specialjump_doNothing"              flags="brl" />
-	<key id="KEY_1"      mapto="specialjump_jumpkey1"               flags="m" />
-	<key id="KEY_4"      mapto="specialjump_jumpkey4"               flags="m" />
-	<key id="KEY_7"      mapto="specialjump_jumpkey7"               flags="m" />
-	<key id="KEY_3"      mapto="specialjump_jumpkey3"               flags="m" />
-	<key id="KEY_6"      mapto="specialjump_jumpkey6"               flags="m" />
-	<key id="KEY_9"      mapto="specialjump_jumpkey9"               flags="m" />
-    <key id="KEY_2"      mapto="specialjump_toggleSubtitleTrack"    flags="m" />
-    <key id="KEY_5"      mapto="specialjump_jump8"                  flags="m" />
-	<key id="KEY_CHANNELDOWN" mapto="specialjump_channelDown"       flags="mr" />
-	<key id="KEY_CHANNELUP"   mapto="specialjump_channelUp"         flags="mr" />
-	<key id="KEY_CHANNELDOWN" mapto="specialjump_doNothing"         flags="bl" />
-	<key id="KEY_CHANNELUP"   mapto="specialjump_doNothing"         flags="bl" />
-	<key id="KEY_PREVIOUS"    mapto="specialjump_jumpPreviousMark"  flags="b" />
-	<key id="KEY_0"           mapto="specialjump_toggleMark"        flags="b" />
-	<key id="KEY_NEXT"        mapto="specialjump_jumpNextMark"      flags="b" />
-	<key id="KEY_PREVIOUS"    mapto="specialjump_toggleMarkIn"      flags="l" />
-<!--<key id="KEY_0"           mapto="specialjump_callMovieCut"      flags="l" /> -->
-	<key id="KEY_0"           mapto="specialjump_callCutListEditor" flags="l" />
-	<key id="KEY_NEXT"        mapto="specialjump_toggleMarkOut"     flags="l" />
-	<key id="KEY_PREVIOUS"    mapto="specialjump_clearDoubleAction" flags="m" />
-	<key id="KEY_0"           mapto="specialjump_clearDoubleAction" flags="m" />
-	<key id="KEY_NEXT"        mapto="specialjump_clearDoubleAction" flags="m" />
-	<key id="KEY_PREVIOUS"    mapto="specialjump_doNothing"         flags="r" />
-	<key id="KEY_0"           mapto="specialjump_doNothing"         flags="r" />
-	<key id="KEY_NEXT"        mapto="specialjump_doNothing"         flags="r" />
-</map>
-
-<!-- ================================================================================= -->
-<!-- Instructions for editing /usr/share/enigma2/keymap.xml                            -->
-<!-- ================================================================================= -->
-<!-- for all keys that do not work with SpecialJump                                    -->
-<!--     menu - system - settings - button setup - use image color buttons - no        -->
-<!--         (same as config.plisettings.ColouredButtons=false)                        -->
-<!--     check which keymap.xml functions are blocking them:                           -->
-<!--         press the key                                                             -->
-<!--         check log file for the last "KEY:" entry like                             -->
-<!--             0 18e 1                                                               -->
-<!--             KEY: 398 RED                                                          -->
-<!--             action ->  InfoBarINFOpanel infoPanel                                 -->
-<!--         in this case ('break' actions), use "specialjump_doNothing" above         -->
-<!--     in other cases it may be necessary to edit /usr/share/enigma2/keymap.xml      -->
-<!-- ================================================================================= -->
-
-
-<!-- 'break' actions solved by "specialjump_doNothing":
-0 18e 1
-KEY: 398 RED
-action ->  InfoBarINFOpanel infoPanel
-0 3c 1
-KEY: 64 [F6/F2]
-action ->  InfobarPiPActions activatePiP
-0 3d 1
-KEY: 61 [F3]
-action ->  InfobarExtensions openEPGSearch
-0 3e 1
-KEY: 62 [F4]
-action ->  InfobarExtensions extensions
-0 190 1
-KEY: 400 YELLOW
-action ->  InfobarTimeshiftActions timeshiftStartY
-0 18f 1
-KEY: 399 GREEN
-action ->  InfobarSubserviceSelectionActions GreenPressed
+<!--
+=================================================================================
+DO NOT EDIT THIS FILE
+DIESE DATEI NICHT EDITIEREN
+=================================================================================
+Create your own keymap:
+Bau Deine eigene keymap:
+  /usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/keymap_user.xml
+  /usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/keymap_instructions.txt
+=================================================================================
 -->
 
-<!-- ================================================================================= -->
-<!-- Possible other edits of /usr/share/enigma2/keymap.xml                             -->
-<!-- ================================================================================= -->
+<keymap>
+	<map context="SpecialJumpActions">
+		<!-- SpecialJump -->
+		<key id="KEY_LEFT"        mapto="specialjump_backwards"              flags="m" />
+		<key id="KEY_RIGHT"       mapto="specialjump_forwards"               flags="m" />
+		<key id="KEY_LEFT"        mapto="specialjump_doNothing"              flags="brl" />
+		<key id="KEY_RIGHT"       mapto="specialjump_doNothing"              flags="brl" />
+		<!-- small SpecialJump -->
+		<!--         F2 on remote generates KEY_F6 event -->
+		<key id="KEY_F6"          mapto="specialjump_backwards_small"        flags="m" />
+		<key id="KEY_F3"          mapto="specialjump_forwards_small"         flags="m" />
+		<key id="KEY_F6"          mapto="specialjump_doNothing"              flags="brl" />
+		<key id="KEY_F3"          mapto="specialjump_doNothing"              flags="brl" />
 
-	<map context="InfobarTeletextActions">
-    <!-- Teletext activation on 'break' and 'long' (allow dual function, teletext(b) and subtitles(l) or vice versa -->
-	<!--<key id="KEY_TEXT" mapto="startTeletext"        flags="m" /> -->
-		<key id="KEY_TEXT" mapto="startTeletext"        flags="b" />
-		<key id="KEY_TEXT" mapto="startTeletext"        flags="l" />
+		<!-- programmable jumps on color keys (you don't want that) -->
+		<key id="KEY_RED"         mapto="specialjump_jump1"                  flags="b" />
+		<key id="KEY_GREEN"       mapto="specialjump_jump2"                  flags="b" />
+		<key id="KEY_YELLOW"      mapto="specialjump_jump3"                  flags="b" />
+		<key id="KEY_BLUE"        mapto="specialjump_jump4"                  flags="b" />
+		<key id="KEY_BLUE"        mapto="specialjump_debugmessagebox"        flags="l" />
+		<key id="KEY_BLUE"        mapto="specialjump_doNothing"              flags="mr" />
+		
+		<!-- during live TV: TEXT = teletext / "long TEXT" = subtitles -->
+		<key id="KEY_TEXT"        mapto="specialjump_startTeletext"          flags="b" />
+		<key id="KEY_TEXT"        mapto="specialjump_toggleSubtitleTrack_skipTeletext"  flags="l" />
+		<key id="KEY_TEXT"        mapto="specialjump_doNothing"              flags="mr" />
+
+		<!-- Fast Zap Mode support / Unterstützung für Fast Zap Mode -->
+		<key id="KEY_1"           mapto="specialjump_jumpkey1"               flags="m" />
+		<key id="KEY_4"           mapto="specialjump_jumpkey4"               flags="m" />
+		<key id="KEY_7"           mapto="specialjump_jumpkey7"               flags="m" />
+		<key id="KEY_3"           mapto="specialjump_jumpkey3"               flags="m" />
+		<key id="KEY_6"           mapto="specialjump_jumpkey6"               flags="m" />
+		<key id="KEY_9"           mapto="specialjump_jumpkey9"               flags="m" />
+		<key id="KEY_2"           mapto="specialjump_jumpkey2"               flags="m" />
+		<key id="KEY_5"           mapto="specialjump_jumpkey5"               flags="m" />
+		<key id="KEY_8"           mapto="specialjump_jumpkey8"               flags="m" />
+		<key id="KEY_CHANNELDOWN" mapto="specialjump_channelDown"            flags="mr" />
+		<key id="KEY_CHANNELUP"   mapto="specialjump_channelUp"              flags="mr" />
+		<key id="KEY_CHANNELDOWN" mapto="specialjump_doNothing"              flags="bl" />
+		<key id="KEY_CHANNELUP"   mapto="specialjump_doNothing"              flags="bl" />
+		
+		<!-- various ... -->
+		<key id="KEY_F1"          mapto="specialjump_toggleLCDBlanking"      flags="b" />
+		<key id="KEY_F1"          mapto="specialjump_emcpin"                 flags="l" />
+		<key id="KEY_F4"          mapto="specialjump_jump8"                  flags="m" />
+		<!--         F4 on my SONY multi remote is a system key, no long press possible -->
+		<key id="KEY_F1"          mapto="specialjump_doNothing"              flags="mr" />
+		<key id="KEY_F4"          mapto="specialjump_doNothing"              flags="brl" />
+		<key id="KEY_AUDIO"       mapto="specialjump_toggleAudioTrack"       flags="m" />
 	</map>
+	<!--=================================================================================-->
+	<map context="SpecialJumpMoviePlayerActions">
+		<!-- SpecialJump -->
+		<key id="KEY_LEFT"        mapto="specialjump_backwards"              flags="m" />
+		<key id="KEY_RIGHT"       mapto="specialjump_forwards"               flags="m" />
+		<key id="KEY_LEFT"        mapto="specialjump_doNothing"              flags="brl" />
+		<key id="KEY_RIGHT"       mapto="specialjump_doNothing"              flags="brl" />
+		<!-- small SpecialJump -->
+		<!--         F2 on remote generates KEY_F6 event -->
+		<key id="KEY_F6"          mapto="specialjump_backwards_small"        flags="m" />
+		<key id="KEY_F3"          mapto="specialjump_forwards_small"         flags="m" />
+		<key id="KEY_F6"          mapto="specialjump_doNothing"              flags="brl" />
+		<key id="KEY_F3"          mapto="specialjump_doNothing"              flags="brl" />
 
-	<map context="TeletextActions">
-    <!-- Teletext P+/P- for next/prev. page -->
-		<key id="KEY_CHANNELUP"   mapto="nextPage"        flags="mr" />
-		<key id="KEY_CHANNELDOWN" mapto="prevPage"        flags="mr" />
-    </map>
+		<!-- programmable jumps on color keys (you don't want that) -->
+		<key id="KEY_RED"         mapto="specialjump_jump1"                  flags="m" />
+		<key id="KEY_GREEN"       mapto="specialjump_jump2"                  flags="m" />
+		<key id="KEY_YELLOW"      mapto="specialjump_jump3"                  flags="m" />
+		<key id="KEY_BLUE"        mapto="specialjump_jump4"                  flags="b" />
+		<key id="KEY_BLUE"        mapto="specialjump_debugmessagebox"        flags="l" />
+		<key id="KEY_RED"         mapto="specialjump_doNothing"              flags="brl" />
+		<key id="KEY_GREEN"       mapto="specialjump_doNothing"              flags="brl" />
+		<key id="KEY_YELLOW"      mapto="specialjump_doNothing"              flags="brl" />
+		<key id="KEY_BLUE"        mapto="specialjump_doNothing"              flags="mr" />
 
-   	<map context="InfobarActions">
-    <!-- faster file list (but no media player) -->
- 	<!--<key id="KEY_VIDEO" mapto="showMovies"        flags="b" />-->
-	<!--<key id="KEY_VIDEO" mapto="showMediaPlayer"        flags="l" />-->
-		<key id="KEY_VIDEO" mapto="showMovies"        flags="m" />
-    </map>
- 
+		<!-- during playback: TEXT = subtitles / "long TEXT" = recorded teletext -->
+		<key id="KEY_TEXT"        mapto="specialjump_toggleSubtitleTrack"    flags="b" />
+		<key id="KEY_TEXT"        mapto="specialjump_startTeletext"          flags="l" />
+		<key id="KEY_TEXT"        mapto="specialjump_doNothing"              flags="mr" />
+		
+		<!-- Show jump distance for normal jump keys -->
+		<key id="KEY_1"           mapto="specialjump_jumpkey1"               flags="m" />
+		<key id="KEY_4"           mapto="specialjump_jumpkey4"               flags="m" />
+		<key id="KEY_7"           mapto="specialjump_jumpkey7"               flags="m" />
+		<key id="KEY_3"           mapto="specialjump_jumpkey3"               flags="m" />
+		<key id="KEY_6"           mapto="specialjump_jumpkey6"               flags="m" />
+		<key id="KEY_9"           mapto="specialjump_jumpkey9"               flags="m" />
+
+		<!-- Zap (dual function P+/P- and play/pause) / Zappen (Doppelfunktion P+/P- und Play/Pause) -->
+		<key id="KEY_CHANNELDOWN" mapto="specialjump_channelDown"            flags="mr" />
+		<key id="KEY_CHANNELUP"   mapto="specialjump_channelUp"              flags="mr" />
+		<key id="KEY_CHANNELDOWN" mapto="specialjump_doNothing"              flags="bl" />
+		<key id="KEY_CHANNELUP"   mapto="specialjump_doNothing"              flags="bl" />
+		
+		<!-- Experimental integrated cutlist editor / Experimenteller integrierter Schnittlisten-Editor -->
+		<key id="KEY_PREVIOUS"    mapto="specialjump_jumpPreviousMark"       flags="b" />
+		<key id="KEY_0"           mapto="specialjump_toggleMark"             flags="b" />
+		<key id="KEY_NEXT"        mapto="specialjump_jumpNextMark"           flags="b" />
+		<key id="KEY_PREVIOUS"    mapto="specialjump_toggleMarkIn"           flags="l" />
+	<!--<key id="KEY_0"           mapto="specialjump_callMovieCut"           flags="l" /> -->
+		<key id="KEY_0"           mapto="specialjump_callCutListEditor"      flags="l" />
+		<key id="KEY_NEXT"        mapto="specialjump_toggleMarkOut"          flags="l" />
+		<key id="KEY_PREVIOUS"    mapto="specialjump_clearDoubleAction"      flags="m" />
+		<key id="KEY_0"           mapto="specialjump_clearDoubleAction"      flags="m" />
+		<key id="KEY_NEXT"        mapto="specialjump_clearDoubleAction"      flags="m" />
+		<key id="KEY_PREVIOUS"    mapto="specialjump_doNothing"              flags="r" />
+		<key id="KEY_0"           mapto="specialjump_doNothing"              flags="r" />
+		<key id="KEY_NEXT"        mapto="specialjump_doNothing"              flags="r" />
+
+		<!-- various ... -->
+		<key id="KEY_F1"          mapto="specialjump_toggleLCDBlanking"      flags="b" />
+		<key id="KEY_F1"          mapto="specialjump_emcpin"                 flags="l" />
+		<key id="KEY_F4"          mapto="specialjump_jump8"                  flags="m" />
+		<!--         F4 on my SONY multi remote is a system key, no long press possible -->
+		<key id="KEY_F1"          mapto="specialjump_doNothing"              flags="mr" />
+		<key id="KEY_F4"          mapto="specialjump_doNothing"              flags="brl" />
+		<key id="KEY_AUDIO"       mapto="specialjump_toggleAudioTrack"       flags="m" />
+	</map>
 </keymap>

@@ -1,0 +1,178 @@
+=================================================================================
+Instructions:
+Anleitung:
+=================================================================================
+Create your own keymap:
+Bau Deine eigene keymap:
+  /usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/keymap_user.xml
+  
+Hints:
+  - Steal pieces from the other keymap files found in the same directory.
+  - If you have put SpecialJump key definitions into the global keymap.usr, remove them there as that file has priority.
+  - At openATV, your SpecialJump/keymap_user.xml is part of the backup settings by default.
+  - Read about sections, keys, available key actions, flags, and measures against double actions below.
+  - Visit the openATV forum at http://www.opena.tv/plugins/6240-specialjump-plugin-zum-schnellen-manuellen-ueberspringen-von-werbung-und-mehr.html
+  
+Tipps:
+  - Stiehl Abschnitte aus anderen Keymaps, die Du im gleichen Verzeichnis findest.
+  - Falls Du SpecialJump Tasten-Definitionen zur globalen keymap.usr hinzugefügt hast, entferne sie wieder, denn dort hätten sie Priorität.
+  - Bei openATV wird Deine SpecialJump/keymap_user.xml beim Sichern der Einstellungen mit gesichert.
+  - Lies unten weiter zu Sektionen, Tasten, verfügbaren Tasten-Aktionen, Flags und Hinweisen zur Vermeidung von Doppel-Aktionen.
+  - Besuche das openATV Forum unter http://www.opena.tv/plugins/6240-specialjump-plugin-zum-schnellen-manuellen-ueberspringen-von-werbung-und-mehr.html
+
+=================================================================================
+Keymap sections:
+Keymap Sektionen:
+=================================================================================
+Define keys for live TV or timeshift within this section:
+Definiere Tasten für Live-TV oder Timeshift in dieser Sektion:
+		<map context="SpecialJumpActions">
+		</map>
+		
+Define keys for video playback (Mediaplayer, EMC or others) within this section:
+Definiere Tasten während der Filmwiederabe (Mediaplayer, EMC oder andere) in dieser Sektion:
+		<map context="SpecialJumpMoviePlayerActions">
+		</map>
+
+=================================================================================
+Keys:
+Tasten:
+=================================================================================
+If you don't know the name of a key, press it and look into the logfile. Search for "KEY:" at the correct timestamp.
+Wenn Du den Namen einer Taste nicht kennst, drücke die Taste und guck ins logfile. Suche "KEY:" beim richtigen Zeitstempel.
+
+=================================================================================
+Available key actions:
+Verfügbare Tasten-Aktionen:
+=================================================================================
+Special jump (fast manual skipping of commercials using 2 keys)
+SpecialJump (Werbung manuell überspringen mit 2 Tasten)
+		mapto="specialjump_backwards"
+		mapto="specialjump_forwards"
+		mapto="specialjump_backwards_small"
+		mapto="specialjump_forwards_small"
+		
+Programmable jumps using up to 8 keys
+Programmierbare Sprünge (auf bis zu 8 Tasten)
+		mapto="specialjump_jump1"
+		mapto="specialjump_jump2"
+		mapto="specialjump_jump3"
+		mapto="specialjump_jump4"
+		mapto="specialjump_jump5"
+		mapto="specialjump_jump6"
+		mapto="specialjump_jump7"
+		mapto="specialjump_jump8"
+		
+Zap (dual function P+/P- and play/pause)
+Zappen (Doppelfunktion P+/P- und Play/Pause)
+		mapto="specialjump_channelDown"
+		mapto="specialjump_channelUp"
+		
+Subtitle and audio toggling with a single key each
+Untertitel und Tonspur mir je einer Taste ein/aus/umschalten
+		mapto="specialjump_toggleAudioTrack"
+		mapto="specialjump_toggleSubtitleTrack"
+		
+Toggle LCD brightness by key
+LCD-Display mit einer Taste dunkel schalten
+		mapto="specialjump_toggleLCDBlanking"
+		
+Fast zapping
+Fast Zap Mode (beschleunigte Umschaltzeiten)
+		mapto="specialjump_channelDown"
+		mapto="specialjump_channelUp"
+		mapto="specialjump_jumpkey1"
+		mapto="specialjump_jumpkey4"
+		mapto="specialjump_jumpkey7"
+		mapto="specialjump_jumpkey3"
+		mapto="specialjump_jumpkey6"
+		mapto="specialjump_jumpkey9"
+		mapto="specialjump_jumpkey2"
+		mapto="specialjump_jumpkey5"
+		mapto="specialjump_jumpkey8"
+
+Experimental integrated cutlist editor
+Experimenteller integrierter Schnittlisten-Editor
+		mapto="specialjump_jumpNextMark"
+		mapto="specialjump_jumpPreviousMark"
+		mapto="specialjump_toggleMark"
+		mapto="specialjump_toggleMarkIn"
+		mapto="specialjump_toggleMarkOut"
+		mapto="specialjump_callCutListEditor"
+		mapto="specialjump_callMovieCut"
+
+Avoid double actions in special situations
+Doppel-Aktionen in bestimmten Situationen vermeiden
+		mapto="specialjump_doNothing"
+
+=================================================================================
+flags:
+=================================================================================
+"m" = make
+"b" = break
+"r" = repeated
+"l" = long
+"mr" = make or repeated
+
+siehe http://www.opena.tv/howtos/13144-erklaerung-der-keymap-flags-und-es-zu-beachten-gibt.html
+
+================================================================================= 
+for keys that do not work with SpecialJump:
+wenn Tasten in SpecialJump nicht funktionieren:
+================================================================================= 
+menu - system - settings - button setup - use image color buttons - no        
+	(same as config.plisettings.ColouredButtons=false)                        
+check which keymap.xml functions are blocking them:                           
+	press the key                                                             
+	check log file for the last "KEY:" entry like                             
+		0 18e 1                                                               
+		KEY: 398 RED                                                          
+		action ->  InfoBarINFOpanel infoPanel                                 
+	in this case ('break' actions), use "specialjump_doNothing" above         
+in other cases it may be necessary to edit /usr/share/enigma2/keymap.xml      
+
+'break' actions solved by "specialjump_doNothing":
+0 18e 1
+KEY: 398 RED
+action ->  InfoBarINFOpanel infoPanel
+0 3c 1
+KEY: 64 [F6/F2]
+action ->  InfobarPiPActions activatePiP
+0 3d 1
+KEY: 61 [F3]
+action ->  InfobarExtensions openEPGSearch
+0 3e 1
+KEY: 62 [F4]
+action ->  InfobarExtensions extensions
+0 190 1
+KEY: 400 YELLOW
+action ->  InfobarTimeshiftActions timeshiftStartY
+0 18f 1
+KEY: 399 GREEN
+action ->  InfobarSubserviceSelectionActions GreenPressed
+
+=================================================================================
+Possible other edits of /usr/share/enigma2/keymap.xml:
+Mögliche andere Änderungen der keymap.xml:
+=================================================================================
+
+	<map context="InfobarTeletextActions">
+    <!-- Teletext activation on 'break' and 'long' (allow dual function, teletext(b) and subtitles(l) or vice versa -->
+	<!--<key id="KEY_TEXT" mapto="startTeletext"        flags="m" /> -->
+		<key id="KEY_TEXT" mapto="startTeletext"        flags="b" />
+		<key id="KEY_TEXT" mapto="startTeletext"        flags="l" />
+	</map>
+
+	<map context="TeletextActions">
+    <!-- Teletext P+/P- for next/prev. page -->
+		<key id="KEY_CHANNELUP"   mapto="nextPage"        flags="mr" />
+		<key id="KEY_CHANNELDOWN" mapto="prevPage"        flags="mr" />
+    </map>
+
+   	<map context="InfobarActions">
+    <!-- faster file list (but no media player) -->
+ 	<!--<key id="KEY_VIDEO" mapto="showMovies"        flags="b" />-->
+	<!--<key id="KEY_VIDEO" mapto="showMediaPlayer"        flags="l" />-->
+		<key id="KEY_VIDEO" mapto="showMovies"        flags="m" />
+    </map>
+ 

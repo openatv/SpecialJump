@@ -91,6 +91,13 @@ timeoutValues    = [("500", "0.5s"), ("1000", "1s"), ("1500", "1.5s"), ("2000", 
 protectValues    = [("-1", _("no protection, always zap")), ("5000", "5s"), ("10000", "10s"), ("20000", "20s"), ("30000", "30s"), ("60000", "1min"), ("120000", "2min"), ("300000", "5min"), ("600000", "10min"), ("900000", "15min"), ("1800000", "30min"), ("3600000", "60min")]
 zapSpeedLimits   = [("0", _("no limit")),      ("60", "0.06s"), ("70", "0.07s"), ("80", "0.08s"), ("90", "0.09s"), ("100", "0.1s"), ("120", "0.12s"), ("150", "0.15s"), ("200", "0.2s"), ("300", "0.3s"), ("400", "0.4s"), ("500", "0.5s"), ("600", "0.6s"), ("700", "0.7s"), ("800", "0.8s"), ("900", "0.9s"), ("1000", "1.0s"), ("1100", "1.1s"), ("1200", "1.2s"), ("1500", "1.5s"), ("2000", "2.0s")]
 
+keymapFiles = []
+keymapFiles.append("keymap.xml")
+keymapFiles.append("keymap_FastZap_only.xml")
+keymapFiles.append("keymap_SpecialJump_MP_only.xml")
+keymapFiles.append("keymap_private_Fischreiher.xml")
+keymapFiles.append("keymap_user.xml")
+
 config.plugins.SpecialJump = ConfigSubsection()
 config.plugins.SpecialJump.enable = ConfigYesNo(default=True)
 config.plugins.SpecialJump.zapspeed_enable = ConfigYesNo(default=True)
@@ -98,6 +105,8 @@ config.plugins.SpecialJump.mainmenu = ConfigYesNo(default=False)
 config.plugins.SpecialJump.show_infobar_on_jumpPreviousNextMark = ConfigSelection([("yes", _("Yes")),("default", _("default"))], default="default")
 config.plugins.SpecialJump.show_infobar = ConfigYesNo(default=True)
 config.plugins.SpecialJump.debugEnable = ConfigYesNo(default=False)
+	
+config.plugins.SpecialJump.keymapFile    = ConfigSelection([(p,p) for p in keymapFiles], default="keymap.xml")
 
 config.plugins.SpecialJump.jump1         = ConfigSelection(fixedJumpValues,  default  ="-15")
 config.plugins.SpecialJump.jump2         = ConfigSelection(fixedJumpValues,  default  ="15")
@@ -249,7 +258,7 @@ def setup(session, **kwargs):
 
 def menu(menuid, **kwargs):
 	if menuid == "mainmenu":
-		return [(_("SpecialJump"), setup, "SpecialJump_menu", 55)]
+		return [("SpecialJump", setup, "SpecialJump_menu", 55)]
 	return []
 
 def Plugins(**kwargs):
@@ -865,10 +874,10 @@ class SpecialJumpConfiguration(Screen, ConfigListScreen):
 		self.list.append(getConfigListEntry((_("Show SpecialJump infobar (set to 'yes')")),           config.plugins.SpecialJump.show_infobar))
 		self.list.append(getConfigListEntry((_("Show SpecialJump infobar on jumpNextMark/jumpPreviousMark (set to 'yes')")),           config.plugins.SpecialJump.show_infobar_on_jumpPreviousNextMark))
 		self.list.append(getConfigListEntry((" "),                                                                                     config.plugins.SpecialJump.separator))
-		self.list.append(getConfigListEntry((_("__ keymap settings ____________________________________")),                            config.plugins.SpecialJump.separator))
-		self.list.append(getConfigListEntry((_("edit your local keymap.xml or global keymap.usr")),                                    config.plugins.SpecialJump.separator))
-		self.list.append(getConfigListEntry((_("for details search the web for 'SpecialJump openATV forum'")),                         config.plugins.SpecialJump.separator))
-		self.list.append(getConfigListEntry((_("_______________________________________________________")),                            config.plugins.SpecialJump.separator))
+		self.list.append(getConfigListEntry((_("__ Keymap selection __")),                                                             config.plugins.SpecialJump.separator))
+		self.list.append(getConfigListEntry((_("Local keymap file")),                                                                  config.plugins.SpecialJump.keymapFile))
+		self.list.append(getConfigListEntry((_("Create your own keymap (instructions in the file):")),                                 config.plugins.SpecialJump.separator))
+		self.list.append(getConfigListEntry(("  /usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/keymap_user.xml"),              config.plugins.SpecialJump.separator))
 		self.list.append(getConfigListEntry((" "),                                                                                     config.plugins.SpecialJump.separator))
 		self.list.append(getConfigListEntry((_("__ Special jump (fast manual skipping of commercials using 2 keys) __")),              config.plugins.SpecialJump.separator))
 		self.list.append(getConfigListEntry((_("Special jump 0 (initial value)")),                    config.plugins.SpecialJump.specialJump0))
@@ -964,6 +973,8 @@ class SpecialJumpConfiguration(Screen, ConfigListScreen):
 		for x in self["config"].list:
 			x[1].save()
 		self.changedEntry()
+		global SpecialJumpInstance
+		SpecialJump.reloadKeymap(SpecialJumpInstance)
 		self.close(True,self.session)
 
 	def cancel(self):
@@ -1082,6 +1093,40 @@ class SpecialJump():
 		
 		self.lastZapTime = None
 		
+		self.activeKeyMap = "keymap.xml"
+		self.reloadKeymap()
+
+	def reloadKeymap(self):
+		if config.plugins.SpecialJump.keymapFile.getValue() != self.activeKeyMap:
+			error = False
+			keymap = os.path.join(resolveFilename(SCOPE_PLUGINS, "Extensions/SpecialJump/"), self.activeKeyMap)
+			if fileExists(keymap):
+				try:
+					keymapparser.removeKeymap(keymap)
+					print "keymap for plugin SpecialJump (%s) removed." % keymap
+				except Exception, exc:
+					print "keymap for plugin SpecialJump (%s) failed to remove: " % keymap, exc
+					error = True
+			else:
+				print "keymap for plugin SpecialJump (%s) not found for removal." % keymap
+				error = True
+
+			keymap = os.path.join(resolveFilename(SCOPE_PLUGINS, "Extensions/SpecialJump/"), config.plugins.SpecialJump.keymapFile.getValue())
+			if fileExists(keymap):
+				try:
+					keymapparser.readKeymap(keymap)
+					print "keymap for plugin SpecialJump (%s) loaded." % keymap
+					self.activeKeyMap = config.plugins.SpecialJump.keymapFile.getValue()
+				except Exception, exc:
+					print "keymap for plugin SpecialJump (%s) failed to load: " % keymap, exc
+					error = True
+			else:
+				print "keymap for plugin SpecialJump (%s) not found." % keymap
+				error = True
+				
+			if error:
+				self.session.open(MessageBox,_("Could not change keymap. Check that files exist and see log file for details."), type = MessageBox.TYPE_ERROR,timeout = 30)
+				
 	def showTimeBetweenKeys(self):
 		if self.lastZapTime is not None:
 			if config.plugins.SpecialJump.debugEnable.getValue(): print "Time since last KEY:",datetime.now()-self.lastZapTime
@@ -2284,7 +2329,7 @@ class SpecialJump():
 			
 			timeshift_file_kB = self.getTimeshiftFileSize_kB()
 			messageString += "timeshift file length =%d kbytes / estimated %ds\n\n" % (timeshift_file_kB,timeshift_file_kB/1000)
-
+			
 			# audio volume
 			if False:
 				messageString += "getAudioVolume =%d\n\n" % self.getAudioVolume()
