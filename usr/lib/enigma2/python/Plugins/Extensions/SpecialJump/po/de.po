@@ -23,6 +23,14 @@ msgstr "OK"
 msgid "Cancel"
 msgstr "Abbrechen"
 
+#
+msgid "show"
+msgstr "zeigen"
+
+#
+msgid "hide"
+msgstr "verbergen"
+
 #: plugin.py:87 plugin.py:296 plugin.py:338
 msgid "do nothing"
 msgstr "nichts tun"
@@ -166,6 +174,10 @@ msgstr "Schnelles manuelles Überspringen von Werbung, und mehr..."
 #: plugin.py:862
 msgid "__ General settings __"
 msgstr "__ Allgemeine Einstellungen __"
+
+#: plugin.py:862
+msgid "__ Infobar settings __"
+msgstr "__ Einstellungen zur Infoleiste __"
 
 #: plugin.py:863
 msgid "Enable SpecialJump plugin [restart GUI]"

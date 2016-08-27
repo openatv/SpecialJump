@@ -197,6 +197,18 @@ config.plugins.SpecialJump.fastZapMethod                  = ConfigSelection(choi
 config.plugins.SpecialJump.zapspeedMeasureTimeout_ms      = ConfigInteger(default = 5500, limits  = (1, 99999))
 config.plugins.SpecialJump.fastZapBenchmarkTime_ms        = ConfigInteger(default = 6000, limits  = (1, 99999))
 
+config.plugins.SpecialJump.showSettingsGeneral            = ConfigSelection([("show", _("show")),("hide", _("hide"))], default="hide")
+config.plugins.SpecialJump.showSettingsKeymap             = ConfigSelection([("show", _("show")),("hide", _("hide"))], default="hide")
+config.plugins.SpecialJump.showSettingsFastZap            = ConfigSelection([("show", _("show")),("hide", _("hide"))], default="hide")
+config.plugins.SpecialJump.showSettingsInfobar            = ConfigSelection([("show", _("show")),("hide", _("hide"))], default="hide")
+config.plugins.SpecialJump.showSettingsSpecialJump        = ConfigSelection([("show", _("show")),("hide", _("hide"))], default="hide")
+config.plugins.SpecialJump.showSettingsFixedJump          = ConfigSelection([("show", _("show")),("hide", _("hide"))], default="hide")
+config.plugins.SpecialJump.showSettingsDualZap            = ConfigSelection([("show", _("show")),("hide", _("hide"))], default="hide")
+config.plugins.SpecialJump.showSettingsSubsAudio          = ConfigSelection([("show", _("show")),("hide", _("hide"))], default="hide")
+config.plugins.SpecialJump.subToggleMode_single           = ConfigSelection([("show", _("show")),("hide", _("hide"))], default="hide")
+config.plugins.SpecialJump.showSettingsAudioVolumes       = ConfigSelection([("show", _("show")),("hide", _("hide"))], default="hide")
+config.plugins.SpecialJump.showSettingsLCDBrightness      = ConfigSelection([("show", _("show")),("hide", _("hide"))], default="hide")
+
 config.plugins.SpecialJump.separator = ConfigSelection([("na", " ")], default="na")
 
 SpecialJumpInstance = None
@@ -847,6 +859,7 @@ class SpecialJumpConfiguration(Screen, ConfigListScreen):
 		self.session = session
 		Screen.__init__(self, session)
 
+		self.initConfigList()
 		self.createConfigList()
 		ConfigListScreen.__init__(self, self.list, session = self.session, on_change = self.changedEntry)
 		self.skinName = ["SpecialJump_" + self.__class__.__name__] # 'SpecialJump_SpecialJumpConfiguration'
@@ -863,108 +876,121 @@ class SpecialJumpConfiguration(Screen, ConfigListScreen):
 				"ok": self.save,
 			}, -2)
 
-	def createConfigList(self):
-		self.list = []
-		self.list.append(getConfigListEntry((_("__ General settings __")),                            config.plugins.SpecialJump.separator))
-		self.list.append(getConfigListEntry((_("Enable SpecialJump plugin [restart GUI]")),           config.plugins.SpecialJump.enable))
-		self.list.append(getConfigListEntry((_("SpecialJump entry in main menu [restart GUI]")),      config.plugins.SpecialJump.mainmenu))
-		self.list.append(getConfigListEntry((_("Enable SpecialJump debug output in normal logfile")), config.plugins.SpecialJump.debugEnable))
-		self.list.append(getConfigListEntry((_("[OSD settings] Show infobar on skip (set to 'no' when using SpecialJump infobar)")),   config.usage.show_infobar_on_skip))
-		self.list.append(getConfigListEntry((_("[Timeshift settings] Show timeshift infobar")),                                        config.timeshift.showinfobar))
-		self.list.append(getConfigListEntry((_("Show SpecialJump infobar (set to 'yes')")),           config.plugins.SpecialJump.show_infobar))
-		self.list.append(getConfigListEntry((_("Show SpecialJump infobar on jumpNextMark/jumpPreviousMark (set to 'yes')")),           config.plugins.SpecialJump.show_infobar_on_jumpPreviousNextMark))
-		self.list.append(getConfigListEntry((" "),                                                                                     config.plugins.SpecialJump.separator))
-		self.list.append(getConfigListEntry((_("__ Keymap selection __")),                                                             config.plugins.SpecialJump.separator))
-		self.list.append(getConfigListEntry((_("Local keymap file")),                                                                  config.plugins.SpecialJump.keymapFile))
-		self.list.append(getConfigListEntry((_("Create your own keymap (instructions in the file):")),                                 config.plugins.SpecialJump.separator))
-		self.list.append(getConfigListEntry(("  /usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/keymap_user.xml"),              config.plugins.SpecialJump.separator))
-		self.list.append(getConfigListEntry((" "),                                                                                     config.plugins.SpecialJump.separator))
-		self.list.append(getConfigListEntry((_("__ Special jump (fast manual skipping of commercials using 2 keys) __")),              config.plugins.SpecialJump.separator))
-		self.list.append(getConfigListEntry((_("Special jump 0 (initial value)")),                    config.plugins.SpecialJump.specialJump0))
-		self.list.append(getConfigListEntry((_("Special jump 1 after 1st direction change")),         config.plugins.SpecialJump.specialJump1))
-		self.list.append(getConfigListEntry((_("Special jump 2 (subsequent jump)")),                  config.plugins.SpecialJump.specialJump2))
-		self.list.append(getConfigListEntry((_("Special jump 3 (subsequent jump)")),                  config.plugins.SpecialJump.specialJump3))
-		self.list.append(getConfigListEntry((_("Special jump 4 (subsequent jump)")),                  config.plugins.SpecialJump.specialJump4))
-		self.list.append(getConfigListEntry((_("Special jump 5 (subsequent jump)")),                  config.plugins.SpecialJump.specialJump5))
-		self.list.append(getConfigListEntry((_("Special jump 6 (subsequent jump)")),                  config.plugins.SpecialJump.specialJump6))
-		self.list.append(getConfigListEntry((_("Special jump 7 (subsequent jump)")),                  config.plugins.SpecialJump.specialJump7))
-		self.list.append(getConfigListEntry((_("Special jump timeout")),                              config.plugins.SpecialJump.specialJumpTimeout_ms))
-		self.list.append(getConfigListEntry((_("Mute after SpecialJump")),                            config.plugins.SpecialJump.specialJumpMuteTime_ms))
-		self.list.append(getConfigListEntry((_("Small SpecialJump: start at initial value no.")),     config.plugins.SpecialJump.smallSpecialJumpStart))
-		self.list.append(getConfigListEntry((_("SpecialJump infobar x position")),                    config.plugins.SpecialJump.bar_x))
-		self.list.append(getConfigListEntry((_("SpecialJump infobar y position")),                    config.plugins.SpecialJump.bar_y))
-		self.list.append(getConfigListEntry((" "),                                                    config.plugins.SpecialJump.separator))
-		self.list.append(getConfigListEntry((_("__ Programmable jumps using up to 8 keys __")),       config.plugins.SpecialJump.separator))
-		self.list.append(getConfigListEntry((_("Programmable jump 1")),                               config.plugins.SpecialJump.jump1))
-		self.list.append(getConfigListEntry((_("Programmable jump 1 action")),                        config.plugins.SpecialJump.jump1action))
-		self.list.append(getConfigListEntry((_("Programmable jump 2")),                               config.plugins.SpecialJump.jump2))
-		self.list.append(getConfigListEntry((_("Programmable jump 2 action")),                        config.plugins.SpecialJump.jump2action))
-		self.list.append(getConfigListEntry((_("Programmable jump 3")),                               config.plugins.SpecialJump.jump3))
-		self.list.append(getConfigListEntry((_("Programmable jump 3 action")),                        config.plugins.SpecialJump.jump3action))
-		self.list.append(getConfigListEntry((_("Programmable jump 4")),                               config.plugins.SpecialJump.jump4))
-		self.list.append(getConfigListEntry((_("Programmable jump 4 action")),                        config.plugins.SpecialJump.jump4action))
-		self.list.append(getConfigListEntry((_("Programmable jump 5")),                               config.plugins.SpecialJump.jump5))
-		self.list.append(getConfigListEntry((_("Programmable jump 5 action")),                        config.plugins.SpecialJump.jump5action))
-		self.list.append(getConfigListEntry((_("Programmable jump 6")),                               config.plugins.SpecialJump.jump6))
-		self.list.append(getConfigListEntry((_("Programmable jump 6 action")),                        config.plugins.SpecialJump.jump6action))
-		self.list.append(getConfigListEntry((_("Programmable jump 7")),                               config.plugins.SpecialJump.jump7))
-		self.list.append(getConfigListEntry((_("Programmable jump 7 action")),                        config.plugins.SpecialJump.jump7action))
-		self.list.append(getConfigListEntry((_("Programmable jump 8")),                               config.plugins.SpecialJump.jump8))
-		self.list.append(getConfigListEntry((_("Programmable jump 8 action")),                        config.plugins.SpecialJump.jump8action))
-		self.list.append(getConfigListEntry((_("Mute after programmable jump")),                      config.plugins.SpecialJump.jumpMuteTime_ms))
-		self.list.append(getConfigListEntry((" "),                                                    config.plugins.SpecialJump.separator))
-		self.list.append(getConfigListEntry((_("__ Zap (dual function P+/P- and play/pause) __")),    config.plugins.SpecialJump.separator))
-		self.list.append(getConfigListEntry((_("Zap speed limit")),                                   config.plugins.SpecialJump.zapSpeedLimit_ms))
-		self.list.append(getConfigListEntry((_("Zap from timeshift by pressing P+/P- twice within")), config.plugins.SpecialJump.zapFromTimeshiftTime_ms))
-		self.list.append(getConfigListEntry((_("Zap from timeshift, warning message duration")),      config.plugins.SpecialJump.zapFromTimeshiftMessageTime_ms))
-		self.list.append(getConfigListEntry((_("Zap from timeshift, warning message x position")),    config.plugins.SpecialJump.zap_x))
-		self.list.append(getConfigListEntry((_("Zap from timeshift, warning message y position")),    config.plugins.SpecialJump.zap_y))
-		self.list.append(getConfigListEntry((_("Protect large timeshift buffer in live TV (P+ required twice)")), config.plugins.SpecialJump.zapP_ProtectTimeshiftBuffer_ms))
-		self.list.append(getConfigListEntry((_("Protect large timeshift buffer in live TV (P- required twice)")), config.plugins.SpecialJump.zapM_ProtectTimeshiftBuffer_ms))
-		self.list.append(getConfigListEntry((" "),                                                    config.plugins.SpecialJump.separator))
-		self.list.append(getConfigListEntry((_("__ Subtitle and audio toggling with a single key each __")),                 config.plugins.SpecialJump.separator))
-		self.list.append(getConfigListEntry((_("Subtitle toggle mode when pressing key only once within infobox timeout")),  config.plugins.SpecialJump.subToggleMode_single))
-		self.list.append(getConfigListEntry((_("Subtitle toggle mode when pressing multiple times within infobox timeout")), config.plugins.SpecialJump.subToggleMode_multi))
-		self.list.append(getConfigListEntry((_("Subtitle toggle infobox timeout")),                   config.plugins.SpecialJump.subToggleTimeout_ms))
-		self.list.append(getConfigListEntry((_("Subtitle toggle infobox verbosity")),                 config.plugins.SpecialJump.subToggleVerbosity))
-		self.list.append(getConfigListEntry((_("Subtitle infobox x position")),                       config.plugins.SpecialJump.subs_x))
-		self.list.append(getConfigListEntry((_("Subtitle infobox y position")),                       config.plugins.SpecialJump.subs_y))
-		self.list.append(getConfigListEntry((_("Subtitle infobox anchor")),                           config.plugins.SpecialJump.subs_anchor))
-		self.list.append(getConfigListEntry((_("Audio toggle infobox timeout")),                      config.plugins.SpecialJump.audioToggleTimeout_ms))
-		self.list.append(getConfigListEntry((_("Audio toggle infobox verbosity")),                    config.plugins.SpecialJump.audioToggleVerbosity))
-		self.list.append(getConfigListEntry((_("Audio toggle infobox x position")),                   config.plugins.SpecialJump.audio_x))
-		self.list.append(getConfigListEntry((_("Audio toggle infobox y position")),                   config.plugins.SpecialJump.audio_y))
-		self.list.append(getConfigListEntry((_("Audio toggle infobox anchor")),                       config.plugins.SpecialJump.audio_anchor))
-		self.list.append(getConfigListEntry((" "),                                                    config.plugins.SpecialJump.separator))
-		self.list.append(getConfigListEntry((_("__ Fixed audio volumes (when remove controls TV volume) __")), config.plugins.SpecialJump.separator))
-		self.list.append(getConfigListEntry((_("Volume for TV and recorded TV (.ts files)")),         config.plugins.SpecialJump.audioVolumeTVorTSvideo))
-		self.list.append(getConfigListEntry((_("Volume for non .ts videos, audio track 1")),          config.plugins.SpecialJump.audioVolumeNonTSVideoTrack1))
-		self.list.append(getConfigListEntry((_("Volume for non .ts videos, audio track 2")),          config.plugins.SpecialJump.audioVolumeNonTSVideoTrack2))
-		self.list.append(getConfigListEntry((_("Volume for non .ts videos, audio track 3")),          config.plugins.SpecialJump.audioVolumeNonTSVideoTrack3))
-		self.list.append(getConfigListEntry((_("Volume for non .ts videos, audio track 4")),          config.plugins.SpecialJump.audioVolumeNonTSVideoTrack4))
-		self.list.append(getConfigListEntry((_("Volume for (nearly) muting after a jump")),           config.plugins.SpecialJump.audioVolumeMuteDuringJump))
-		self.list.append(getConfigListEntry((_("Volume infobox timeout")),                            config.plugins.SpecialJump.audioVolumeTimeout_ms))
-		self.list.append(getConfigListEntry((_("Volume infobox x position")),                         config.plugins.SpecialJump.audioVolume_x))
-		self.list.append(getConfigListEntry((_("Volume infobox y position")),                         config.plugins.SpecialJump.audioVolume_y))
-		self.list.append(getConfigListEntry((_("Volume infobox verbosity")),                          config.plugins.SpecialJump.audioVolumeVerbosity))
-		self.list.append(getConfigListEntry((_("[from AV menu] Audio auto volume level")),            config.av.autovolume))
-		self.list.append(getConfigListEntry((" "),                                                    config.plugins.SpecialJump.separator))
-		self.list.append(getConfigListEntry((_("__ Toggle LCD brightness by key __")),                config.plugins.SpecialJump.separator))
-		self.list.append(getConfigListEntry((_("Turn LCD on again on event change")),                 config.plugins.SpecialJump.LCDonOnEventChange))
-		self.list.append(getConfigListEntry((" "),                                                    config.plugins.SpecialJump.separator))
-		self.list.append(getConfigListEntry((_("__ Fast zapping __")),                                config.plugins.SpecialJump.separator))
-		self.list.append(getConfigListEntry((_("Enable predictive fast zap mode")),                   config.plugins.SpecialJump.fastZapEnable))
-		self.list.append(getConfigListEntry((_("Fast zap mode method of activating next channel")),   config.plugins.SpecialJump.fastZapMethod))
-		self.list.append(getConfigListEntry((_("Auto-zap benchmark mode (debug only, random hit/miss/off)")), config.plugins.SpecialJump.fastZapBenchmarkMode))
-		self.list.append(getConfigListEntry((_("Enable zap speed measurement")),                      config.plugins.SpecialJump.zapspeed_enable))
-		self.list.append(getConfigListEntry((_("Zap speed infobox verbosity")),                       config.plugins.SpecialJump.zapspeedVerbosity))
-		self.list.append(getConfigListEntry((_("Zap speed infobox timeout")),                         config.plugins.SpecialJump.zapspeedTimeout_ms))
-		self.list.append(getConfigListEntry((_("Zap speed infobox x position")),                      config.plugins.SpecialJump.zapspeed_x))
-		self.list.append(getConfigListEntry((_("Zap speed infobox y position")),                      config.plugins.SpecialJump.zapspeed_y))
-		self.list.append(getConfigListEntry((_("Zap speed infobox anchor")),                          config.plugins.SpecialJump.zapspeed_anchor))
-		self.list.append(getConfigListEntry((_("Zap speed measurement timeout (zap error) [ms]")),    config.plugins.SpecialJump.zapspeedMeasureTimeout_ms))
-		self.list.append(getConfigListEntry((_("Auto-zap benchmark mode time between zaps [ms]")),    config.plugins.SpecialJump.fastZapBenchmarkTime_ms))
+	def initConfigList(self):
+		self.configList = [
+		( _("__ General settings __"),                                                           0, config.plugins.SpecialJump.showSettingsGeneral),
+		( _("Enable SpecialJump plugin [restart GUI]"),                                          1, config.plugins.SpecialJump.enable),
+		( _("SpecialJump entry in main menu [restart GUI]"),                                     2, config.plugins.SpecialJump.mainmenu),
+		( _("Enable SpecialJump debug output in normal logfile"),                                3, config.plugins.SpecialJump.debugEnable),
+		( " ",                                                                                   4, config.plugins.SpecialJump.separator),
+		( _("__ Keymap selection __"),                                                           0, config.plugins.SpecialJump.showSettingsKeymap),
+		( _("Local keymap file"),                                                                1, config.plugins.SpecialJump.keymapFile),
+		( _("Create your own keymap (instructions in the file):"),                               2, config.plugins.SpecialJump.separator),
+		( "  /usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/keymap_user.xml",            3, config.plugins.SpecialJump.separator),
+		( " ",                                                                                   4, config.plugins.SpecialJump.separator),
+		( _("__ Fast zapping __"),                                                               0, config.plugins.SpecialJump.showSettingsFastZap),
+		( _("Enable predictive fast zap mode"),                                                  1, config.plugins.SpecialJump.fastZapEnable),
+		( _("Fast zap mode method of activating next channel"),                                  2, config.plugins.SpecialJump.fastZapMethod),
+		( _("Auto-zap benchmark mode (debug only, random hit/miss/off)"),                        3, config.plugins.SpecialJump.fastZapBenchmarkMode),
+		( _("Enable zap speed measurement"),                                                     4, config.plugins.SpecialJump.zapspeed_enable),
+		( _("Zap speed infobox verbosity"),                                                      5, config.plugins.SpecialJump.zapspeedVerbosity),
+		( _("Zap speed infobox timeout"),                                                        6, config.plugins.SpecialJump.zapspeedTimeout_ms),
+		( _("Zap speed infobox x position"),                                                     7, config.plugins.SpecialJump.zapspeed_x),
+		( _("Zap speed infobox y position"),                                                     8, config.plugins.SpecialJump.zapspeed_y),
+		( _("Zap speed infobox anchor"),                                                         9, config.plugins.SpecialJump.zapspeed_anchor),
+		( _("Zap speed measurement timeout (zap error) [ms]"),                                  10, config.plugins.SpecialJump.zapspeedMeasureTimeout_ms),
+		( _("Auto-zap benchmark mode time between zaps [ms]"),                                  11, config.plugins.SpecialJump.fastZapBenchmarkTime_ms),
+		( " ",                                                                                  12, config.plugins.SpecialJump.separator),
+		( _("__ Infobar settings __"),                                                           0, config.plugins.SpecialJump.showSettingsInfobar),
+		( _("[OSD settings] Show infobar on skip (set to 'no' when using SpecialJump infobar)"), 1, config.usage.show_infobar_on_skip),
+		( _("[Timeshift settings] Show timeshift infobar"),                                      2, config.timeshift.showinfobar),
+		( _("Show SpecialJump infobar (set to 'yes')"),                                          3, config.plugins.SpecialJump.show_infobar),
+		( _("Show SpecialJump infobar on jumpNextMark/jumpPreviousMark (set to 'yes')"),         4, config.plugins.SpecialJump.show_infobar_on_jumpPreviousNextMark),
+		( " ",                                                                                   5, config.plugins.SpecialJump.separator),
+		( _("__ Special jump (fast manual skipping of commercials using 2 keys) __"),            0, config.plugins.SpecialJump.showSettingsSpecialJump),
+		( _("Special jump 0 (initial value)"),                                                   1, config.plugins.SpecialJump.specialJump0),
+		( _("Special jump 1 after 1st direction change"),                                        2, config.plugins.SpecialJump.specialJump1),
+		( _("Special jump 2 (subsequent jump)"),                                                 3, config.plugins.SpecialJump.specialJump2),
+		( _("Special jump 3 (subsequent jump)"),                                                 4, config.plugins.SpecialJump.specialJump3),
+		( _("Special jump 4 (subsequent jump)"),                                                 5, config.plugins.SpecialJump.specialJump4),
+		( _("Special jump 5 (subsequent jump)"),                                                 6, config.plugins.SpecialJump.specialJump5),
+		( _("Special jump 6 (subsequent jump)"),                                                 7, config.plugins.SpecialJump.specialJump6),
+		( _("Special jump 7 (subsequent jump)"),                                                 8, config.plugins.SpecialJump.specialJump7),
+		( _("Special jump timeout"),                                                             9, config.plugins.SpecialJump.specialJumpTimeout_ms),
+		( _("Mute after SpecialJump"),                                                          10, config.plugins.SpecialJump.specialJumpMuteTime_ms),
+		( _("Small SpecialJump: start at initial value no."),                                   11, config.plugins.SpecialJump.smallSpecialJumpStart),
+		( _("SpecialJump infobar x position"),                                                  12, config.plugins.SpecialJump.bar_x),
+		( _("SpecialJump infobar y position"),                                                  13, config.plugins.SpecialJump.bar_y),
+		( " ",                                                                                  14, config.plugins.SpecialJump.separator),
+		( _("__ Programmable jumps using up to 8 keys __"),                                      0, config.plugins.SpecialJump.showSettingsFixedJump),
+		( _("Programmable jump 1"),                                                              1, config.plugins.SpecialJump.jump1),
+		( _("Programmable jump 1 action"),                                                       2, config.plugins.SpecialJump.jump1action),
+		( _("Programmable jump 2"),                                                              3, config.plugins.SpecialJump.jump2),
+		( _("Programmable jump 2 action"),                                                       4, config.plugins.SpecialJump.jump2action),
+		( _("Programmable jump 3"),                                                              5, config.plugins.SpecialJump.jump3),
+		( _("Programmable jump 3 action"),                                                       6, config.plugins.SpecialJump.jump3action),
+		( _("Programmable jump 4"),                                                              7, config.plugins.SpecialJump.jump4),
+		( _("Programmable jump 4 action"),                                                       8, config.plugins.SpecialJump.jump4action),
+		( _("Programmable jump 5"),                                                              9, config.plugins.SpecialJump.jump5),
+		( _("Programmable jump 5 action"),                                                      10, config.plugins.SpecialJump.jump5action),
+		( _("Programmable jump 6"),                                                             11, config.plugins.SpecialJump.jump6),
+		( _("Programmable jump 6 action"),                                                      12, config.plugins.SpecialJump.jump6action),
+		( _("Programmable jump 7"),                                                             13, config.plugins.SpecialJump.jump7),
+		( _("Programmable jump 7 action"),                                                      14, config.plugins.SpecialJump.jump7action),
+		( _("Programmable jump 8"),                                                             15, config.plugins.SpecialJump.jump8),
+		( _("Programmable jump 8 action"),                                                      16, config.plugins.SpecialJump.jump8action),
+		( _("Mute after programmable jump"),                                                    17, config.plugins.SpecialJump.jumpMuteTime_ms),
+		( " ",                                                                                  18, config.plugins.SpecialJump.separator),
+		( _("__ Zap (dual function P+/P- and play/pause) __"),                                   0, config.plugins.SpecialJump.showSettingsDualZap),
+		( _("Zap speed limit"),                                                                  1, config.plugins.SpecialJump.zapSpeedLimit_ms),
+		( _("Zap from timeshift by pressing P+/P- twice within"),                                2, config.plugins.SpecialJump.zapFromTimeshiftTime_ms),
+		( _("Zap from timeshift, warning message duration"),                                     3, config.plugins.SpecialJump.zapFromTimeshiftMessageTime_ms),
+		( _("Zap from timeshift, warning message x position"),                                   4, config.plugins.SpecialJump.zap_x),
+		( _("Zap from timeshift, warning message y position"),                                   5, config.plugins.SpecialJump.zap_y),
+		( _("Protect large timeshift buffer in live TV (P+ required twice)"),                    6, config.plugins.SpecialJump.zapP_ProtectTimeshiftBuffer_ms),
+		( _("Protect large timeshift buffer in live TV (P- required twice)"),                    7, config.plugins.SpecialJump.zapM_ProtectTimeshiftBuffer_ms),
+		( " ",                                                                                   8, config.plugins.SpecialJump.separator),
+		( _("__ Subtitle and audio toggling with a single key each __"),                         0, config.plugins.SpecialJump.showSettingsSubsAudio),
+		( _("Subtitle toggle mode when pressing key only once within infobox timeout"),          1, config.plugins.SpecialJump.subToggleMode_single),
+		( _("Subtitle toggle mode when pressing multiple times within infobox timeout"),         2, config.plugins.SpecialJump.subToggleMode_multi),
+		( _("Subtitle toggle infobox timeout"),                                                  3, config.plugins.SpecialJump.subToggleTimeout_ms),
+		( _("Subtitle toggle infobox verbosity"),                                                4, config.plugins.SpecialJump.subToggleVerbosity),
+		( _("Subtitle infobox x position"),                                                      5, config.plugins.SpecialJump.subs_x),
+		( _("Subtitle infobox y position"),                                                      6, config.plugins.SpecialJump.subs_y),
+		( _("Subtitle infobox anchor"),                                                          7, config.plugins.SpecialJump.subs_anchor),
+		( _("Audio toggle infobox timeout"),                                                     8, config.plugins.SpecialJump.audioToggleTimeout_ms),
+		( _("Audio toggle infobox verbosity"),                                                   9, config.plugins.SpecialJump.audioToggleVerbosity),
+		( _("Audio toggle infobox x position"),                                                 10, config.plugins.SpecialJump.audio_x),
+		( _("Audio toggle infobox y position"),                                                 11, config.plugins.SpecialJump.audio_y),
+		( _("Audio toggle infobox anchor"),                                                     12, config.plugins.SpecialJump.audio_anchor),
+		( " ",                                                                                  13, config.plugins.SpecialJump.separator),
+		( _("__ Fixed audio volumes (when remove controls TV volume) __"),                       0, config.plugins.SpecialJump.showSettingsAudioVolumes),
+		( _("Volume for TV and recorded TV (.ts files)"),                                        1, config.plugins.SpecialJump.audioVolumeTVorTSvideo),
+		( _("Volume for non .ts videos, audio track 1"),                                         2, config.plugins.SpecialJump.audioVolumeNonTSVideoTrack1),
+		( _("Volume for non .ts videos, audio track 2"),                                         3, config.plugins.SpecialJump.audioVolumeNonTSVideoTrack2),
+		( _("Volume for non .ts videos, audio track 3"),                                         4, config.plugins.SpecialJump.audioVolumeNonTSVideoTrack3),
+		( _("Volume for non .ts videos, audio track 4"),                                         5, config.plugins.SpecialJump.audioVolumeNonTSVideoTrack4),
+		( _("Volume for (nearly) muting after a jump"),                                          6, config.plugins.SpecialJump.audioVolumeMuteDuringJump),
+		( _("Volume infobox timeout"),                                                           7, config.plugins.SpecialJump.audioVolumeTimeout_ms),
+		( _("Volume infobox x position"),                                                        8, config.plugins.SpecialJump.audioVolume_x),
+		( _("Volume infobox y position"),                                                        9, config.plugins.SpecialJump.audioVolume_y),
+		( _("Volume infobox verbosity"),                                                        10, config.plugins.SpecialJump.audioVolumeVerbosity),
+		( _("[from AV menu] Audio auto volume level"),                                          11, config.av.autovolume),
+		( " ",                                                                                  12, config.plugins.SpecialJump.separator),
+		( _("__ Toggle LCD brightness by key __"),                                               0, config.plugins.SpecialJump.showSettingsLCDBrightness),
+		( _("Turn LCD on again on event change"),                                                1, config.plugins.SpecialJump.LCDonOnEventChange),
+		]
 
+	def createConfigList(self):
+		list = []
+		for i, conf in enumerate( self.configList ):
+			# 0 entry text
+			# 1 visibility looking up
+			# 2 config variable
+			if (conf[1] == 0) or (self.configList[i-conf[1]][2].getValue() == "show"):
+				list.append(getConfigListEntry(conf[0], conf[2]))
+		self.list = list
+		
 	def changedEntry(self):
 		self.createConfigList()
 		self["config"].setList(self.list)
