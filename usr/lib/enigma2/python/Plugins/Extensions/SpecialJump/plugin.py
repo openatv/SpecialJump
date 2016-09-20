@@ -213,15 +213,20 @@ config.plugins.SpecialJump.separator = ConfigSelection([("na", " ")], default="n
 
 SpecialJumpInstance = None
 baseInfoBarPlugins__init__ = None
-base_InfoBarNumberZap_selectAndStartService = None
 base_ChannelSelection_setHistoryPath = None
+base_InfoBarChannelSelection_zapUp = None
+base_InfoBarChannelSelection_zapDown = None
+base_ChannelSelection_zap = None
+thisZapDirection = "zapDown"
 
 #----------------------------------------------------------------------
 
 def autostart(reason, **kwargs):
 	global baseInfoBarPlugins__init__
-	global base_InfoBarNumberZap_selectAndStartService
 	global base_ChannelSelection_setHistoryPath
+	global base_InfoBarChannelSelection_zapUp
+	global base_InfoBarChannelSelection_zapDown
+	global base_ChannelSelection_zap
 	global SpecialJumpInstance
 	if config.plugins.SpecialJump.enable.value:
 		print "SpecialJump enabled: ",config.plugins.SpecialJump.enable.getValue()
@@ -230,12 +235,18 @@ def autostart(reason, **kwargs):
 			SpecialJumpInstance = SpecialJump(session)
 		if baseInfoBarPlugins__init__ is None:
 			baseInfoBarPlugins__init__ = InfoBarPlugins.__init__
-		if base_InfoBarNumberZap_selectAndStartService is None:
-			base_InfoBarNumberZap_selectAndStartService = InfoBarNumberZap.selectAndStartService
 		if base_ChannelSelection_setHistoryPath is None:
 			base_ChannelSelection_setHistoryPath = ChannelSelection.setHistoryPath
-		InfoBarNumberZap.selectAndStartService = SJselectAndStartService
+		if base_InfoBarChannelSelection_zapUp is None:
+			base_InfoBarChannelSelection_zapUp = InfoBarChannelSelection.zapUp
+		if base_InfoBarChannelSelection_zapDown is None:
+			base_InfoBarChannelSelection_zapDown = InfoBarChannelSelection.zapDown
+		if base_ChannelSelection_zap is None:
+			base_ChannelSelection_zap = ChannelSelection.zap
 		ChannelSelection.setHistoryPath     = SJsetHistoryPath
+		InfoBarChannelSelection.zapUp       = SJzapUp
+		InfoBarChannelSelection.zapDown     = SJzapDown
+		ChannelSelection.zap                = SJzap
 		InfoBarPlugins.__init__ = InfoBarPlugins__init__
 		InfoBarPlugins.specialjump_forwards             = specialjump_forwards
 		InfoBarPlugins.specialjump_backwards            = specialjump_backwards
@@ -397,13 +408,25 @@ def SJsetHistoryPath(self, doZap=True):
 	base_ChannelSelection_setHistoryPath(self,doZap)
 	SpecialJump.zapHandler(SpecialJumpInstance,"zapDown") # P+
 
-def SJselectAndStartService(self, service, bouquet):
-	# number zap is using InfoBarNumberZap.selectAndStartService. Disable pseudo recordings before changing service (freeing the tuner), do predictive zap afterwards.
-	SpecialJump.initInfoBar(SpecialJumpInstance,self)
+def SJzapUp(self):
+	global thisZapDirection
+	thisZapDirection = "zapUp"
+	base_InfoBarChannelSelection_zapUp(self)
+	
+def SJzapDown(self):
+	global thisZapDirection
+	thisZapDirection = "zapDown"
+	base_InfoBarChannelSelection_zapDown(self)
+
+def SJzap(self, enable_pipzap=False, preview_zap=False, checkParentalControl=True, ref=None):
+	global thisZapDirection
+	# zapUp, zapDown, ChannelSelection are using ChannelSelection.zap. Disable pseudo recordings before changing service (freeing the tuner), do predictive zap afterwards.
+	SpecialJump.initInfoBar(SpecialJumpInstance,None) # 'self' isn't InfoBar, pass 'None'
 	SpecialJump.initZapSpeedCounter(SpecialJumpInstance)
 	SpecialJump.disablePredictiveRecOrPIP(SpecialJumpInstance)
-	base_InfoBarNumberZap_selectAndStartService(self, service, bouquet)
-	SpecialJump.zapHandler(SpecialJumpInstance,"zapDown") # P+
+	base_ChannelSelection_zap(self, enable_pipzap, preview_zap, checkParentalControl, ref)
+	SpecialJump.zapHandler(SpecialJumpInstance,thisZapDirection)
+	thisZapDirection = "zapDown" # P+ (for next zap caused by anything else than SJzapUp / SJzapDown)
 
 def specialjump_jumpPreviousMark(self,mode):
 	if not SpecialJumpInstance.doubleActionFlag: # 'break' action suppressed after 'long' key action
