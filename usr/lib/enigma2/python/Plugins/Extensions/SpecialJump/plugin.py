@@ -166,6 +166,7 @@ config.plugins.SpecialJump.zapFromTimeshiftTime_ms        = ConfigSelection([("0
 config.plugins.SpecialJump.zapFromTimeshiftMessageTime_ms = ConfigSelection([("0", _("no message"))] + timeoutValues, default="1000")
 config.plugins.SpecialJump.zapP_ProtectTimeshiftBuffer_ms = ConfigSelection(protectValues, default="5000")
 config.plugins.SpecialJump.zapM_ProtectTimeshiftBuffer_ms = ConfigSelection(protectValues, default="1800000")
+config.plugins.SpecialJump.zap_ProtectOnlyWhenBlanked     = ConfigYesNo(default=False)
 config.plugins.SpecialJump.subToggleMode_single           = ConfigSelection([("12noff", _("1-2-n-off-1-2-n-off")), ("onoff", _("on-off-on-off"))], default="onoff")
 config.plugins.SpecialJump.subToggleMode_multi            = ConfigSelection([("12noff", _("1-2-n-off-1-2-n-off")), ("onoff", _("on-off-on-off"))], default="12noff")
 
@@ -972,7 +973,8 @@ class SpecialJumpConfiguration(Screen, ConfigListScreen):
 		( _("Zap from timeshift, warning message y position"),                                   5, config.plugins.SpecialJump.zap_y),
 		( _("Protect large timeshift buffer in live TV (P+ required twice)"),                    6, config.plugins.SpecialJump.zapP_ProtectTimeshiftBuffer_ms),
 		( _("Protect large timeshift buffer in live TV (P- required twice)"),                    7, config.plugins.SpecialJump.zapM_ProtectTimeshiftBuffer_ms),
-		( " ",                                                                                   8, config.plugins.SpecialJump.separator),
+		( _("Protect large timeshift buffer only in cinema mode (LCD brighness off, see below)"),8, config.plugins.SpecialJump.zap_ProtectOnlyWhenBlanked),
+		( " ",                                                                                   9, config.plugins.SpecialJump.separator),
 		( _("__ Subtitle and audio toggling with a single key each __"),                         0, config.plugins.SpecialJump.showSettingsSubsAudio),
 		( _("Subtitle toggle mode when pressing key only once within infobox timeout"),          1, config.plugins.SpecialJump.subToggleMode_single),
 		( _("Subtitle toggle mode when pressing multiple times within infobox timeout"),         2, config.plugins.SpecialJump.subToggleMode_multi),
@@ -1550,7 +1552,7 @@ class SpecialJump():
 					self.zapUp() # zapUp = P-
 				else:
 					length = self.getTimeshiftFileSize_kB() # length of timeshift buffer (estimated: 1kB ~ 1ms)
-					if (length > int(config.plugins.SpecialJump.zapM_ProtectTimeshiftBuffer_ms.getValue())) and not (int(config.plugins.SpecialJump.zapM_ProtectTimeshiftBuffer_ms.getValue()) == -1): # protect timeshift buffer unless "no protection" is selected
+					if (length > int(config.plugins.SpecialJump.zapM_ProtectTimeshiftBuffer_ms.getValue())) and not (int(config.plugins.SpecialJump.zapM_ProtectTimeshiftBuffer_ms.getValue()) == -1) and (not self.SJLCDon or not config.plugins.SpecialJump.zap_ProtectOnlyWhenBlanked.getValue()): # protect timeshift buffer unless "no protection" is selected
 						#if config.plugins.SpecialJump.debugEnable.getValue(): print "E-"
 						self.specialJumpStartZapDownTimer()
 						self.specialJumpShowZapWarning()
@@ -1587,7 +1589,7 @@ class SpecialJump():
 					self.zapDown() # zapDown = P+
 				else:
 					length = self.getTimeshiftFileSize_kB() # length of timeshift buffer (estimated: 1kB ~ 1ms)
-					if (length > int(config.plugins.SpecialJump.zapP_ProtectTimeshiftBuffer_ms.getValue())) and not (int(config.plugins.SpecialJump.zapP_ProtectTimeshiftBuffer_ms.getValue()) == -1): # protect timeshift buffer unless "no protection" is selected
+					if (length > int(config.plugins.SpecialJump.zapP_ProtectTimeshiftBuffer_ms.getValue())) and not (int(config.plugins.SpecialJump.zapP_ProtectTimeshiftBuffer_ms.getValue()) == -1) and (not self.SJLCDon or not config.plugins.SpecialJump.zap_ProtectOnlyWhenBlanked.getValue()): # protect timeshift buffer unless "no protection" is selected
 						#if config.plugins.SpecialJump.debugEnable.getValue(): print "E+"
 						self.specialJumpStartZapUpTimer()
 						self.specialJumpShowZapWarning()
