@@ -392,7 +392,7 @@ msgstr "Schutz des Timeshift-Puffers nur im Kino-Modus (bei dunkel geschaltetem 
 
 #: plugin.py:915
 msgid "__ Subtitle and audio toggling with a single key each __"
-msgstr "__ Untertitel und Tonspur mir je einer Taste ein/aus/umschalten __"
+msgstr "__ Untertitel und Tonspur mit je einer Taste ein/aus/umschalten __"
 
 #: plugin.py:916
 msgid "Subtitle toggle mode when pressing key only once within infobox timeout"
