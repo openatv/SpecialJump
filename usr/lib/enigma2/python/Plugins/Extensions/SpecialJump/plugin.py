@@ -92,7 +92,7 @@ protectValues    = [("-1", _("no protection, always zap")), ("5000", "5s"), ("10
 zapSpeedLimits   = [("0", _("no limit")),      ("60", "0.06s"), ("70", "0.07s"), ("80", "0.08s"), ("90", "0.09s"), ("100", "0.1s"), ("120", "0.12s"), ("150", "0.15s"), ("200", "0.2s"), ("300", "0.3s"), ("400", "0.4s"), ("500", "0.5s"), ("600", "0.6s"), ("700", "0.7s"), ("800", "0.8s"), ("900", "0.9s"), ("1000", "1.0s"), ("1100", "1.1s"), ("1200", "1.2s"), ("1500", "1.5s"), ("2000", "2.0s")]
 
 keymapFiles = []
-keymapFiles.append("keymap.xml")
+keymapFiles.append("keymap_classic.xml")
 keymapFiles.append("keymap_FastZap_only.xml")
 keymapFiles.append("keymap_SpecialJump_MP_only.xml")
 keymapFiles.append("keymap_private_Fischreiher.xml")
@@ -106,7 +106,7 @@ config.plugins.SpecialJump.show_infobar_on_jumpPreviousNextMark = ConfigSelectio
 config.plugins.SpecialJump.show_infobar = ConfigYesNo(default=True)
 config.plugins.SpecialJump.debugEnable = ConfigYesNo(default=False)
 	
-config.plugins.SpecialJump.keymapFile    = ConfigSelection([(p,p) for p in keymapFiles], default="keymap.xml")
+config.plugins.SpecialJump.keymapFile    = ConfigSelection([(p,p) for p in keymapFiles], default="keymap_classic.xml")
 
 config.plugins.SpecialJump.jump1         = ConfigSelection(fixedJumpValues,  default  ="-15")
 config.plugins.SpecialJump.jump2         = ConfigSelection(fixedJumpValues,  default  ="15")
@@ -1144,7 +1144,7 @@ class SpecialJump():
 		
 		self.lastZapTime = None
 		
-		self.activeKeyMap = "keymap.xml"
+		self.activeKeyMap = "keymap_classic.xml"
 		self.reloadKeymap()
 
 	def reloadKeymap(self):
@@ -1174,6 +1174,8 @@ class SpecialJump():
 			else:
 				print "keymap for plugin SpecialJump (%s) not found." % keymap
 				error = True
+				
+			os.system("ln -fs %s %s" % (keymap, os.path.join(resolveFilename(SCOPE_PLUGINS, "Extensions/SpecialJump/"), "keymap.xml")))
 				
 			if error:
 				self.session.open(MessageBox,_("Could not change keymap. Check that files exist and see log file for details."), type = MessageBox.TYPE_ERROR,timeout = 30)
