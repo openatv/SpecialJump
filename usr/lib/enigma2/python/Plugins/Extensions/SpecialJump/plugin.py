@@ -2396,6 +2396,10 @@ class SpecialJump():
 				#else:
 				#    messageString += _("Infobar is not InfoBar\n")  
 				messageString += "\n"
+				
+			# channel number
+			if True:
+				messageString += "Channel Number =%d\n\n" % (int(self.InfoBar_instance.servicelist.servicelist.getCurrentIndex())+1)
 
 			# (pseudo) recordings
 			if True:
