@@ -1,0 +1,8 @@
+#!/bin/sh
+#
+# cleanup script, executed after removing plugin
+#
+
+rm -rf /usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/
+echo "Plugin SpecialJump removed! You should restart enigma2 now!"
+exit 0
