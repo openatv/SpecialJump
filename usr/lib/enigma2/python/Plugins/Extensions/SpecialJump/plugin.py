@@ -2406,16 +2406,16 @@ class SpecialJump():
 			# (pseudo) recordings
 			if True:
 				try:
-					types =    {int(pNavigation.isRealRecording)          : "isRealRecording", \
-								int(pNavigation.isStreaming)              : "isStreaming", \
-								int(pNavigation.isPseudoRecording)        : "isPseudoRecording", \
-								int(pNavigation.isUnknownRecording)       : "isUnknownRecording", \
-								int(pNavigation.isFromTimer)              : "isFromTimer", 
-								int(pNavigation.isFromInstantRecording)   : "isFromInstantRecording", \
-								int(pNavigation.isFromEPGrefresh)         : "isFromEPGrefresh", \
-								int(pNavigation.isFromSpecialJumpFastZap) : "isFromSpecialJumpFastZap"}
+					types =    {int(pNavigation.isRealRecording)          : "Recording", \
+								int(pNavigation.isStreaming)              : "Streaming", \
+								int(pNavigation.isPseudoRecording)        : "PseudoRec", \
+								int(pNavigation.isUnknownRecording)       : "Unknown", \
+								int(pNavigation.isFromTimer)              : "FromTimer", 
+								int(pNavigation.isFromInstantRecording)   : "InstantRec", \
+								int(pNavigation.isFromEPGrefresh)         : "EPGrefresh", \
+								int(pNavigation.isFromSpecialJumpFastZap) : "SJFastZap"}
 
-					recs = self.session.nav.getRecordingsServicesAndTypes()
+					recs = self.session.nav.getRecordingsServicesAndTypesAndSlotIDs()
 					records_running = len(recs)
 					messageString += "Active recordings: %d\n" % records_running
 					for x in recs:
@@ -2426,11 +2426,11 @@ class SpecialJump():
 									typeString += " %s" % (types[2**i])
 								else:
 									typeString += " %d" % (2**i)
-						messageString += "Active recording: %s of type%s\n" % (x[0],typeString)
-						print "Active recording: %s of type%s\n" % (x[0],typeString)
+						messageString += "Active recording: %s of type%s on tuner %d\n" % (x[0],typeString,x[2])
+						print "Active recording: %s of type%s on tuner %d\n" % (x[0],typeString,x[2])
 					messageString += "\n"
 				except:
-					messageString += _("This image does not support 'getRecordingsServicesAndTypes()'\n")
+					messageString += _("This image does not support 'getRecordingsServicesAndTypesAndSlotIDs()'\n")
 
 			if False:
 				recs = NavigationInstance.instance.record_event
