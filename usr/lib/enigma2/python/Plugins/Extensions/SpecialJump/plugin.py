@@ -53,6 +53,7 @@ from Components.ServiceEventTracker import ServiceEventTracker
 from Components.Sources.StaticText import StaticText
 from Components.SystemInfo import SystemInfo
 from Components.ServicePosition import ServicePositionGauge
+from Components.NimManager import nimmanager
 from ServiceReference import ServiceReference, isPlayableForCur
 import NavigationInstance
 from enigma import eTimer, ePoint, eSize
@@ -1671,7 +1672,7 @@ class SpecialJump():
 		else:
 			self.SJZapBenchmarkTimer.stop()
 				
-		if config.plugins.SpecialJump.fastZapEnable.value and SystemInfo.get("NumVideoDecoders", 1) > 1:
+		if config.plugins.SpecialJump.fastZapEnable.value and len(nimmanager.nim_slots) > 1:
 			self.fastZapDirection = direction
 			if (config.plugins.SpecialJump.fastZapMethod.value == "pip") or (config.plugins.SpecialJump.fastZapMethod.value == "pip_hidden"):
 				if (self.fastZapPipActive == False):
@@ -2428,6 +2429,17 @@ class SpecialJump():
 									typeString += " %d" % (2**i)
 						messageString += "Active recording: %s of type%s on tuner %d\n" % (x[0],typeString,x[2])
 						print "Active recording: %s of type%s on tuner %d\n" % (x[0],typeString,x[2])
+					
+					recs = self.session.nav.getRecordingsServicesAndTypesAndSlotIDs()
+					numBlockedTuners = 0
+					seen = []
+					for x in recs:
+						if (x[2] >= 0) and not (x[2] in seen) and not (x[1] & pNavigation.isFromSpecialJumpFastZap):
+							numBlockedTuners += 1
+							seen.append(x[2])
+					messageString += "Tuners in use for non SJ recordings: %d\n" % numBlockedTuners
+					print "Tuners in use for non SJ recordings: %d\n" % numBlockedTuners
+					messageString += "Tuners installed: %d\n" % len(nimmanager.nim_slots)
 					messageString += "\n"
 				except:
 					messageString += _("This image does not support 'getRecordingsServicesAndTypesAndSlotIDs()'\n")
