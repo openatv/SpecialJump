@@ -219,7 +219,7 @@ base_ChannelSelection_setHistoryPath = None
 base_InfoBarChannelSelection_zapUp = None
 base_InfoBarChannelSelection_zapDown = None
 base_ChannelSelection_zap = None
-thisZapDirection = "zapDown"
+thisZapDirection = "None"
 
 #----------------------------------------------------------------------
 
@@ -409,6 +409,8 @@ def SJsetHistoryPath(self, doZap=True):
 	SpecialJump.disablePredictiveRecOrPIP(SpecialJumpInstance)
 	base_ChannelSelection_setHistoryPath(self,doZap)
 	SpecialJump.zapHandler(SpecialJumpInstance,"zapDown") # P+
+	global thisZapDirection
+	thisZapDirection = "None" # for next zap caused by anything else than SJzapUp / SJzapDown
 
 def SJzapUp(self):
 	global thisZapDirection
@@ -422,13 +424,18 @@ def SJzapDown(self):
 
 def SJzap(self, enable_pipzap=False, preview_zap=False, checkParentalControl=True, ref=None):
 	global thisZapDirection
-	# zapUp, zapDown, ChannelSelection are using ChannelSelection.zap. Disable pseudo recordings before changing service (freeing the tuner), do predictive zap afterwards.
+	# zapUp, zapDown, ChannelSelection are using ChannelSelection.zap.
 	SpecialJump.initInfoBar(SpecialJumpInstance,None) # 'self' isn't InfoBar, pass 'None'
 	SpecialJump.initZapSpeedCounter(SpecialJumpInstance)
-	SpecialJump.disablePredictiveRecOrPIP(SpecialJumpInstance)
+	#now only done after zapping (TODO remove):
+	#if thisZapDirection != SpecialJumpInstance.fastZapDirection: # guessed wrong
+	#	SpecialJump.disablePredictiveRecOrPIP(SpecialJumpInstance)
 	base_ChannelSelection_zap(self, enable_pipzap, preview_zap, checkParentalControl, ref)
-	SpecialJump.zapHandler(SpecialJumpInstance,thisZapDirection)
-	thisZapDirection = "zapDown" # P+ (for next zap caused by anything else than SJzapUp / SJzapDown)
+	if thisZapDirection is not "None":
+		SpecialJump.zapHandler(SpecialJumpInstance,thisZapDirection)
+	else:
+		SpecialJump.zapHandler(SpecialJumpInstance,"zapDown") # P+ is a good guess for the next zap
+	thisZapDirection = "None" # for next zap caused by anything else than SJzapUp / SJzapDown
 
 def specialjump_jumpPreviousMark(self,mode):
 	if not SpecialJumpInstance.doubleActionFlag: # 'break' action suppressed after 'long' key action
@@ -1604,7 +1611,6 @@ class SpecialJump():
 							self.SJZapUpTimer.stop()
 
 	def zapUp(self):
-		self.initZapSpeedCounter()
 		self.specialJumpStartZapTimer()
 		self.SJZapBenchmarkTimer.stop()
 		self.InfoBar_instance.LongButtonPressed = False # do not treat as PIP zap even when pressed long
@@ -1612,19 +1618,20 @@ class SpecialJump():
 			self.InfoBar_instance.pts_blockZap_timer.stop()
 		except:
 			print "self.InfoBar_instance.pts_blockZap_timer.stop() failed in zapUp"
-		InfoBarChannelSelection.zapUp(self.InfoBar_instance)     
-		self.zapHandler("zapUp")
+		global thisZapDirection
+		thisZapDirection = "zapUp"
+		base_InfoBarChannelSelection_zapUp(self.InfoBar_instance)     
 				
 	def zapDown(self):
-		self.initZapSpeedCounter()
 		self.specialJumpStartZapTimer()
 		self.InfoBar_instance.LongButtonPressed = False # do not treat as PIP zap even when pressed long
 		try:
 			self.InfoBar_instance.pts_blockZap_timer.stop()
 		except:
 			print "self.InfoBar_instance.pts_blockZap_timer.stop() failed in zapDown"
-		InfoBarChannelSelection.zapDown(self.InfoBar_instance)
-		self.zapHandler("zapDown")
+		global thisZapDirection
+		thisZapDirection = "zapDown"
+		base_InfoBarChannelSelection_zapDown(self.InfoBar_instance)
 
 	def initInfoBar(self,parent):
 		if parent is not None:
