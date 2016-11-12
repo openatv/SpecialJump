@@ -2368,6 +2368,35 @@ class SpecialJump():
 			self.InfoBar_instance = parent
 			self.InfoBar_instance.teletext_plugin(session=self.session, service=self.session.nav.getCurrentService())
 		self.skipTeletextActivation = False
+
+	def getNumberOfFrontendsInstalled(self):
+		return len(nimmanager.nim_slots)
+		
+	def getNumberOfRecordings(self):
+		try:
+			recs = self.session.nav.getRecordingsServicesAndTypes()
+			numRecordings = 0
+			for x in recs:
+				if not (x[1] & pNavigation.isFromSpecialJumpFastZap):
+					numRecordings += 1
+			return numRecordings
+		except:
+			print "This image does not support 'getRecordingsServicesAndTypes()'"
+			return None
+
+	def getNumberOfFrontendsRecording(self):
+		try:
+			recs = self.session.nav.getRecordingsServicesAndTypesAndSlotIDs()
+			numBlockedFrontends = 0
+			seen = []
+			for x in recs:
+				if (x[2] >= 0) and not (x[2] in seen) and not (x[1] & pNavigation.isFromSpecialJumpFastZap):
+					numBlockedFrontends += 1
+					seen.append(x[2])
+			return numBlockedFrontends
+		except:
+			print "This image does not support 'getRecordingsServicesAndTypesAndSlotIDs()'"
+			return getNumberOfRecordings(self)
 		
 	def debugmessagebox(self,parent):
 		self.InfoBar_instance = parent
@@ -2426,6 +2455,8 @@ class SpecialJump():
 					recs = self.session.nav.getRecordingsServicesAndTypesAndSlotIDs()
 					records_running = len(recs)
 					messageString += "Active recordings: %d\n" % records_running
+					import string
+					num2alpha = dict(zip(range(0, 26), string.ascii_uppercase))
 					for x in recs:
 						typeString = " "
 						for i in range(0, len(types)):
@@ -2434,22 +2465,16 @@ class SpecialJump():
 									typeString += " %s" % (types[2**i])
 								else:
 									typeString += " %d" % (2**i)
-						messageString += "Active recording: %s of type%s on tuner %d\n" % (x[0],typeString,x[2])
-						print "Active recording: %s of type%s on tuner %d\n" % (x[0],typeString,x[2])
+						messageString += "Active recording: %s of type%s on tuner %s\n" % (x[0],typeString,num2alpha[x[2]])
+						print "Active recording: %s of type%s on tuner %s\n" % (x[0],typeString,num2alpha[x[2]])				
+					messageString += "\n"
 					
-					recs = self.session.nav.getRecordingsServicesAndTypesAndSlotIDs()
-					numBlockedTuners = 0
-					seen = []
-					for x in recs:
-						if (x[2] >= 0) and not (x[2] in seen) and not (x[1] & pNavigation.isFromSpecialJumpFastZap):
-							numBlockedTuners += 1
-							seen.append(x[2])
-					messageString += "Tuners in use for non SJ recordings: %d\n" % numBlockedTuners
-					print "Tuners in use for non SJ recordings: %d\n" % numBlockedTuners
-					messageString += "Tuners installed: %d\n" % len(nimmanager.nim_slots)
+					messageString += "Tuners in use for non SJ recordings: %d\n" % self.getNumberOfFrontendsRecording()
+					messageString += "Active non SJ recordings: %d\n" % self.getNumberOfRecordings()
+					messageString += "Tuners installed: %d\n" % self.getNumberOfFrontendsInstalled()
 					messageString += "\n"
 				except:
-					messageString += _("This image does not support 'getRecordingsServicesAndTypesAndSlotIDs()'\n")
+					messageString += "This image does not support 'getRecordingsServicesAndTypesAndSlotIDs()'\n"
 
 			if False:
 				recs = NavigationInstance.instance.record_event
