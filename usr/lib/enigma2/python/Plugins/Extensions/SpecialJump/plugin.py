@@ -1679,7 +1679,7 @@ class SpecialJump():
 		else:
 			self.SJZapBenchmarkTimer.stop()
 				
-		if config.plugins.SpecialJump.fastZapEnable.value and len(nimmanager.nim_slots) > 1:
+		if config.plugins.SpecialJump.fastZapEnable.value and self.getNumberOfFrontendsFreeForSJ() > 1:
 			self.fastZapDirection = direction
 			if (config.plugins.SpecialJump.fastZapMethod.value == "pip") or (config.plugins.SpecialJump.fastZapMethod.value == "pip_hidden"):
 				if (self.fastZapPipActive == False):
@@ -1698,9 +1698,8 @@ class SpecialJump():
 			else:
 				if config.plugins.SpecialJump.debugEnable.getValue(): print direction," start zapPredictive (pseudo rec.)"
 				self.postZap_preloadPredictive()
-		elif config.plugins.SpecialJump.fastZapEnable.value:
-			print "fast zap not possible with a single tuner"
 		else:
+			if config.plugins.SpecialJump.debugEnable.getValue(): print "disabling FastZap temporarily (only %d free tuner(s) available)" % self.getNumberOfFrontendsFreeForSJ()
 			if (self.fastZapPipActive == True):
 				#not using PIP any more, restore size and turn off PIP
 				self.session.pip.instance.move(ePoint(config.av.pip.value[0],config.av.pip.value[1]))
@@ -2369,6 +2368,13 @@ class SpecialJump():
 			self.InfoBar_instance.teletext_plugin(session=self.session, service=self.session.nav.getCurrentService())
 		self.skipTeletextActivation = False
 
+	def getNumberOfFrontendsFreeForSJ(self):
+		numBlockedFrontends = self.getNumberOfFrontendsRecording()
+		if numBlockedFrontends is None:
+			return self.getNumberOfFrontendsInstalled()
+		else:
+			return self.getNumberOfFrontendsInstalled() - numBlockedFrontends
+		
 	def getNumberOfFrontendsInstalled(self):
 		return len(nimmanager.nim_slots)
 		
@@ -2401,24 +2407,26 @@ class SpecialJump():
 	def debugmessagebox(self,parent):
 		self.InfoBar_instance = parent
 		service = self.session.nav.getCurrentService()
+		messageString = ""
 		if service is None:
-			self.session.open(MessageBox,_("no service"), type = MessageBox.TYPE_ERROR,timeout = 2)
+			self.session.open(MessageBox,"no service", type = MessageBox.TYPE_ERROR,timeout = 2)
 		else:
 			seek = service.seek()
-			if seek is None:
-				messageString = _("no seek\n")
-			elif not seek.isCurrentlySeekable():
-				length  = seek.getLength()
-				playpos = seek.getPlayPosition()
-				messageString = "seek not currently seekable.\nLength=%d\nPlayPostition=%d\n" % (length[1]/90000, playpos[1]/90000)
-			else:
-				length  = seek.getLength()
-				playpos = seek.getPlayPosition()
-				messageString = "seek is currently seekable.\nLength=%d\nPlayPostition=%d\n" % (length[1]/90000, playpos[1]/90000)
-			messageString += "\n"
+			if False:
+				if seek is None:
+					messageString += "no seek\n\n"
+				elif not seek.isCurrentlySeekable():
+					length  = seek.getLength()
+					playpos = seek.getPlayPosition()
+					messageString += "seek not currently seekable.\nLength=%d\nPlayPostition=%d\n\n" % (length[1]/90000, playpos[1]/90000)
+				else:
+					length  = seek.getLength()
+					playpos = seek.getPlayPosition()
+					messageString += "seek is currently seekable.\nLength=%d\nPlayPostition=%d\n\n" % (length[1]/90000, playpos[1]/90000)
 			
-			timeshift_file_kB = self.getTimeshiftFileSize_kB()
-			messageString += "timeshift file length =%d kbytes / estimated %ds\n\n" % (timeshift_file_kB,timeshift_file_kB/1000)
+			if False:
+				timeshift_file_kB = self.getTimeshiftFileSize_kB()
+				messageString += "timeshift file length =%d kbytes / estimated %ds\n\n" % (timeshift_file_kB,timeshift_file_kB/1000)
 			
 			# audio volume
 			if False:
@@ -2472,6 +2480,7 @@ class SpecialJump():
 					messageString += "Tuners in use for non SJ recordings: %d\n" % self.getNumberOfFrontendsRecording()
 					messageString += "Active non SJ recordings: %d\n" % self.getNumberOfRecordings()
 					messageString += "Tuners installed: %d\n" % self.getNumberOfFrontendsInstalled()
+					messageString += "Tuners available for SJ: %d\n" % self.getNumberOfFrontendsFreeForSJ()
 					messageString += "\n"
 				except:
 					messageString += "This image does not support 'getRecordingsServicesAndTypesAndSlotIDs()'\n"
@@ -2598,7 +2607,7 @@ class SpecialJump():
 				for x in AudioTrackList:
 					messageString += "AudioTrack %s / %s / %s / %s\n" % (x[0],x[1],x[2],x[3])
 					
-			self.session.open(MessageBox, messageString, type = MessageBox.TYPE_ERROR,timeout = 10)
+			self.session.open(MessageBox, messageString, type = MessageBox.TYPE_INFO,timeout = 120)
 			
 			# write getBufferCharge (or other things) to a file periodically
 			if False:
