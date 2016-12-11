@@ -2402,7 +2402,7 @@ class SpecialJump():
 			return numBlockedFrontends
 		except:
 			print "This image does not support 'getRecordingsServicesAndTypesAndSlotIDs()'"
-			return getNumberOfRecordings(self)
+			return self.getNumberOfRecordings()
 		
 	def debugmessagebox(self,parent):
 		self.InfoBar_instance = parent
