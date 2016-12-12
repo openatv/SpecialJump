@@ -1421,9 +1421,12 @@ class SpecialJump():
 				self.SJZapspeedPollTimer.stop()
 		else:
 			if path.exists('/proc/stb/vmpeg/0/yres'):
-				f = open('/proc/stb/vmpeg/0/yres', 'r')
-				video_height = int(f.read(), 16)
-				f.close()
+				try:
+					f = open('/proc/stb/vmpeg/0/yres', 'r')
+					video_height = int(f.read(), 16)
+					f.close()
+				except:
+					video_height = 0
 				if video_height == 0:
 					self.zap_time_res_0_seen = True
 				elif self.zap_time_res_0_seen:
