@@ -62,6 +62,7 @@ from enigma import iServiceInformation
 from enigma import iPlayableService
 from enigma import eDBoxLCD
 from enigma import pNavigation
+from enigma import eServiceReference
 from datetime import datetime
 from random import randint
 from Tools.Directories import *
@@ -2469,15 +2470,20 @@ class SpecialJump():
 					import string
 					num2alpha = dict(zip(range(0, 26), string.ascii_uppercase))
 					for x in recs:
-						typeString = " "
+						typeString = ""
 						for i in range(0, len(types)):
 							if (2**i & x[1]) > 0:
+								if typeString != "":
+									typeString += " "
 								if 2**i in types:
-									typeString += " %s" % (types[2**i])
+									typeString += "%s" % (types[2**i])
 								else:
-									typeString += " %d" % (2**i)
-						messageString += "Active recording: %s of type%s on tuner %s\n" % (x[0],typeString,num2alpha[x[2]])
-						print "Active recording: %s of type%s on tuner %s\n" % (x[0],typeString,num2alpha[x[2]])				
+									typeString += "%d" % (2**i)
+						name = ServiceReference(x[0]).getServiceName()
+						if name is None:
+							name = _("unknown service")
+						messageString += "rec. %s (%s) tuner %s\n" % (name,typeString,num2alpha[x[2]])
+						#print "Active recording: %s of type%s on tuner %s\n" % (x[0],typeString,num2alpha[x[2]])				
 					messageString += "\n"
 					
 					messageString += "Tuners in use for non SJ recordings: %d\n" % self.getNumberOfFrontendsRecording()
