@@ -473,11 +473,11 @@ def specialjump_clearDoubleAction(self):
 	SpecialJumpInstance.doubleActionFlag = False
 
 def specialjump_channelDown(self,mode):
-	SpecialJump.showTimeBetweenKeys(SpecialJumpInstance)	
+	#SpecialJump.showTimeBetweenKeys(SpecialJumpInstance)	
 	SpecialJump.channelDown(SpecialJumpInstance,self,mode)
 
 def specialjump_channelUp(self,mode):
-	SpecialJump.showTimeBetweenKeys(SpecialJumpInstance)	
+	#SpecialJump.showTimeBetweenKeys(SpecialJumpInstance)	
 	SpecialJump.channelUp(SpecialJumpInstance,self,mode)
 
 def specialjump_forwards(self,mode,size):
@@ -489,7 +489,7 @@ def specialjump_backwards(self,mode,size):
 	elif size == 'small':  SpecialJump.specialJumpBackwards(SpecialJumpInstance,self,mode,int(config.plugins.SpecialJump.smallSpecialJumpStart.getValue()))
 
 def specialjump_jump(self,mode,jumpkey):
-	SpecialJump.showTimeBetweenKeys(SpecialJumpInstance)	
+	#SpecialJump.showTimeBetweenKeys(SpecialJumpInstance)	
 	if   jumpkey == 'J1': SpecialJump.fixedJump(SpecialJumpInstance, self, mode, "-", int( config.plugins.SpecialJump.jump1.getValue()),config.plugins.SpecialJump.jump1action.getValue())
 	elif jumpkey == 'J2': SpecialJump.fixedJump(SpecialJumpInstance, self, mode, "-", int( config.plugins.SpecialJump.jump2.getValue()),config.plugins.SpecialJump.jump2action.getValue())
 	elif jumpkey == 'J3': SpecialJump.fixedJump(SpecialJumpInstance, self, mode, "-", int( config.plugins.SpecialJump.jump3.getValue()),config.plugins.SpecialJump.jump3action.getValue())
@@ -552,7 +552,7 @@ class SpecialJumpEventTracker(Screen):
 			})
 
 	def __serviceChanged(self):
-		if config.plugins.SpecialJump.debugEnable.getValue(): print "__serviceChanged"
+		#if config.plugins.SpecialJump.debugEnable.getValue(): print "__serviceChanged"
 		if not self.parent.SJMuteTimerActive:
 			self.SJChangedTimer.start(100,1) #1 = once / false = repetitively
 
@@ -1901,16 +1901,16 @@ class SpecialJump():
 					mypath = ''
 				if mypath != '':
 					if mypath.endswith('.ts'):
-						if config.plugins.SpecialJump.debugEnable.getValue(): print "__serviceChanged/ playing .ts file"
+						#if config.plugins.SpecialJump.debugEnable.getValue(): print "__serviceChanged/ playing .ts file"
 						serviceType = "TVorTSvideo"
 					else:
-						if config.plugins.SpecialJump.debugEnable.getValue(): print "__serviceChanged/ playing other (non .ts) file"
+						#if config.plugins.SpecialJump.debugEnable.getValue(): print "__serviceChanged/ playing other (non .ts) file"
 						serviceType = "nonTSvideo"
 				else:
-					if config.plugins.SpecialJump.debugEnable.getValue(): print "__serviceChanged/ no path, presumably live TV"
+					#if config.plugins.SpecialJump.debugEnable.getValue(): print "__serviceChanged/ no path, presumably live TV"
 					serviceType = "TVorTSvideo"
 			else:
-				if config.plugins.SpecialJump.debugEnable.getValue(): print "__serviceChanged/ no service reference"
+				#if config.plugins.SpecialJump.debugEnable.getValue(): print "__serviceChanged/ no service reference"
 				serviceType = "none"
 			
 			if serviceType == "TVorTSvideo":
