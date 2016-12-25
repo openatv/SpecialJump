@@ -39,12 +39,13 @@ Features Sprungfunktionen:
 - Tastenfunktion zum schnellen Toggeln des Audio- oder Subtitle-Tracks mit einer Taste (ohne sich durch Menüs zu hangeln)
 - Tastenfunktion zum Dunkelschalten des Displays (für puristische Cineasten)
 - Optional verschiedene feste Lautstärkewerte für TV-Betrieb und die einzelnen Tracks von Videos (Angleichen der Lautstärke verschiedener Tracks, nur sinnvoll, wenn die Fernbedienung die Lautstärke des Fernsehers steuert)
-- Tastenbelegung aller Funktionen nur über die keymap (/usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/keymap.xml bzw. /usr/share/enigma2/keymap.usr)
+- Tastenbelegung aller Funktionen über die keymap (/usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/keymap_user.xml bzw. /usr/share/enigma2/keymap.usr)
+- Neu: Einige vordefinierte keymaps zur Auswahl im Menü, Beschreibung der Tastenfunktionen (siehe Beitrag #147 http://www.opena.tv/plugins/6240-spe...tml#post247369)
 
 Verbesserungen im Bedienkomfort:
 --------------------------------
 
-- Fast Zap Mode (beschleunigte Umschaltzeiten durch vorausschauendes Vorladen des nächsten Senders auf einem weiteren Tuner)
+- Fast Zap Mode (beschleunigte Umschaltzeiten durch vorausschauendes Vorladen des nächsten Senders auf einem weiteren Tuner) - siehe Beitrag #15 http://www.opena.tv/plugins/6240-spe...tml#post130140 - jetzt auch ohne Verbiegen der Tastenbelegung (bei Auswahl der "keymap_FastZap_only.xml")
 - Direktes Zurückspringen in den Timeshift-Buffer aus dem Live-TV-Betrieb möglich (ohne SpecialJump nur über Pause oder Rewind möglich)
 - Mehrfachsprünge im pausierten Zustand möglich (ohne SpecialJump wird bei mehreren Sprüngen nicht um die Summe der Sprünge gesprungen, sondern nur um die Distanz des jeweils letzten Sprunges)
 - Nach dem Wegzappen aus dem Timeshift ist ein erneutes Zappen sofort möglich (ohne SpecialJump erst nach 3 Sekunden).
@@ -95,9 +96,8 @@ FAQ:
 
 2. Warum kann die Tastenbelegung nicht im Konfigurationsmenü des Plugins eingestellt werden?  
       Es gibt Plugins, die diesen Komfort für wenige Tasten bieten, z.B. Multiquickbutton. Ein Plugin, das viele Tasten auf diese Weise verwaltet, wird aber schnell groß, langsam und inkompatibel mit anderen Plugins.  
-      Unter /usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/keymap.xml findet sich ein Template für eine Tastenbelegung, die unter openATV auf Gigablue Quad lauffähig ist.  
-      Ich empfehle, den Inhalt der /usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/keymap.xml in die /usr/share/enigma2/keymap.usr zu kopieren und dort weiter zu ändern, dann bleiben die Änderungen nach einem Update von SpecialJump erhalten.  
-      Änderungen der Tastenbelegung sind in dieser Datei einfach möglich, die Namen sollten halbwegs selbsterklärend sein.  
+      Unter /usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/keymap_instructions.txt befindet sich eine Anleitung, die beschreibt, wie man eigene Keymaps erstellen kann, und im gleichen Verzeichnis stehen einige vordefinierte Keymaps bereit, die im Konfigurationsmenü von SpecialJump ausgewählt werden können.  
+      Ich empfehle, die benötigten Funktionen in die /usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/keymap_user.xml einzutragen, dann bleiben die Änderungen nach einem Update von SpecialJump erhalten.  
       Tipp: Unerwünschte Doppel-Aktionen können entstehen, wenn z.B. die gewünschte neue Tastenfunktion beim Drücken (flags="m") und die bisherige Tastenfunktion beim Loslassen (flags="b") ausgelöst wird.  
       In diesem Fall kann die bisherige Tastenfunktion durch den folgenden Eintrag "ausgeschaltet" werden:  
       `<key id="KEY_XXXX"   mapto="specialjump_doNothing"   flags="b" />`
@@ -151,48 +151,4 @@ FAQ:
 Revision History:
 -----------------
 
-0.1  
-Initial version
-
-0.2  
-Removed EMC stuff, should work without EMC.  
-Corrected skin names, added template skin.xml
-
-0.3  
-Changed default, SpecialJump not in main menu  
-Packed public keymap.xml into .ipk
-
-0.4  
-Changes of settings (window positions, jump distance and actions) take effect immediately  
-Stable startup (self.Infobar\_instance before self.SpecialJumpEventTracker\_instance)
-
-0.5  
-Added "small SpecialJump"  
-Handle number keys also outside movie player: NumberZap in live TV, jump in timeshift including optional muting
-    
-0.6  
-Control file: "Architecture: mips32el"
-
-0.7  
-Fixed zap blocking problem (system time is sometimes adjusted by several seconds when switching channels, causing zap block due to wrong speed limit detection, now using timers instead of system time)  
-Added display blanking
-
-0.8  
-Fixed wrong "display blanking" state variable after power-on from standby, this sometimes required pressing the "toggleLCDBlanking" key twice  
-When mixing "short" and "long" SpecialJumps, now the initial jump distance is used for every new type of SpecialJumps
-
-0.9  
-Fixed potential issues with empty subtitlelist
-
-1.0  
-Workaround for Gigablue Quad/Plus driver 2014.12.16 for jumping into TS buffer from live TV (config.plugins.SpecialJump.algoVersion=2)  
-Added EMC parental control  
-Fix infobar control by show_infobar_on_jumpPreviousNextMark
-
-For later revisions please see the commit messages at https://github.com/openatv/SpecialJump/commits/master
-
-Postponed:  
-Replaced config.xxx.getValue() by config.xxx.value / postponed for compatibility with old images where .value always returned a string for int's
-
-Optional future features:  
-Jump back from live TV into active recording after switching to the same channel
+Please see the commit messages at https://github.com/openatv/SpecialJump/commits/master
