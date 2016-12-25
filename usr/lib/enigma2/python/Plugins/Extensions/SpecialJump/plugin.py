@@ -1764,8 +1764,13 @@ class SpecialJump():
 				self.InfoBar_instance.servicelist.moveUp()
 
 		fastZapNextService = self.InfoBar_instance.servicelist.getCurrentSelection()
-		self.enablePredictiveRecOrPIP(fastZapNextService)
-		self.zapPredictiveService = fastZapNextService.toString()
+		
+		if self.compareTSIDandNamespace(storeService,fastZapNextService) == True:
+			if config.plugins.SpecialJump.debugEnable.getValue(): print "FastZap not preloading the next service as it is on the same transponder"
+			self.zapPredictiveService = None
+		else:		
+			self.enablePredictiveRecOrPIP(fastZapNextService)
+			self.zapPredictiveService = fastZapNextService.toString()
 
 		self.InfoBar_instance.servicelist.setCurrentSelection(storeService)
 		if config.plugins.SpecialJump.debugEnable.getValue(): print "zapPredictive 2"
@@ -1813,6 +1818,17 @@ class SpecialJump():
 			self.fastZapRecService = None
 			self.zapPredictiveService = None
 			
+	def compareTSIDandNamespace(self, service1, service2):
+		namespace1 = ServiceReference(service1).ref.getUnsignedData(4) # NAMESPACE
+		tsid1      = ServiceReference(service1).ref.getUnsignedData(2) # TSID
+		namespace2 = ServiceReference(service2).ref.getUnsignedData(4) # NAMESPACE
+		tsid2      = ServiceReference(service2).ref.getUnsignedData(2) # TSID
+		if (namespace1 and tsid1 and namespace2 and tsid2):
+			if config.plugins.SpecialJump.debugEnable.getValue(): print "check whether next service is on same transponder: (%04x,%04x) vs. (%04x,%04x)" % (namespace1,tsid1,namespace2,tsid2)
+			return (namespace1 and tsid1 and namespace2 and tsid2 and (namespace1 == namespace2) and (tsid1 == tsid2))
+		else:
+			return False
+	
 	def pauseService(self):
 		if InfoBar and self.InfoBar_instance:
 			InfoBarSeek.pauseService(self.InfoBar_instance)
@@ -2479,10 +2495,12 @@ class SpecialJump():
 									typeString += "%s" % (types[2**i])
 								else:
 									typeString += "%d" % (2**i)
-						name = ServiceReference(x[0]).getServiceName()
+						name      = ServiceReference(x[0]).getServiceName()
+						namespace = ServiceReference(x[0]).ref.getUnsignedData(4) # NAMESPACE
+						tsid      = ServiceReference(x[0]).ref.getUnsignedData(2) # TSID
 						if name is None:
 							name = _("unknown service")
-						messageString += "rec. %s (%s) tuner %s\n" % (name,typeString,num2alpha[x[2]])
+						messageString += "rec. %s (%s) tuner %s (%04x,%04x)\n" % (name,typeString,num2alpha[x[2]],namespace,tsid)
 						#print "Active recording: %s of type%s on tuner %s\n" % (x[0],typeString,num2alpha[x[2]])				
 					messageString += "\n"
 					
