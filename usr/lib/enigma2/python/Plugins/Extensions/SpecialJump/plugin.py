@@ -196,6 +196,7 @@ config.plugins.SpecialJump.EMCdirsShowPin                 = ConfigInteger(defaul
 
 config.plugins.SpecialJump.fastZapEnable                  = ConfigYesNo(default=True)
 config.plugins.SpecialJump.fastZapBenchmarkMode           = ConfigSelection(default = "false", choices = [("random", _("random")), ("random_stop", _("random, stop at error")), ("false", _("No")), ("just_zap", _("just zap")), ("just_zap_stop", _("just zap, stop at error"))])
+config.plugins.SpecialJump.preloadIfSameTSID              = ConfigYesNo(default=True)
 config.plugins.SpecialJump.fastZapMethod                  = ConfigSelection(choices = [("pip", _("Picture in Picture (debug only)")),("pip_hidden", _("Picture in Picture, hidden (not recommended)")),("record", _("fake recording"))],default = "record")
 config.plugins.SpecialJump.zapspeedMeasureTimeout_ms      = ConfigInteger(default = 5500, limits  = (1, 99999))
 config.plugins.SpecialJump.fastZapBenchmarkTime_ms        = ConfigInteger(default = 6000, limits  = (1, 99999))
@@ -925,15 +926,16 @@ class SpecialJumpConfiguration(Screen, ConfigListScreen):
 		( _("Enable predictive fast zap mode"),                                                  1, config.plugins.SpecialJump.fastZapEnable),
 		( _("Fast zap mode method of activating next channel"),                                  2, config.plugins.SpecialJump.fastZapMethod),
 		( _("Auto-zap benchmark mode (debug only, random hit/miss/off)"),                        3, config.plugins.SpecialJump.fastZapBenchmarkMode),
-		( _("Enable zap speed measurement"),                                                     4, config.plugins.SpecialJump.zapspeed_enable),
-		( _("Zap speed infobox verbosity"),                                                      5, config.plugins.SpecialJump.zapspeedVerbosity),
-		( _("Zap speed infobox timeout"),                                                        6, config.plugins.SpecialJump.zapspeedTimeout_ms),
-		( _("Zap speed infobox x position"),                                                     7, config.plugins.SpecialJump.zapspeed_x),
-		( _("Zap speed infobox y position"),                                                     8, config.plugins.SpecialJump.zapspeed_y),
-		( _("Zap speed infobox anchor"),                                                         9, config.plugins.SpecialJump.zapspeed_anchor),
-		( _("Zap speed measurement timeout (zap error) [ms]"),                                  10, config.plugins.SpecialJump.zapspeedMeasureTimeout_ms),
-		( _("Auto-zap benchmark mode time between zaps [ms]"),                                  11, config.plugins.SpecialJump.fastZapBenchmarkTime_ms),
-		( " ",                                                                                  12, config.plugins.SpecialJump.separator),
+		( _("Also preload next channel if it is on the same transponder (recommended)"),         4, config.plugins.SpecialJump.preloadIfSameTSID),
+		( _("Enable zap speed measurement"),                                                     5, config.plugins.SpecialJump.zapspeed_enable),
+		( _("Zap speed infobox verbosity"),                                                      6, config.plugins.SpecialJump.zapspeedVerbosity),
+		( _("Zap speed infobox timeout"),                                                        7, config.plugins.SpecialJump.zapspeedTimeout_ms),
+		( _("Zap speed infobox x position"),                                                     8, config.plugins.SpecialJump.zapspeed_x),
+		( _("Zap speed infobox y position"),                                                     9, config.plugins.SpecialJump.zapspeed_y),
+		( _("Zap speed infobox anchor"),                                                        10, config.plugins.SpecialJump.zapspeed_anchor),
+		( _("Zap speed measurement timeout (zap error) [ms]"),                                  11, config.plugins.SpecialJump.zapspeedMeasureTimeout_ms),
+		( _("Auto-zap benchmark mode time between zaps [ms]"),                                  12, config.plugins.SpecialJump.fastZapBenchmarkTime_ms),
+		( " ",                                                                                  13, config.plugins.SpecialJump.separator),
 		( _("__ Infobar settings __"),                                                           0, config.plugins.SpecialJump.showSettingsInfobar),
 		( _("[OSD settings] Show infobar on skip (set to 'no' when using SpecialJump infobar)"), 1, config.usage.show_infobar_on_skip),
 		( _("[Timeshift settings] Show timeshift infobar"),                                      2, config.timeshift.showinfobar),
@@ -1765,7 +1767,7 @@ class SpecialJump():
 
 		fastZapNextService = self.InfoBar_instance.servicelist.getCurrentSelection()
 		
-		if self.compareTSIDandNamespace(storeService,fastZapNextService) == True:
+		if self.compareTSIDandNamespace(storeService,fastZapNextService) and not config.plugins.SpecialJump.preloadIfSameTSID.value:
 			if config.plugins.SpecialJump.debugEnable.getValue(): print "FastZap not preloading the next service as it is on the same transponder"
 			self.zapPredictiveService = None
 		else:		

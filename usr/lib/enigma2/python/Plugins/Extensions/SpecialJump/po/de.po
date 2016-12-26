@@ -515,6 +515,10 @@ msgid "Auto-zap benchmark mode (debug only, random hit/miss/off)"
 msgstr "Auto-Zap Benchmark Modus (zu Debug-Zwecken)"
 
 #: plugin.py:954
+msgid "Also preload next channel if it is on the same transponder (recommended)"
+msgstr "Auch bei gleichem Transponder den nächsten Sender vorladen (empfohlen)"
+
+#: plugin.py:954
 msgid "Enable zap speed measurement"
 msgstr "Messung der Umschaltzeiten aktivieren"
 
