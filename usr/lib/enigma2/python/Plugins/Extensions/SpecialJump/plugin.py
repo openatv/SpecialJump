@@ -1651,7 +1651,7 @@ class SpecialJump():
 		self.zap_time_event_counter = 0
 
 	def zapHandler(self,direction):
-		if config.plugins.SpecialJump.fastZapEnable.value:
+		if config.plugins.SpecialJump.fastZapEnable.value and self.zapPredictiveService is not None:
 			cur = self.InfoBar_instance.servicelist.getCurrentSelection()
 			if cur:
 				cur = cur.toString()
