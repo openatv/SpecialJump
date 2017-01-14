@@ -78,6 +78,12 @@ try:
 	from Plugins.Extensions.CutListEditor.plugin import main as CutListEditor
 except:
 	print "import CutListEditor failed"
+try:
+	from Plugins.Extensions.SpecialJump.addons_private import SpecialJumpPrivateAddons
+	SpecialJumpPrivateAddonsInst = SpecialJumpPrivateAddons()
+except:
+	print "import SpecialJumpPrivateAddons failed"
+	SpecialJumpPrivateAddonsInst = None
 
 import xml.sax.xmlreader
 import os.path
@@ -1206,6 +1212,8 @@ class SpecialJump():
 				config.EMC.cfghide_enable.setValue(True)
 			except:
 				if config.plugins.SpecialJump.debugEnable.getValue(): print "could not set config.EMC.cfghide_enable True"
+			if SpecialJumpPrivateAddonsInst is not None:
+				SpecialJumpPrivateAddons.SJprivateHide(SpecialJumpPrivateAddonsInst)
 		
 	def powerOff(self):
 		if config.plugins.SpecialJump.debugEnable.getValue(): print "powerOff"
@@ -1229,6 +1237,8 @@ class SpecialJump():
 					config.EMC.cfghide_enable.setValue(False)
 				except:
 					if config.plugins.SpecialJump.debugEnable.getValue(): print "could not set config.EMC.cfghide_enable False"
+				if SpecialJumpPrivateAddonsInst is not None:
+					SpecialJumpPrivateAddons.SJprivateShow(SpecialJumpPrivateAddonsInst)
 			else:
 				if config.plugins.SpecialJump.debugEnable.getValue(): print "EMC PIN incorrect"
 
