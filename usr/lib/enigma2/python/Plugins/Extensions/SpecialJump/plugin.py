@@ -2485,10 +2485,13 @@ class SpecialJump():
 				data      = feinfo and feinfo.getFrontendData()
 				slot_number = data and data.get("tuner_number")
 				ref       = self.session.nav.getCurrentlyPlayingServiceReference()
-				name      = ServiceReference(ref).getServiceName()
-				namespace = ref.getUnsignedData(4) # NAMESPACE
-				tsid      = ref.getUnsignedData(2) # TSID
-				messageString += "live %s (ch. %d) tuner %s (%04x,%04x)\n" % (name,channelNo,num2alpha[slot_number],namespace,tsid)
+				name      = ref and ServiceReference(ref).getServiceName()
+				namespace = ref and ref.getUnsignedData(4) # NAMESPACE
+				tsid      = ref and ref.getUnsignedData(2) # TSID
+				if (slot_number is not None) and (name is not None):
+					messageString += "live %s (ch. %d) tuner %s (%04x,%04x)\n\n" % (name,channelNo,num2alpha[slot_number],namespace,tsid)
+				else:
+					messageString += "live TV not tuned.\n\n"
 
 			# (pseudo) recordings
 			if True:
