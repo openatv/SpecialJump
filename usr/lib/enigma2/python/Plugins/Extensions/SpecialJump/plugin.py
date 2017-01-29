@@ -2440,6 +2440,8 @@ class SpecialJump():
 		self.InfoBar_instance = parent
 		service = self.session.nav.getCurrentService()
 		messageString = ""
+		import string
+		num2alpha = dict(zip(range(0, 26), string.ascii_uppercase))
 		if service is None:
 			self.session.open(MessageBox,"no service", type = MessageBox.TYPE_ERROR,timeout = 2)
 		else:
@@ -2476,9 +2478,17 @@ class SpecialJump():
 				#    messageString += _("Infobar is not InfoBar\n")  
 				messageString += "\n"
 				
-			# channel number
+			# channel number and live TV tuners
 			if True:
-				messageString += "Channel Number =%d\n\n" % (int(self.InfoBar_instance.servicelist.servicelist.getCurrentIndex())+1)
+				channelNo = int(self.InfoBar_instance.servicelist.servicelist.getCurrentIndex())+1
+				feinfo    = service and service.frontendInfo()
+				data      = feinfo and feinfo.getFrontendData()
+				slot_number = data and data.get("tuner_number")
+				ref       = self.session.nav.getCurrentlyPlayingServiceReference()
+				name      = ServiceReference(ref).getServiceName()
+				namespace = ref.getUnsignedData(4) # NAMESPACE
+				tsid      = ref.getUnsignedData(2) # TSID
+				messageString += "live %s (ch. %d) tuner %s (%04x,%04x)\n" % (name,channelNo,num2alpha[slot_number],namespace,tsid)
 
 			# (pseudo) recordings
 			if True:
@@ -2495,8 +2505,6 @@ class SpecialJump():
 					recs = self.session.nav.getRecordingsServicesAndTypesAndSlotIDs()
 					records_running = len(recs)
 					messageString += "Active recordings: %d\n" % records_running
-					import string
-					num2alpha = dict(zip(range(0, 26), string.ascii_uppercase))
 					for x in recs:
 						typeString = ""
 						for i in range(0, len(types)):
