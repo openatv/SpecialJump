@@ -59,7 +59,7 @@ import NavigationInstance
 from enigma import eTimer, ePoint, eSize
 from enigma import eDVBVolumecontrol
 from enigma import iServiceInformation
-from enigma import iPlayableService
+from enigma import iPlayableService, iRecordableService
 from enigma import eDBoxLCD
 from enigma import pNavigation
 from enigma import eServiceReference
@@ -1068,6 +1068,7 @@ class SpecialJump():
 	def __init__(self,session):
 		self.session = session
 		config.misc.standbyCounter.addNotifier(self._onStandby, initial_call = False)
+		self.session.nav.record_event.append(self.gotRecordEvent)
 		
 		self.SJLCDon = True                    # for toggling LCD brightness
 		if config.plugins.SpecialJump.debugEnable.getValue(): print "__init__ SJLCDon = True"
@@ -1224,6 +1225,14 @@ class SpecialJump():
 		from Screens.Standby import inStandby
 		inStandby.onClose.append(self.powerOn)
 		self.powerOff()
+
+	def gotRecordEvent(self, service, event):
+		if event == iRecordableService.evRecordStopped:
+			if config.plugins.SpecialJump.debugEnable.getValue(): print "evRecordStopped"
+			if len(NavigationInstance.instance.getRecordings(False,pNavigation.isFromSpecialJumpFastZap)) == 0:
+				#pseudo recording was stopped externally (e.g. in RecordTimer.py) to free a tuner, null the pointer so that the tuner is no longer blocked
+				if config.plugins.SpecialJump.debugEnable.getValue(): print "evRecordStopped externally, nulling the pointer of the pseudo recording"
+				self.fastZapRecService = None
 
 	def specialJumpEMCpin(self,parent):
 		from Screens.InputBox import PinInput
@@ -2119,6 +2128,7 @@ class SpecialJump():
 		self.SJZapBenchmarkTimer = None
 		self.executeCyclicTimer.callback.remove(self.executeCyclic)
 		self.executeCyclicTimer = None
+		self.session.nav.record_event.remove(self.gotRecordEvent)
 
 	def getSeek(self):
 		service = self.session.nav.getCurrentService()
