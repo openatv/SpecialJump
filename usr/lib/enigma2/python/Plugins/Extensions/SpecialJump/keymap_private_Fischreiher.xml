@@ -71,10 +71,11 @@ Bau Deine eigene keymap:
 		<key id="KEY_RIGHT"       mapto="specialjump_doNothing"              flags="brl" />
 		<!-- small SpecialJump -->
 		<!--         F2 on remote generates KEY_F6 event -->
+		<!--         F3 on remote generates KEY_F6 event in new driver, same as F2, so use KEY_ARCHIVE now -->
 		<key id="KEY_F6"          mapto="specialjump_backwards_small"        flags="m" />
-		<key id="KEY_F3"          mapto="specialjump_forwards_small"         flags="m" />
+		<key id="KEY_ARCHIVE"     mapto="specialjump_forwards_small"         flags="m" />
 		<key id="KEY_F6"          mapto="specialjump_doNothing"              flags="brl" />
-		<key id="KEY_F3"          mapto="specialjump_doNothing"              flags="brl" />
+		<key id="KEY_ARCHIVE"     mapto="specialjump_doNothing"              flags="brl" />
 
 		<!-- programmable jumps on color keys (you don't want that) -->
 		<key id="KEY_RED"         mapto="specialjump_jump1"                  flags="m" />
