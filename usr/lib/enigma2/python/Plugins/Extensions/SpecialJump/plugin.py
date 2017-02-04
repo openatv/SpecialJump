@@ -1117,6 +1117,8 @@ class SpecialJump():
 		self.SJZapBenchmarkTimer.timeout.get().append(self.zapDown)
 		self.executeCyclicTimer=eTimer() 
 		self.executeCyclicTimer.timeout.get().append(self.executeCyclic)
+		self.gotRecordEventTimer=eTimer() 
+		self.gotRecordEventTimer.timeout.get().append(self.gotRecordEventDelayed)
 	   		
 		self.InfoBar_instance         = None # always passed as an argument
 		# always use self.InfoBar_instance from parent (not global InfoBar.instance):
@@ -1228,11 +1230,15 @@ class SpecialJump():
 
 	def gotRecordEvent(self, service, event):
 		if event == iRecordableService.evRecordStopped:
-			if config.plugins.SpecialJump.debugEnable.getValue(): print "evRecordStopped"
-			if len(NavigationInstance.instance.getRecordings(False,pNavigation.isFromSpecialJumpFastZap)) == 0:
-				#pseudo recording was stopped externally (e.g. in RecordTimer.py) to free a tuner, null the pointer so that the tuner is no longer blocked
-				if config.plugins.SpecialJump.debugEnable.getValue(): print "evRecordStopped externally, nulling the pointer of the pseudo recording"
-				self.fastZapRecService = None
+			if config.plugins.SpecialJump.debugEnable.getValue(): print "evRecordStopped starting timer"
+			self.gotRecordEventTimer.start(500)
+
+	def gotRecordEventDelayed(self):
+		self.gotRecordEventTimer.stop()
+		if len(NavigationInstance.instance.getRecordings(False,pNavigation.isFromSpecialJumpFastZap)) == 0:
+			#pseudo recording was stopped externally (e.g. in RecordTimer.py) to free a tuner, null the pointer so that the tuner is no longer blocked
+			if config.plugins.SpecialJump.debugEnable.getValue(): print "evRecordStopped externally, nulling the pointer of the pseudo recording"
+			self.fastZapRecService = None
 
 	def specialJumpEMCpin(self,parent):
 		from Screens.InputBox import PinInput
@@ -2128,6 +2134,8 @@ class SpecialJump():
 		self.SJZapBenchmarkTimer = None
 		self.executeCyclicTimer.callback.remove(self.executeCyclic)
 		self.executeCyclicTimer = None
+		self.gotRecordEventTimer.callback.remove(self.gotRecordEventDelayed)
+		self.gotRecordEventTimer = None
 		self.session.nav.record_event.remove(self.gotRecordEvent)
 
 	def getSeek(self):
