@@ -396,7 +396,7 @@ msgstr "__ Untertitel und Tonspur mit je einer Taste ein/aus/umschalten __"
 
 #: plugin.py:916
 msgid "Subtitle toggle mode when pressing key only once within infobox timeout"
-msgstr Untertitel-Umschalt-Reihenfolge bei 1 Tastendruck innerhalb des Timeouts"
+msgstr "Untertitel-Umschalt-Reihenfolge bei 1 Tastendruck innerhalb des Timeouts"
 
 #: plugin.py:917
 msgid "Subtitle toggle mode when pressing multiple times within infobox timeout"
@@ -404,43 +404,43 @@ msgstr "Untertitel-Umschalt-Reihenfolge bei >1 Tastendruck innerhalb des Timeout
 
 #: plugin.py:918
 msgid "Subtitle toggle infobox timeout"
-msgstr "Untertitel-Unschaltung, Anzeigedauer der Infobox"
+msgstr "Untertitel-Umschaltung, Anzeigedauer der Infobox"
 
 #: plugin.py:919
 msgid "Subtitle toggle infobox verbosity"
-msgstr "Untertitel-Unschaltung, Ausführlichkeit der Infobox"
+msgstr "Untertitel-Umschaltung, Ausführlichkeit der Infobox"
 
 #: plugin.py:920
 msgid "Subtitle infobox x position"
-msgstr "Untertitel-Unschaltung, X-Position der Infobox"
+msgstr "Untertitel-Umschaltung, X-Position der Infobox"
 
 #: plugin.py:921
 msgid "Subtitle infobox y position"
-msgstr "Untertitel-Unschaltung, Y-Position der Infobox"
+msgstr "Untertitel-Umschaltung, Y-Position der Infobox"
 
 #: plugin.py:922
 msgid "Subtitle infobox anchor"
-msgstr "Untertitel-Unschaltung, Verankerung der Infobox"
+msgstr "Untertitel-Umschaltung, Verankerung der Infobox"
 
 #: plugin.py:923
 msgid "Audio toggle infobox timeout"
-msgstr "Tonspur-Unschaltung, Anzeigedauer der Infobox"
+msgstr "Tonspur-Umschaltung, Anzeigedauer der Infobox"
 
 #: plugin.py:924
 msgid "Audio toggle infobox verbosity"
-msgstr "Tonspur-Unschaltung, Ausführlichkeit der Infobox"
+msgstr "Tonspur-Umschaltung, Ausführlichkeit der Infobox"
 
 #: plugin.py:925
 msgid "Audio toggle infobox x position"
-msgstr "Tonspur-Unschaltung, X-Position der Infobox"
+msgstr "Tonspur-Umschaltung, X-Position der Infobox"
 
 #: plugin.py:926
 msgid "Audio toggle infobox y position"
-msgstr "Tonspur-Unschaltung, Y-Position der Infobox"
+msgstr "Tonspur-Umschaltung, Y-Position der Infobox"
 
 #: plugin.py:927
 msgid "Audio toggle infobox anchor"
-msgstr "Tonspur-Unschaltung, Verankerung der Infobox"
+msgstr "Tonspur-Umschaltung, Verankerung der Infobox"
 
 #: plugin.py:929
 msgid "__ Fixed audio volumes (when remove controls TV volume) __"
@@ -472,19 +472,19 @@ msgstr "Lautstärke für (beinahe) Stummschaltung nach einem Sprung"
 
 #: plugin.py:936
 msgid "Volume infobox timeout"
-msgstr "Lautstärke-Unschaltung, Anzeigedauer der Infobox"
+msgstr "Lautstärke-Umschaltung, Anzeigedauer der Infobox"
 
 #: plugin.py:937
 msgid "Volume infobox x position"
-msgstr "Lautstärke-Unschaltung, X-Position der Infobox"
+msgstr "Lautstärke-Umschaltung, X-Position der Infobox"
 
 #: plugin.py:938
 msgid "Volume infobox y position"
-msgstr "Lautstärke-Unschaltung, X-Position der Infobox"
+msgstr "Lautstärke-Umschaltung, X-Position der Infobox"
 
 #: plugin.py:939
 msgid "Volume infobox verbosity"
-msgstr "Lautstärke-Unschaltung, Ausführlichkeit der Infobox"
+msgstr "Lautstärke-Umschaltung, Ausführlichkeit der Infobox"
 
 #: plugin.py:940
 msgid "[from AV menu] Audio auto volume level"
