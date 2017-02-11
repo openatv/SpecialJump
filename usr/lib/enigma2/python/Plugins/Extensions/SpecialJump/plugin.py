@@ -2454,6 +2454,18 @@ class SpecialJump():
 			print "This image does not support 'getRecordingsServicesAndTypesAndSlotIDs()'"
 			return self.getNumberOfRecordings()
 		
+	def isIPTV(self):
+		ref = self.session.nav.getCurrentlyPlayingServiceReference()
+		if ref is not None:
+			try:
+				mypath = ref.getPath()
+			except:
+				mypath = ''
+		if mypath.startswith('http://'):
+			return True
+		else:
+			return False
+	
 	def debugmessagebox(self,parent):
 		self.InfoBar_instance = parent
 		service = self.session.nav.getCurrentService()
@@ -2498,18 +2510,21 @@ class SpecialJump():
 				
 			# channel number and live TV tuners
 			if True:
-				channelNo = int(self.InfoBar_instance.servicelist.servicelist.getCurrentIndex())+1
-				feinfo    = service and service.frontendInfo()
-				data      = feinfo and feinfo.getFrontendData()
-				slot_number = data and data.get("tuner_number")
-				ref       = self.session.nav.getCurrentlyPlayingServiceReference()
-				name      = ref and ServiceReference(ref).getServiceName()
-				namespace = ref and ref.getUnsignedData(4) # NAMESPACE
-				tsid      = ref and ref.getUnsignedData(2) # TSID
-				if (slot_number is not None) and (name is not None):
-					messageString += "live %s (ch. %d) tuner %s (%04x,%04x)\n\n" % (name,channelNo,num2alpha[slot_number],namespace,tsid)
+				if self.isIPTV():
+					messageString += "live TV is IPTV.\n\n"
 				else:
-					messageString += "live TV not tuned.\n\n"
+					channelNo = int(self.InfoBar_instance.servicelist.servicelist.getCurrentIndex())+1
+					feinfo    = service and service.frontendInfo()
+					data      = feinfo and feinfo.getFrontendData()
+					slot_number = data and data.get("tuner_number")
+					ref       = self.session.nav.getCurrentlyPlayingServiceReference()
+					name      = ref and ServiceReference(ref).getServiceName()
+					namespace = ref and ref.getUnsignedData(4) # NAMESPACE
+					tsid      = ref and ref.getUnsignedData(2) # TSID
+					if (slot_number is not None) and (name is not None):
+						messageString += "live %s (ch. %d) tuner %s (%04x,%04x)\n\n" % (name,channelNo,num2alpha[slot_number],namespace,tsid)
+					else:
+						messageString += "live TV not tuned.\n\n"
 
 			# (pseudo) recordings
 			if True:
@@ -2541,8 +2556,12 @@ class SpecialJump():
 						tsid      = ServiceReference(x[0]).ref.getUnsignedData(2) # TSID
 						if name is None:
 							name = _("unknown service")
-						messageString += "rec. %s (%s) tuner %s (%04x,%04x)\n" % (name,typeString,num2alpha[x[2]],namespace,tsid)
-						#print "Active recording: %s of type%s on tuner %s\n" % (x[0],typeString,num2alpha[x[2]])				
+						if x[2] >= 0:
+							tuner = num2alpha[x[2]]
+						else:
+							tuner = "None"
+						messageString += "rec. %s (%s) tuner %s (%04x,%04x)\n" % (name,typeString,tuner,namespace,tsid)
+						#print "Active recording: %s of type%s on tuner %s\n" % (x[0],typeString,tuner)				
 					messageString += "\n"
 					
 					messageString += "Tuners in use for non SJ recordings: %d\n" % self.getNumberOfFrontendsRecording()
