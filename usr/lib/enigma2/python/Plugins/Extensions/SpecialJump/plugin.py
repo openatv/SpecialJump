@@ -2511,7 +2511,6 @@ class SpecialJump():
 				
 			# channel number and live TV tuners
 			if True:
-				messageString += "self.SJMode %s\n\n" % self.SJMode
 				if self.SJMode == "TV":
 					if self.isIPTV():
 						messageString += "live TV is IPTV.\n\n"
