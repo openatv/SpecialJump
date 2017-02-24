@@ -338,7 +338,7 @@ def InfoBarPlugins__init__(self):
 		 'specialjump_toggleAudioTrack':    (self.specialjump_toggleAudioTrack,    'toggle audio track'),
 		 'specialjump_toggleLCDBlanking':   (self.specialjump_toggleLCDBlanking,   'toggle LCD blanking'),
 		 'specialjump_emcpin':              (self.specialjump_emcpin,              'enter parental control PIN for EMC hidden dirs'),
-		 'specialjump_debugmessagebox':     (self.specialjump_debugmessagebox,     'show debug message box'),
+		 'specialjump_debugmessagebox':     (boundFunction(self.specialjump_debugmessagebox,"MP"), 'show debug message box'),
 		 'specialjump_startTeletext':       (self.specialjump_startTeletext,       'start teletext'),
 		 'specialjump_toggleSubtitleTrack_skipTeletext':        (self.specialjump_toggleSubtitleTrack_skipTeletext,        'skip teletext activation')}
 		self['SpecialJumpMoviePlayerActions'] = HelpableActionMap(self, 'SpecialJumpMoviePlayerActions', x, prio=-2) # -2 for priority over InfoBarSeek SeekActions seekdef:1 etc.
@@ -380,7 +380,7 @@ def InfoBarPlugins__init__(self):
 		 'specialjump_toggleAudioTrack':    (self.specialjump_toggleAudioTrack,    'toggle audio track'),
 		 'specialjump_toggleLCDBlanking':   (self.specialjump_toggleLCDBlanking,   'toggle LCD blanking'),
 		 'specialjump_emcpin':              (self.specialjump_emcpin,              'enter parental control PIN for EMC hidden dirs'),
-		 'specialjump_debugmessagebox':     (self.specialjump_debugmessagebox,     'show debug message box'),
+		 'specialjump_debugmessagebox':     (boundFunction(self.specialjump_debugmessagebox,"TV"), 'show debug message box'),
 		 'specialjump_startTeletext':       (self.specialjump_startTeletext,       'start teletext'),
 		 'specialjump_toggleSubtitleTrack_skipTeletext':        (self.specialjump_toggleSubtitleTrack_skipTeletext,        'skip teletext activation')}
 		self['SpecialJumpActions'] = HelpableActionMap(self, 'SpecialJumpActions', x, prio=-2) # -2 for priority over InfoBarSeek SeekActions seekdef:1 etc.
@@ -524,8 +524,8 @@ def specialjump_toggleAudioTrack(self):
 def specialjump_toggleLCDBlanking(self):
 	SpecialJump.toggleLCDBlanking(SpecialJumpInstance,self)
 			
-def specialjump_debugmessagebox(self):
-	SpecialJump.debugmessagebox(SpecialJumpInstance,self)
+def specialjump_debugmessagebox(self,mode):
+	SpecialJump.debugmessagebox(SpecialJumpInstance,self,mode)
 
 def specialjump_startTeletext(self):
 	SpecialJump.startTeletext(SpecialJumpInstance,self)
@@ -2466,7 +2466,8 @@ class SpecialJump():
 		else:
 			return False
 	
-	def debugmessagebox(self,parent):
+	def debugmessagebox(self,parent,mode):
+		self.SJMode=mode
 		self.InfoBar_instance = parent
 		service = self.session.nav.getCurrentService()
 		messageString = ""
@@ -2510,21 +2511,23 @@ class SpecialJump():
 				
 			# channel number and live TV tuners
 			if True:
-				if self.isIPTV():
-					messageString += "live TV is IPTV.\n\n"
-				else:
-					channelNo = int(self.InfoBar_instance.servicelist.servicelist.getCurrentIndex())+1
-					feinfo    = service and service.frontendInfo()
-					data      = feinfo and feinfo.getFrontendData()
-					slot_number = data and data.get("tuner_number")
-					ref       = self.session.nav.getCurrentlyPlayingServiceReference()
-					name      = ref and ServiceReference(ref).getServiceName()
-					namespace = ref and ref.getUnsignedData(4) # NAMESPACE
-					tsid      = ref and ref.getUnsignedData(2) # TSID
-					if (slot_number is not None) and (name is not None):
-						messageString += "live %s (ch. %d) tuner %s (%04x,%04x)\n\n" % (name,channelNo,num2alpha[slot_number],namespace,tsid)
+				messageString += "self.SJMode %s\n\n" % self.SJMode
+				if self.SJMode == "TV":
+					if self.isIPTV():
+						messageString += "live TV is IPTV.\n\n"
 					else:
-						messageString += "live TV not tuned.\n\n"
+						channelNo = int(self.InfoBar_instance.servicelist.servicelist.getCurrentIndex())+1
+						feinfo    = service and service.frontendInfo()
+						data      = feinfo and feinfo.getFrontendData()
+						slot_number = data and data.get("tuner_number")
+						ref       = self.session.nav.getCurrentlyPlayingServiceReference()
+						name      = ref and ServiceReference(ref).getServiceName()
+						namespace = ref and ref.getUnsignedData(4) # NAMESPACE
+						tsid      = ref and ref.getUnsignedData(2) # TSID
+						if (slot_number is not None) and (name is not None):
+							messageString += "live %s (ch. %d) tuner %s (%04x,%04x)\n\n" % (name,channelNo,num2alpha[slot_number],namespace,tsid)
+						else:
+							messageString += "live TV not tuned.\n\n"
 
 			# (pseudo) recordings
 			if True:
