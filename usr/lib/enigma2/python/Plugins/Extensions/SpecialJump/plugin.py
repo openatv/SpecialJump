@@ -1575,6 +1575,7 @@ class SpecialJump():
 		if mode == "MP":
 			if self.isSeekstatePaused():
 				self.InfoBar_instance.hide()
+				self.SpecialJumpInfoBar_instance.doHide()
 			else:
 				self.pauseService()
 		if mode == "TV":
@@ -1588,6 +1589,7 @@ class SpecialJump():
 						self.specialJumpStartZapDownTimer()
 						self.specialJumpShowZapWarning()
 						self.InfoBar_instance.hide()
+						self.SpecialJumpInfoBar_instance.doHide()
 					else:
 						#if config.plugins.SpecialJump.debugEnable.getValue(): print "C-"
 						self.pauseService()
