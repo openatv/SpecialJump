@@ -1573,7 +1573,10 @@ class SpecialJump():
 		self.InfoBar_instance = parent
 		self.SJMode=mode
 		if mode == "MP":
-			self.pauseService()
+			if self.isSeekstatePaused():
+				self.InfoBar_instance.hide()
+			else:
+				self.pauseService()
 		if mode == "TV":
 			if self.isCurrentlySeekable(): # timeshift active and play position "in the past"
 				if self.SJZapDownTimerActive:  # quickly pressed twice
@@ -1584,6 +1587,7 @@ class SpecialJump():
 						#if config.plugins.SpecialJump.debugEnable.getValue(): print "B-"
 						self.specialJumpStartZapDownTimer()
 						self.specialJumpShowZapWarning()
+						self.InfoBar_instance.hide()
 					else:
 						#if config.plugins.SpecialJump.debugEnable.getValue(): print "C-"
 						self.pauseService()
@@ -2389,9 +2393,7 @@ class SpecialJump():
 	#from Plugins/Extensions/Infopanel/plugin.py
 	def command(self,commandline, strip=1):
 		commandline = commandline + " >/tmp/command.txt"
-		print 'LBA1 ',commandline
 		os.system(commandline)
-		print 'LBA2 ',commandline
 		text = ""
 		if os.path.exists("/tmp/command.txt") is True:
 			file = open("/tmp/command.txt", "r")
@@ -2745,4 +2747,6 @@ class SpecialJump():
 		f.write("%s %d\n" % (datetime.now(),video_height))
 		f.close()
 
+	def executeCyclic4(self):
+		print "/proc/buddyinfo ",self.command("cat /proc/buddyinfo")
 	
