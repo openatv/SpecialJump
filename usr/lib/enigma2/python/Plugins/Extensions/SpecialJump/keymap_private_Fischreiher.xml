@@ -52,6 +52,10 @@ Bau Deine eigene keymap:
 		<key id="KEY_CHANNELUP"   mapto="specialjump_channelUp"              flags="mr" />
 		<key id="KEY_CHANNELDOWN" mapto="specialjump_doNothing"              flags="bl" />
 		<key id="KEY_CHANNELUP"   mapto="specialjump_doNothing"              flags="bl" />
+
+		<!-- avoid event view on 'unpause' by "KEY_OK" (for boxes without "KEY_UNPAUSE") -->
+		<key id="KEY_OK" mapto="specialjump_OK" flags="m" />
+		<key id="KEY_OK" mapto="specialjump_doNothing" flags="blr" />
 		
 		<!-- various ... -->
 		<key id="KEY_F1"          mapto="specialjump_toggleLCDBlanking"      flags="b" />
@@ -93,6 +97,10 @@ Bau Deine eigene keymap:
 		<key id="KEY_TEXT"        mapto="specialjump_startTeletext"          flags="l" />
 		<key id="KEY_TEXT"        mapto="specialjump_doNothing"              flags="mr" />
 		
+		<!-- avoid event view on 'unpause' by "KEY_OK" (for boxes without "KEY_UNPAUSE") -->
+		<key id="KEY_OK" mapto="specialjump_OK" flags="m" />
+		<key id="KEY_OK" mapto="specialjump_doNothing" flags="blr" />
+
 		<!-- Show jump distance for normal jump keys -->
 		<key id="KEY_1"           mapto="specialjump_jumpkey1"               flags="m" />
 		<key id="KEY_4"           mapto="specialjump_jumpkey4"               flags="m" />

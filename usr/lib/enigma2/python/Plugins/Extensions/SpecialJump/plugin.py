@@ -269,6 +269,7 @@ def autostart(reason, **kwargs):
 		InfoBarPlugins.specialjump_toggleAudioTrack     = specialjump_toggleAudioTrack
 		InfoBarPlugins.specialjump_channelDown          = specialjump_channelDown
 		InfoBarPlugins.specialjump_channelUp            = specialjump_channelUp
+		InfoBarPlugins.specialjump_OK                   = specialjump_OK
 		InfoBarPlugins.specialjump_doNothing            = specialjump_doNothing
 		InfoBarPlugins.specialjump_clearDoubleAction    = specialjump_clearDoubleAction
 		InfoBarPlugins.specialjump_jumpPreviousMark     = specialjump_jumpPreviousMark
@@ -332,8 +333,9 @@ def InfoBarPlugins__init__(self):
 		 'specialjump_toggleMarkOut':       (boundFunction(self.specialjump_toggleMarkOut,"MP"),    'toggle mark out'),
 		 'specialjump_callMovieCut':        (boundFunction(self.specialjump_callMovieCut,"MP"),     'call MovieCut plugin'),
 		 'specialjump_callCutListEditor':   (boundFunction(self.specialjump_callCutListEditor,"MP"),'call CutListEditor plugin'),
+		 'specialjump_OK':                  (boundFunction(self.specialjump_OK,"MP"),               'for boxes without KEY_PLAY, avoiding event view window'),
 		 'specialjump_doNothing':           (self.specialjump_doNothing, 'do nothing'),
-		 'specialjump_clearDoubleAction':   (self.specialjump_clearDoubleAction, 'avoid double action for certain keys, call on make'),
+		 'specialjump_clearDoubleAction':   (self.specialjump_clearDoubleAction,   'avoid double action for certain keys, call on make'),
 		 'specialjump_toggleSubtitleTrack': (self.specialjump_toggleSubtitleTrack, 'toggle subtitle track'),
 		 'specialjump_toggleAudioTrack':    (self.specialjump_toggleAudioTrack,    'toggle audio track'),
 		 'specialjump_toggleLCDBlanking':   (self.specialjump_toggleLCDBlanking,   'toggle LCD blanking'),
@@ -374,6 +376,7 @@ def InfoBarPlugins__init__(self):
 		 'specialjump_toggleMarkOut':       (boundFunction(self.specialjump_toggleMarkOut,"TV"),    'toggle mark out'),
 		 'specialjump_callMovieCut':        (boundFunction(self.specialjump_callMovieCut,"TV"),     'call MovieCut plugin'),
 		 'specialjump_callCutListEditor':   (boundFunction(self.specialjump_callCutListEditor,"TV"),'call CutListEditor plugin'),
+		 'specialjump_OK':                  (boundFunction(self.specialjump_OK,"TV"),               'for boxes without KEY_PLAY, avoiding event view window'),
 		 'specialjump_doNothing':           (self.specialjump_doNothing, 'do nothing'),
 		 'specialjump_clearDoubleAction':   (self.specialjump_clearDoubleAction, 'avoid double action for certain keys, call on make'),
 		 'specialjump_toggleSubtitleTrack': (self.specialjump_toggleSubtitleTrack, 'toggle subtitle track'),
@@ -395,6 +398,7 @@ def InfoBarPlugins__init__(self):
 		InfoBarPlugins.specialjump_toggleSubtitleTrack_skipTeletext = None
 		InfoBarPlugins.specialjump_emcpin = None
 		InfoBarPlugins.specialjump_jump = None
+		InfoBarPlugins.specialjump_OK = None
 		InfoBarPlugins.specialjump_toggleSubtitleTrack = None
 		InfoBarPlugins.specialjump_clearDoubleAction = None
 		InfoBarPlugins.specialjump_toggleAudioTrack = None
@@ -472,6 +476,9 @@ def specialjump_callMovieCut(self,mode):
 def specialjump_callCutListEditor(self,mode):
 	SpecialJumpInstance.doubleActionFlag = True # 'long' press action, suppress 'break' action
 	SpecialJump.callCutListEditor(SpecialJumpInstance,self,mode)
+
+def specialjump_OK(self,mode):
+	SpecialJump.handleOKkey(SpecialJumpInstance,self,mode)
 
 def specialjump_doNothing(self):
 	pass
@@ -2335,6 +2342,21 @@ class SpecialJump():
 			CutListEditor(session=self.session, service=self.session.nav.getCurrentlyPlayingServiceReference())
 		except:
 			print "callCutListEditor failed"
+
+	def handleOKkey(self,parent,mode):
+		if config.plugins.SpecialJump.debugEnable.getValue(): print "handleOKkey"
+		self.InfoBar_instance = parent
+		self.SJMode=mode
+		if self.SJMode == "TV":
+			if self.isSeekstatePaused():
+				self.unPauseService()
+			else:
+				InfoBarShowHide.OkPressed(self.InfoBar_instance)
+		else:
+			if self.isSeekstatePaused():
+				self.unPauseService()
+			else:
+				InfoBarShowHide.OkPressed(self.InfoBar_instance)
 
 	#from InfoBarGenerics.py
 	#added argument markType, allows setting IN and OUT points
