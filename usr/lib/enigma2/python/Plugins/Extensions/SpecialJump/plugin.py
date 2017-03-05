@@ -1049,7 +1049,10 @@ class SpecialJumpConfiguration(Screen, ConfigListScreen):
 			x[1].save()
 		self.changedEntry()
 		global SpecialJumpInstance
-		SpecialJump.reloadKeymap(SpecialJumpInstance)
+		try:
+			SpecialJump.reloadKeymap(SpecialJumpInstance)
+		except:
+			print "SpecialJump.reloadKeymap failed - probably no SpecialJumpInstance yet."
 		self.close(True,self.session)
 
 	def cancel(self):
