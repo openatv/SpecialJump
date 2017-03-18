@@ -143,6 +143,16 @@ config.plugins.SpecialJump.specialJump6  = ConfigInteger(default  =  11, limits 
 config.plugins.SpecialJump.specialJump7  = ConfigInteger(default  =   7, limits  = (1, 999))
 config.plugins.SpecialJump.smallSpecialJumpStart  = ConfigSelection([("1", "1"),("2", "2"),("3", "3"),("4", "4"),("5", "5"),("6", "6"),("7", "7")], default="3")
 
+config.plugins.SpecialJump.specialJump2_0     = ConfigInteger(default  = 131, limits  = (1, 999)) 
+config.plugins.SpecialJump.specialJump2_1     = ConfigInteger(default  =  11, limits  = (1, 999)) 
+config.plugins.SpecialJump.specialJump2_2     = ConfigInteger(default  = 101, limits  = (1, 999)) 
+config.plugins.SpecialJump.specialJump2_3     = ConfigInteger(default  =  21, limits  = (1, 999)) 
+config.plugins.SpecialJump.specialJump2_4     = ConfigInteger(default  =  91, limits  = (1, 999)) 
+config.plugins.SpecialJump.specialJump2_5     = ConfigInteger(default  =  51, limits  = (1, 999)) 
+config.plugins.SpecialJump.specialJump2_6     = ConfigInteger(default  =  11, limits  = (1, 999)) 
+config.plugins.SpecialJump.specialJump2_7     = ConfigInteger(default  =   7, limits  = (1, 999)) 
+config.plugins.SpecialJump.EnableSpecialJump2 = ConfigYesNo(default=False)
+
 #SpecialJump infobar default coordinates
 config.plugins.SpecialJump.bar_x         = ConfigInteger(default  =  70, limits  = (0, 1919))
 config.plugins.SpecialJump.bar_y         = ConfigInteger(default  = 600, limits  = (0, 1079))
@@ -212,6 +222,7 @@ config.plugins.SpecialJump.showSettingsKeymap             = ConfigSelection([("s
 config.plugins.SpecialJump.showSettingsFastZap            = ConfigSelection([("show", _("show")),("hide", _("hide"))], default="hide")
 config.plugins.SpecialJump.showSettingsInfobar            = ConfigSelection([("show", _("show")),("hide", _("hide"))], default="hide")
 config.plugins.SpecialJump.showSettingsSpecialJump        = ConfigSelection([("show", _("show")),("hide", _("hide"))], default="hide")
+config.plugins.SpecialJump.showSettingsSpecialJump2       = ConfigSelection([("show", _("show")),("hide", _("hide"))], default="hide")
 config.plugins.SpecialJump.showSettingsFixedJump          = ConfigSelection([("show", _("show")),("hide", _("hide"))], default="hide")
 config.plugins.SpecialJump.showSettingsDualZap            = ConfigSelection([("show", _("show")),("hide", _("hide"))], default="hide")
 config.plugins.SpecialJump.showSettingsSubsAudio          = ConfigSelection([("show", _("show")),("hide", _("hide"))], default="hide")
@@ -495,12 +506,12 @@ def specialjump_channelUp(self,mode):
 	SpecialJump.channelUp(SpecialJumpInstance,self,mode)
 
 def specialjump_forwards(self,mode,size):
-	if   size == 'normal': SpecialJump.specialJumpForwards(SpecialJumpInstance,self,mode,0)
-	elif size == 'small':  SpecialJump.specialJumpForwards(SpecialJumpInstance,self,mode,int(config.plugins.SpecialJump.smallSpecialJumpStart.getValue()))
+	if   size == 'small':  SpecialJump.specialJumpForwards(SpecialJumpInstance,self,mode,size,int(config.plugins.SpecialJump.smallSpecialJumpStart.getValue()))
+	else:                  SpecialJump.specialJumpForwards(SpecialJumpInstance,self,mode,size,0)
 
 def specialjump_backwards(self,mode,size):
-	if   size == 'normal': SpecialJump.specialJumpBackwards(SpecialJumpInstance,self,mode,0)
-	elif size == 'small':  SpecialJump.specialJumpBackwards(SpecialJumpInstance,self,mode,int(config.plugins.SpecialJump.smallSpecialJumpStart.getValue()))
+	if   size == 'small':  SpecialJump.specialJumpBackwards(SpecialJumpInstance,self,mode,size,int(config.plugins.SpecialJump.smallSpecialJumpStart.getValue()))
+	else:                  SpecialJump.specialJumpBackwards(SpecialJumpInstance,self,mode,size,0)
 
 def specialjump_jump(self,mode,jumpkey):
 	#SpecialJump.showTimeBetweenKeys(SpecialJumpInstance)	
@@ -970,6 +981,17 @@ class SpecialJumpConfiguration(Screen, ConfigListScreen):
 		( _("SpecialJump infobar x position"),                                                  12, config.plugins.SpecialJump.bar_x),
 		( _("SpecialJump infobar y position"),                                                  13, config.plugins.SpecialJump.bar_y),
 		( " ",                                                                                  14, config.plugins.SpecialJump.separator),
+		( _("__ Special jump 2 (on the multi functional P+/P- keys) __"),                        0, config.plugins.SpecialJump.showSettingsSpecialJump2),
+		( _("Special jump 0 on P+/P- (initial value)"),                                          1, config.plugins.SpecialJump.specialJump2_0),
+		( _("Special jump 1 on P+/P- after 1st direction change"),                               2, config.plugins.SpecialJump.specialJump2_1),
+		( _("Special jump 2 on P+/P- (subsequent jump)"),                                        3, config.plugins.SpecialJump.specialJump2_2),
+		( _("Special jump 3 on P+/P- (subsequent jump)"),                                        4, config.plugins.SpecialJump.specialJump2_3),
+		( _("Special jump 4 on P+/P- (subsequent jump)"),                                        5, config.plugins.SpecialJump.specialJump2_4),
+		( _("Special jump 5 on P+/P- (subsequent jump)"),                                        6, config.plugins.SpecialJump.specialJump2_5),
+		( _("Special jump 6 on P+/P- (subsequent jump)"),                                        7, config.plugins.SpecialJump.specialJump2_6),
+		( _("Special jump 7 on P+/P- (subsequent jump)"),                                        8, config.plugins.SpecialJump.specialJump2_7),
+		( _("Enable SpecialJump 2 on P+/P-"), 	                                                 9, config.plugins.SpecialJump.EnableSpecialJump2),
+		( " ",                                                                                  10, config.plugins.SpecialJump.separator),
 		( _("__ Programmable jumps using up to 8 keys __"),                                      0, config.plugins.SpecialJump.showSettingsFixedJump),
 		( _("Programmable jump 1"),                                                              1, config.plugins.SpecialJump.jump1),
 		( _("Programmable jump 1 action"),                                                       2, config.plugins.SpecialJump.jump1action),
@@ -1088,7 +1110,7 @@ class SpecialJump():
 		self.SJPreMuteVolume = -1              # -1 = no value stored
 		self.SJLastSubsTrack = 0               # last subtitle track in "onoff" toggle mode
 		self.SJMode="--"                       # TV or MoviePlayer mode
-		self.SJLastInitialJump = 0             # last value of "initialJump" (for starting over again when changing between full and small SpecialJump)
+		self.SJLastJumpSize = 'full'           # last value of "size" (for starting over again when changing between full and small SpecialJump)
 		self.SJAudioBoxTimerActive     = False # timer for audio infobox is (not) active
 		self.SJSubsBoxTimerActive      = False # timer for subtitle infobox is (not) active
 		self.SJZapspeedBoxTimerActive  = False # timer for zap speed infobox is (not) active
@@ -1268,24 +1290,42 @@ class SpecialJump():
 				if config.plugins.SpecialJump.debugEnable.getValue(): print "EMC PIN incorrect"
 
 		
-	def specialJumpValue(self,index):
+	def specialJumpValue(self,size,index):
 		#I want arrays ...
-		if index == 0:
-			value = config.plugins.SpecialJump.specialJump0.getValue()
-		elif index == 1:
-			value = config.plugins.SpecialJump.specialJump1.getValue()
-		elif index == 2:
-			value = config.plugins.SpecialJump.specialJump2.getValue()
-		elif index == 3:
-			value = config.plugins.SpecialJump.specialJump3.getValue()
-		elif index == 4:
-			value = config.plugins.SpecialJump.specialJump4.getValue()
-		elif index == 5:
-			value = config.plugins.SpecialJump.specialJump5.getValue()
-		elif index == 6:
-			value = config.plugins.SpecialJump.specialJump6.getValue()
+		if size == 'full2':
+			if index == 0:
+				value = config.plugins.SpecialJump.specialJump2_0.getValue()
+			elif index == 1:
+				value = config.plugins.SpecialJump.specialJump2_1.getValue()
+			elif index == 2:
+				value = config.plugins.SpecialJump.specialJump2_2.getValue()
+			elif index == 3:
+				value = config.plugins.SpecialJump.specialJump2_3.getValue()
+			elif index == 4:
+				value = config.plugins.SpecialJump.specialJump2_4.getValue()
+			elif index == 5:
+				value = config.plugins.SpecialJump.specialJump2_5.getValue()
+			elif index == 6:
+				value = config.plugins.SpecialJump.specialJump2_6.getValue()
+			else:
+				value = config.plugins.SpecialJump.specialJump2_7.getValue()
 		else:
-			value = config.plugins.SpecialJump.specialJump7.getValue()
+			if index == 0:
+				value = config.plugins.SpecialJump.specialJump0.getValue()
+			elif index == 1:
+				value = config.plugins.SpecialJump.specialJump1.getValue()
+			elif index == 2:
+				value = config.plugins.SpecialJump.specialJump2.getValue()
+			elif index == 3:
+				value = config.plugins.SpecialJump.specialJump3.getValue()
+			elif index == 4:
+				value = config.plugins.SpecialJump.specialJump4.getValue()
+			elif index == 5:
+				value = config.plugins.SpecialJump.specialJump5.getValue()
+			elif index == 6:
+				value = config.plugins.SpecialJump.specialJump6.getValue()
+			else:
+				value = config.plugins.SpecialJump.specialJump7.getValue()
 		return value
 
 	def specialJumpStartTimerShowInfoBar(self, withCuts, muteTime_ms):
@@ -1492,11 +1532,11 @@ class SpecialJump():
 		self.SJZapTimer.stop()
 		self.SJZapTimerActive = False
  
-	def specialJumpBackwards(self,parent,mode,initialJump):
+	def specialJumpBackwards(self,parent,mode,size,initialJump):
 		self.InfoBar_instance = parent
 		self.SJMode=mode
-		if initialJump != self.SJLastInitialJump:
-			self.SJLastInitialJump = initialJump
+		if size != self.SJLastJumpSize:
+			self.SJLastJumpSize = size
 			self.SJLastJumpDir = 0 # start over when changing between full and small SpecialJump
 		if InfoBar and self.InfoBar_instance:
 			if self.SJLastJumpDir    == 0:
@@ -1506,15 +1546,15 @@ class SpecialJump():
 			elif self.SJNextJumpIndex > initialJump:
 				self.SJNextJumpIndex += 1
 
-			self.SJJumpTime     -= self.specialJumpValue(self.SJNextJumpIndex)
+			self.SJJumpTime     -= self.specialJumpValue(size,self.SJNextJumpIndex)
 			self.SJLastJumpDir   = -1
-			self.activateTimeshiftIfNecessaryAndDoSeekRelative(- self.specialJumpValue(self.SJNextJumpIndex) * 90000, config.plugins.SpecialJump.specialJumpMuteTime_ms.getValue())                
+			self.activateTimeshiftIfNecessaryAndDoSeekRelative(- self.specialJumpValue(size,self.SJNextJumpIndex) * 90000, config.plugins.SpecialJump.specialJumpMuteTime_ms.getValue())                
 			
-	def specialJumpForwards(self,parent,mode,initialJump):
+	def specialJumpForwards(self,parent,mode,size,initialJump):
 		self.InfoBar_instance = parent
 		self.SJMode=mode
-		if initialJump != self.SJLastInitialJump:
-			self.SJLastInitialJump = initialJump
+		if size != self.SJLastJumpSize:
+			self.SJLastJumpSize = size
 			self.SJLastJumpDir = 0 # start over when changing between full and small SpecialJump
 		if InfoBar and self.InfoBar_instance:
 			if self.SJLastJumpDir    == 0:
@@ -1524,9 +1564,9 @@ class SpecialJump():
 			elif self.SJNextJumpIndex > initialJump:
 				self.SJNextJumpIndex += 1
 
-			self.SJJumpTime     += self.specialJumpValue(self.SJNextJumpIndex)
+			self.SJJumpTime     += self.specialJumpValue(size,self.SJNextJumpIndex)
 			self.SJLastJumpDir   = 1
-			self.activateTimeshiftIfNecessaryAndDoSeekRelative(self.specialJumpValue(self.SJNextJumpIndex) * 90000, config.plugins.SpecialJump.specialJumpMuteTime_ms.getValue())
+			self.activateTimeshiftIfNecessaryAndDoSeekRelative(self.specialJumpValue(size,self.SJNextJumpIndex) * 90000, config.plugins.SpecialJump.specialJumpMuteTime_ms.getValue())
 
 	def debugMessage(self,locationString):
 		if config.plugins.SpecialJump.debugEnable.getValue():
@@ -1584,25 +1624,46 @@ class SpecialJump():
 		self.SJMode=mode
 		if mode == "MP":
 			if self.isSeekstatePaused():
-				self.InfoBar_instance.hide()
-				self.SpecialJumpInfoBar_instance.doHide()
+				if config.plugins.SpecialJump.EnableSpecialJump2.value:
+					if not self.SJTimer.isActive():
+						self.unPauseService()
+					self.specialJumpBackwards(parent,mode,'full2',0)
+				else:
+					self.InfoBar_instance.hide()
+					self.SpecialJumpInfoBar_instance.doHide()
 			else:
-				self.pauseService()
+				if config.plugins.SpecialJump.EnableSpecialJump2.value and self.SJTimer.isActive() and self.SJLastJumpSize == 'full2':
+					self.specialJumpBackwards(parent,mode,'full2',0)
+				else:
+					self.pauseService()
+					if config.plugins.SpecialJump.EnableSpecialJump2.value:
+						self.SpecialJumpInfoBar_instance.hide()
+						InfoBarShowHide.unlockShow(self.InfoBar_instance)
+						InfoBarShowHide.startHideTimer(self.InfoBar_instance)
 		if mode == "TV":
 			if self.isCurrentlySeekable(): # timeshift active and play position "in the past"
-				if self.SJZapDownTimerActive:  # quickly pressed twice
-					#if config.plugins.SpecialJump.debugEnable.getValue(): print "A-"
-					self.zapUp() # zapUp = P-
+				if config.plugins.SpecialJump.EnableSpecialJump2.value and (self.isSeekstatePaused() or (self.SJTimer.isActive() and self.SJLastJumpSize == 'full2')):
+					if config.plugins.SpecialJump.EnableSpecialJump2.value and self.isSeekstatePaused() and not self.SJTimer.isActive():
+						self.unPauseService()
+					self.specialJumpBackwards(parent,mode,'full2',0)
 				else:
-					if self.isSeekstatePaused():
-						#if config.plugins.SpecialJump.debugEnable.getValue(): print "B-"
-						self.specialJumpStartZapDownTimer()
-						self.specialJumpShowZapWarning()
-						self.InfoBar_instance.hide()
-						self.SpecialJumpInfoBar_instance.doHide()
+					if self.SJZapDownTimerActive:  # quickly pressed twice
+						#if config.plugins.SpecialJump.debugEnable.getValue(): print "A-"
+						self.zapUp() # zapUp = P-
 					else:
-						#if config.plugins.SpecialJump.debugEnable.getValue(): print "C-"
-						self.pauseService()
+						if self.isSeekstatePaused():
+							#if config.plugins.SpecialJump.debugEnable.getValue(): print "B-"
+							self.specialJumpStartZapDownTimer()
+							self.specialJumpShowZapWarning()
+							self.InfoBar_instance.hide()
+							self.SpecialJumpInfoBar_instance.doHide()
+						else:
+							#if config.plugins.SpecialJump.debugEnable.getValue(): print "C-"
+							self.pauseService()
+							if config.plugins.SpecialJump.EnableSpecialJump2.value:
+								self.SpecialJumpInfoBar_instance.hide()
+								InfoBarShowHide.unlockShow(self.InfoBar_instance)
+								InfoBarShowHide.startHideTimer(self.InfoBar_instance)
 			else: # live TV
 				if self.SJZapDownTimerActive:  # quickly pressed twice
 					#if config.plugins.SpecialJump.debugEnable.getValue(): print "D-"
@@ -1625,21 +1686,27 @@ class SpecialJump():
 		self.InfoBar_instance = parent
 		self.SJMode=mode
 		if mode == "MP":
-			self.unPauseService()
+			if config.plugins.SpecialJump.EnableSpecialJump2.value and ((not self.isSeekstatePaused()) or (self.SJTimer.isActive() and self.SJLastJumpSize == 'full2')):
+				self.specialJumpForwards(parent,mode,'full2',0)
+			else:
+				self.unPauseService()
 		if mode == "TV":
 			if self.isCurrentlySeekable(): # timeshift active and play position "in the past"
-				if self.SJZapUpTimerActive:  # quickly pressed twice
-					#if config.plugins.SpecialJump.debugEnable.getValue(): print "A+"
-					#InfoBarTimeshift.stopTimeshift(self.InfoBar_instance) # not just zap, or zapping will be impossible for ~2s -- didn't help
-					self.zapDown() # zapDown = P+
+				if config.plugins.SpecialJump.EnableSpecialJump2.value and ((not self.isSeekstatePaused()) or (self.SJTimer.isActive() and self.SJLastJumpSize == 'full2')):
+					self.specialJumpForwards(parent,mode,'full2',0)
 				else:
-					if not self.isSeekstatePaused():
-						#if config.plugins.SpecialJump.debugEnable.getValue(): print "B+"
-						self.specialJumpStartZapUpTimer()
-						self.specialJumpShowZapWarning()
+					if self.SJZapUpTimerActive:  # quickly pressed twice
+						#if config.plugins.SpecialJump.debugEnable.getValue(): print "A+"
+						#InfoBarTimeshift.stopTimeshift(self.InfoBar_instance) # not just zap, or zapping will be impossible for ~2s -- didn't help
+						self.zapDown() # zapDown = P+
 					else:
-						#if config.plugins.SpecialJump.debugEnable.getValue(): print "C+"
-						self.unPauseService()
+						if not self.isSeekstatePaused():
+							#if config.plugins.SpecialJump.debugEnable.getValue(): print "B+"
+							self.specialJumpStartZapUpTimer()
+							self.specialJumpShowZapWarning()
+						else:
+							#if config.plugins.SpecialJump.debugEnable.getValue(): print "C+"
+							self.unPauseService()
 			else: # live TV
 				if self.SJZapUpTimerActive:  # quickly pressed twice
 					#if config.plugins.SpecialJump.debugEnable.getValue(): print "D+"

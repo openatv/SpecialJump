@@ -262,6 +262,42 @@ msgstr "SpecialJump Sprung 6 (nächster Sprung)"
 msgid "Special jump 7 (subsequent jump)"
 msgstr "SpecialJump Sprung 7 (nächster Sprung)"
 
+#: plugin.py:873
+msgid "__ Special jump 2 (on the multi functional P+/P- keys) __"
+msgstr "__ SpecialJump 2 (auf den Multifunktions-Tasten P+/P-) __"
+
+#: plugin.py:873
+msgid "Special jump 0 on P+/P- (initial value)"
+msgstr "SpecialJump Sprung 0 auf P+/P- (erster Wert)"
+
+#: plugin.py:874
+msgid "Special jump 1 on P+/P- after 1st direction change"
+msgstr "SpecialJump Sprung 1 auf P+/P- nach erstem Richtungswechsel"
+
+#: plugin.py:875
+msgid "Special jump 2 on P+/P- (subsequent jump)"
+msgstr "SpecialJump Sprung 2 auf P+/P- (nächster Sprung)"
+
+#: plugin.py:876
+msgid "Special jump 3 on P+/P- (subsequent jump)"
+msgstr "SpecialJump Sprung 3 auf P+/P- (nächster Sprung)"
+
+#: plugin.py:877
+msgid "Special jump 4 on P+/P- (subsequent jump)"
+msgstr "SpecialJump Sprung 4 auf P+/P- (nächster Sprung)"
+
+#: plugin.py:878
+msgid "Special jump 5 on P+/P- (subsequent jump)"
+msgstr "SpecialJump Sprung 5 auf P+/P- (nächster Sprung)"
+
+#: plugin.py:879
+msgid "Special jump 6 on P+/P- (subsequent jump)"
+msgstr "SpecialJump Sprung 6 auf P+/P- (nächster Sprung)"
+
+#: plugin.py:880
+msgid "Special jump 7 on P+/P- (subsequent jump)"
+msgstr "SpecialJump Sprung 7 auf P+/P- (nächster Sprung)"
+
 #: plugin.py:881
 msgid "Special jump timeout"
 msgstr "SpecialJump Sprung Timeout"
@@ -281,6 +317,10 @@ msgstr "SpecialJump Infoleiste: X-Position"
 #: plugin.py:885
 msgid "SpecialJump infobar y position"
 msgstr "SpecialJump Infoleiste: Y-Position"
+
+#: plugin.py:884
+msgid "Enable SpecialJump 2 on P+/P-"
+msgstr "SpecialJump 2 auf P+/P- aktivieren"
 
 #: plugin.py:887
 msgid "__ Programmable jumps using up to 8 keys __"
