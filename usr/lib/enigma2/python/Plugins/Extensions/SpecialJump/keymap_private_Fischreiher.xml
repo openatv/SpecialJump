@@ -65,6 +65,7 @@ Bau Deine eigene keymap:
 		<key id="KEY_F1"          mapto="specialjump_doNothing"              flags="mr" />
 		<key id="KEY_F4"          mapto="specialjump_doNothing"              flags="brl" />
 		<key id="KEY_AUDIO"       mapto="specialjump_toggleAudioTrack"       flags="m" />
+		<key id="KEY_AUDIO"       mapto="specialjump_doNothing"              flags="brl" />
 	</map>
 	<!--=================================================================================-->
 	<map context="SpecialJumpMoviePlayerActions">
@@ -138,5 +139,6 @@ Bau Deine eigene keymap:
 		<key id="KEY_F1"          mapto="specialjump_doNothing"              flags="mr" />
 		<key id="KEY_F4"          mapto="specialjump_doNothing"              flags="brl" />
 		<key id="KEY_AUDIO"       mapto="specialjump_toggleAudioTrack"       flags="m" />
+		<key id="KEY_AUDIO"       mapto="specialjump_doNothing"              flags="brl" />
 	</map>
 </keymap>
