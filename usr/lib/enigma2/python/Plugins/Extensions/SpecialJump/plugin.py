@@ -1199,65 +1199,6 @@ class SpecialJump():
 		self.activeKeyMap = "keymap_classic.xml"
 		self.reloadKeymap()
 
-		#if config.plugins.SpecialJump.EnableSpecialJump2.value:
-		#	from enigma import eActionMap
-
-		#	# start EMC by 'long OK'
-		#	eActionMap.getInstance().unbindPythonKey('InfobarShowHideActions', keymapparser.getKeyId('KEY_OK'), 'LongOKPressed')
-		#	eActionMap.getInstance().bindKey("keymap.xml", "generic", keymapparser.getKeyId('KEY_OK'),   self.flagsToInt('l'), "InfobarActions", "showMovies")
-
-		#	# P+/P- in EMC MovieSelection
-		#	eActionMap.getInstance().unbindPythonKey('PluginMovieSelectionActions', keymapparser.getKeyId('KEY_CHANNELUP'),   'EMCBqtPlus')
-		#	eActionMap.getInstance().unbindPythonKey('PluginMovieSelectionActions', keymapparser.getKeyId('KEY_CHANNELDOWN'), 'EMCBqtMnus')
-		#	eActionMap.getInstance().bindKey("/usr/lib/enigma2/python/Plugins/Extensions/EnhancedMovieCenter/keymap.xml", "generic", keymapparser.getKeyId('KEY_CHANNELUP'),   self.flagsToInt('mr'), "PluginMovieSelectionActions", "EMCUp")
-		#	eActionMap.getInstance().bindKey("/usr/lib/enigma2/python/Plugins/Extensions/EnhancedMovieCenter/keymap.xml", "generic", keymapparser.getKeyId('KEY_CHANNELDOWN'), self.flagsToInt('mr'), "PluginMovieSelectionActions", "EMCDown")
-
-		#	# OK in EMC MovieSelection
-		#	eActionMap.getInstance().unbindPythonKey('PluginMovieSelectionActions', keymapparser.getKeyId('KEY_OK'), 'EMCOK')
-		#	eActionMap.getInstance().bindKey("/usr/lib/enigma2/python/Plugins/Extensions/EnhancedMovieCenter/keymap.xml", "generic", keymapparser.getKeyId('KEY_OK'), self.flagsToInt('b'), "PluginMovieSelectionActions", "EMCOK")
-		#	eActionMap.getInstance().bindKey("/usr/lib/enigma2/python/Plugins/Extensions/EnhancedMovieCenter/keymap.xml", "generic", keymapparser.getKeyId('KEY_OK'), self.flagsToInt('l'), "PluginMovieSelectionActions", "EMCEXIT")
-
-		#	# POWER in EMC MovieSelection
-		#	eActionMap.getInstance().unbindPythonKey('PluginMovieSelectionActions', keymapparser.getKeyId('KEY_POWER'), 'EMCEXIT')
-
-		#	# P+/P- in EventView
-		#	eActionMap.getInstance().bindKey("keymap.xml", "generic", keymapparser.getKeyId('KEY_CHANNELUP'),   self.flagsToInt('m'), "EventViewActions", "pageUp")
-		#	eActionMap.getInstance().bindKey("keymap.xml", "generic", keymapparser.getKeyId('KEY_CHANNELDOWN'), self.flagsToInt('m'), "EventViewActions", "pageDown")
-
-
-		#	# P+/P- in MediaCenter Player
-		#	eActionMap.getInstance().unbindPythonKey('MP_SP_Move', keymapparser.getKeyId('KEY_CHANNELUP'),   'SPMoveUp')
-		#	eActionMap.getInstance().unbindPythonKey('MP_SP_Move', keymapparser.getKeyId('KEY_CHANNELDOWN'), 'SPMoveDown')
-		#	eActionMap.getInstance().bindKey("keymap.xml", "generic", keymapparser.getKeyId('KEY_CHANNELUP'),   self.flagsToInt('m'), "InfobarSeekActions", "unPauseService")
-		#	eActionMap.getInstance().bindKey("keymap.xml", "generic", keymapparser.getKeyId('KEY_CHANNELDOWN'), self.flagsToInt('m'), "InfobarSeekActions", "playpauseService")
-
-		#	# Teletext P+/P- for next/prev. page
-		#	eActionMap.getInstance().unbindPythonKey('TeletextActions', keymapparser.getKeyId('KEY_UP'),          'nextPage')
-		#	eActionMap.getInstance().unbindPythonKey('TeletextActions', keymapparser.getKeyId('KEY_DOWN'),        'KEY_DOWN')
-		#	eActionMap.getInstance().unbindPythonKey('TeletextActions', keymapparser.getKeyId('KEY_CHANNELUP'),   'zoomMode')
-		#	eActionMap.getInstance().unbindPythonKey('TeletextActions', keymapparser.getKeyId('KEY_CHANNELDOWN'), 'screenMode')
-		#	eActionMap.getInstance().bindKey("keymap.xml", "generic", keymapparser.getKeyId('KEY_UP'),          self.flagsToInt('m'),  "TeletextActions", "zoomMode")
-		#	eActionMap.getInstance().bindKey("keymap.xml", "generic", keymapparser.getKeyId('KEY_DOWN'),        self.flagsToInt('m'),  "TeletextActions", "screenMode")
-		#	eActionMap.getInstance().bindKey("keymap.xml", "generic", keymapparser.getKeyId('KEY_F1'),          self.flagsToInt('m'),  "TeletextActions", "transparent")
-		#	eActionMap.getInstance().bindKey("keymap.xml", "generic", keymapparser.getKeyId('KEY_CHANNELUP'),   self.flagsToInt('mr'), "TeletextActions", "nextPage")
-
-
-		#	# pressing KEY_VIDEO a second time unintentionally when starting EMC was adding a file to the playlist, now use "1" for selection instead
-		#	eActionMap.getInstance().unbindPythonKey('PluginMovieSelectionActions', keymapparser.getKeyId('KEY_VIDEO'), 'EMCVIDEOB')
-		#	eActionMap.getInstance().bindKey("/usr/lib/enigma2/python/Plugins/Extensions/EnhancedMovieCenter/keymap.xml", "generic", keymapparser.getKeyId('KEY_1'), self.flagsToInt('m'), "PluginMovieSelectionActions", "EMCVIDEOB")
-
-		#	# faster EMC start (but no media player)
-		#	eActionMap.getInstance().unbindPythonKey('InfobarActions', keymapparser.getKeyId('KEY_VIDEO'), 'showMovies')
-		#	eActionMap.getInstance().unbindPythonKey('InfobarActions', keymapparser.getKeyId('KEY_VIDEO'), 'showMediaPlayer')
-		#	eActionMap.getInstance().bindKey("keymap.xml", "generic", keymapparser.getKeyId('KEY_VIDEO'),   self.flagsToInt('m'), "InfobarActions", "showMovies")
-
-		#	# Teletext transparency
-		#	eActionMap.getInstance().bindKey("keymap.xml", "generic", keymapparser.getKeyId('KEY_CHANNELDOWN'), self.flagsToInt('mr'), "TeletextActions", "prevPage")
-
-	def flagsToInt(self,flags):
-		flag_ascii_to_id = lambda x: {'m':1,'b':2,'r':4,'l':8}[x]
-		return sum(map(flag_ascii_to_id, flags))
-
 	def reloadKeymap(self):
 		if config.plugins.SpecialJump.keymapFile.getValue() != self.activeKeyMap:
 			error = False
