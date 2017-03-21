@@ -143,14 +143,14 @@ config.plugins.SpecialJump.specialJump6  = ConfigInteger(default  =  11, limits 
 config.plugins.SpecialJump.specialJump7  = ConfigInteger(default  =   7, limits  = (1, 999))
 config.plugins.SpecialJump.smallSpecialJumpStart  = ConfigSelection([("1", "1"),("2", "2"),("3", "3"),("4", "4"),("5", "5"),("6", "6"),("7", "7")], default="3")
 
-config.plugins.SpecialJump.specialJump2_0     = ConfigInteger(default  = 131, limits  = (1, 999)) 
-config.plugins.SpecialJump.specialJump2_1     = ConfigInteger(default  =  11, limits  = (1, 999)) 
-config.plugins.SpecialJump.specialJump2_2     = ConfigInteger(default  = 101, limits  = (1, 999)) 
-config.plugins.SpecialJump.specialJump2_3     = ConfigInteger(default  =  21, limits  = (1, 999)) 
-config.plugins.SpecialJump.specialJump2_4     = ConfigInteger(default  =  91, limits  = (1, 999)) 
-config.plugins.SpecialJump.specialJump2_5     = ConfigInteger(default  =  51, limits  = (1, 999)) 
-config.plugins.SpecialJump.specialJump2_6     = ConfigInteger(default  =  11, limits  = (1, 999)) 
-config.plugins.SpecialJump.specialJump2_7     = ConfigInteger(default  =   7, limits  = (1, 999)) 
+config.plugins.SpecialJump.specialJump2_0     = ConfigInteger(default  =  60, limits  = (1, 999)) 
+config.plugins.SpecialJump.specialJump2_1     = ConfigInteger(default  =  15, limits  = (1, 999)) 
+config.plugins.SpecialJump.specialJump2_2     = ConfigInteger(default  =  15, limits  = (1, 999)) 
+config.plugins.SpecialJump.specialJump2_3     = ConfigInteger(default  =  15, limits  = (1, 999)) 
+config.plugins.SpecialJump.specialJump2_4     = ConfigInteger(default  =  15, limits  = (1, 999)) 
+config.plugins.SpecialJump.specialJump2_5     = ConfigInteger(default  =  15, limits  = (1, 999)) 
+config.plugins.SpecialJump.specialJump2_6     = ConfigInteger(default  =  15, limits  = (1, 999)) 
+config.plugins.SpecialJump.specialJump2_7     = ConfigInteger(default  =  15, limits  = (1, 999)) 
 config.plugins.SpecialJump.EnableSpecialJump2 = ConfigYesNo(default=False)
 
 #SpecialJump infobar default coordinates
