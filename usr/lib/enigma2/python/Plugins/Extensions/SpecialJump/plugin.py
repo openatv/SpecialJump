@@ -102,6 +102,7 @@ zapSpeedLimits   = [("0", _("no limit")),      ("60", "0.06s"), ("70", "0.07s"),
 keymapFiles = []
 keymapFiles.append("keymap_classic.xml")
 keymapFiles.append("keymap_FastZap_only.xml")
+keymapFiles.append("keymap_SixKeys.xml")
 keymapFiles.append("keymap_SpecialJump_MP_only.xml")
 keymapFiles.append("keymap_private_Fischreiher.xml")
 keymapFiles.append("keymap_user.xml")
@@ -281,6 +282,7 @@ def autostart(reason, **kwargs):
 		InfoBarPlugins.specialjump_channelDown          = specialjump_channelDown
 		InfoBarPlugins.specialjump_channelUp            = specialjump_channelUp
 		InfoBarPlugins.specialjump_OK                   = specialjump_OK
+		InfoBarPlugins.specialjump_OKlong               = specialjump_OKlong
 		InfoBarPlugins.specialjump_doNothing            = specialjump_doNothing
 		InfoBarPlugins.specialjump_clearDoubleAction    = specialjump_clearDoubleAction
 		InfoBarPlugins.specialjump_jumpPreviousMark     = specialjump_jumpPreviousMark
@@ -388,6 +390,7 @@ def InfoBarPlugins__init__(self):
 		 'specialjump_callMovieCut':        (boundFunction(self.specialjump_callMovieCut,"TV"),     'call MovieCut plugin'),
 		 'specialjump_callCutListEditor':   (boundFunction(self.specialjump_callCutListEditor,"TV"),'call CutListEditor plugin'),
 		 'specialjump_OK':                  (boundFunction(self.specialjump_OK,"TV"),               'for boxes without KEY_PLAY, avoiding event view window'),
+		 'specialjump_OKlong':              (boundFunction(self.specialjump_OKlong,"TV"),           'stop timeshift / call showMovies()'),
 		 'specialjump_doNothing':           (self.specialjump_doNothing, 'do nothing'),
 		 'specialjump_clearDoubleAction':   (self.specialjump_clearDoubleAction, 'avoid double action for certain keys, call on make'),
 		 'specialjump_toggleSubtitleTrack': (self.specialjump_toggleSubtitleTrack, 'toggle subtitle track'),
@@ -410,6 +413,7 @@ def InfoBarPlugins__init__(self):
 		InfoBarPlugins.specialjump_emcpin = None
 		InfoBarPlugins.specialjump_jump = None
 		InfoBarPlugins.specialjump_OK = None
+		InfoBarPlugins.specialjump_OKlong = None
 		InfoBarPlugins.specialjump_toggleSubtitleTrack = None
 		InfoBarPlugins.specialjump_clearDoubleAction = None
 		InfoBarPlugins.specialjump_toggleAudioTrack = None
@@ -490,6 +494,9 @@ def specialjump_callCutListEditor(self,mode):
 
 def specialjump_OK(self,mode):
 	SpecialJump.handleOKkey(SpecialJumpInstance,self,mode)
+
+def specialjump_OKlong(self,mode):
+	SpecialJump.handleOKlong(SpecialJumpInstance,self,mode)
 
 def specialjump_doNothing(self):
 	pass
@@ -1417,14 +1424,14 @@ class SpecialJump():
 			return -1
 		return a/b
 		   
-	def specialJumpStartZapUpTimer(self):
+	def specialJumpStartZapUpTimer(self,factor=1):
 		self.SJZapUpTimer.stop()
-		self.SJZapUpTimer.start(int(config.plugins.SpecialJump.zapFromTimeshiftTime_ms.getValue()))
+		self.SJZapUpTimer.start(factor*int(config.plugins.SpecialJump.zapFromTimeshiftTime_ms.getValue()))
 		self.SJZapUpTimerActive = True
 		   
-	def specialJumpStartZapDownTimer(self):
+	def specialJumpStartZapDownTimer(self,factor=1):
 		self.SJZapDownTimer.stop()
-		self.SJZapDownTimer.start(int(config.plugins.SpecialJump.zapFromTimeshiftTime_ms.getValue()))
+		self.SJZapDownTimer.start(factor*int(config.plugins.SpecialJump.zapFromTimeshiftTime_ms.getValue()))
 		self.SJZapDownTimerActive = True
 		   
 	def specialJumpStartZapTimer(self):
@@ -2427,6 +2434,21 @@ class SpecialJump():
 				self.unPauseService()
 			else:
 				InfoBarShowHide.OkPressed(self.InfoBar_instance)
+
+	def handleOKlong(self,parent,mode):
+		if config.plugins.SpecialJump.debugEnable.getValue(): print "handleOKlong"
+		self.InfoBar_instance = parent
+		self.SJMode=mode
+		if self.SJMode == "TV":
+			if self.isCurrentlySeekable(): # timeshift active and play position "in the past"
+				InfoBarTimeshift.stopTimeshift(self.InfoBar_instance)
+				# allow zapping after stopping timeshift
+				self.specialJumpStartZapUpTimer(3)
+				self.specialJumpStartZapDownTimer(3)
+			else:
+				InfoBar.showMovies(self.InfoBar_instance)
+		else:
+			if config.plugins.SpecialJump.debugEnable.getValue(): print "handleOKlong not implemented in MP mode"
 
 	#from InfoBarGenerics.py
 	#added argument markType, allows setting IN and OUT points

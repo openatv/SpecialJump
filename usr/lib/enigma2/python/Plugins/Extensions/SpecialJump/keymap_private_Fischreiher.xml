@@ -54,8 +54,9 @@ Bau Deine eigene keymap:
 		<key id="KEY_CHANNELUP"   mapto="specialjump_doNothing"              flags="bl" />
 
 		<!-- avoid event view on 'unpause' by "KEY_OK" (for boxes without "KEY_UNPAUSE") -->
-		<key id="KEY_OK" mapto="specialjump_OK" flags="b" />
-		<key id="KEY_OK" mapto="specialjump_doNothing" flags="mr" />
+		<key id="KEY_OK"          mapto="specialjump_OK"                     flags="b" />
+		<key id="KEY_OK"          mapto="specialjump_OKlong"                 flags="l" />
+		<key id="KEY_OK"          mapto="specialjump_doNothing"              flags="mr" />
 		
 		<!-- various ... -->
 		<key id="KEY_F1"          mapto="specialjump_toggleLCDBlanking"      flags="b" />
@@ -141,4 +142,92 @@ Bau Deine eigene keymap:
 		<key id="KEY_AUDIO"       mapto="specialjump_toggleAudioTrack"       flags="m" />
 		<key id="KEY_AUDIO"       mapto="specialjump_doNothing"              flags="brl" />
 	</map>
+
+	<!--=================================================================================-->
+	<!--=== for 6-key remote                                                          ===-->
+	<!--=================================================================================-->
+	
+	<!-- start EMC by 'long OK' -->
+	<map context="InfobarShowHideActions">
+		<key id="KEY_OK"          unmap="LongOKPressed" />
+	</map>
+	<!-- <map context="InfobarActions">
+		<key id="KEY_OK"          mapto="showMovies"       flags="l" />
+	</map>-->
+
+	<!-- P+/P- in EMC MovieSelection -->
+	<map context="PluginMovieSelectionActions">
+		<key id="KEY_CHANNELUP"   unmap="EMCBqtPlus" />
+		<key id="KEY_CHANNELDOWN" unmap="EMCBqtMnus" />
+		<key id="KEY_CHANNELUP"   mapto="EMCUp"            flags="mr" />
+		<key id="KEY_CHANNELDOWN" mapto="EMCDown"          flags="mr" />
+	</map>
+
+	<!-- OK in EMC MovieSelection -->
+	<map context="PluginMovieSelectionActions">
+		<key id="KEY_OK"          unmap="EMCOK" />
+		<key id="KEY_OK"          mapto="EMCOK"            flags="b" />
+		<key id="KEY_OK"          mapto="EMCEXIT"          flags="l" />
+	</map>
+
+	<!-- POWER in EMC MovieSelection -->
+	<map context="PluginMovieSelectionActions">
+		<key id="KEY_POWER"       unmap="EMCEXIT" />
+	</map>
+
+	<!-- P+/P- in EventView -->
+	<map context="EventViewActions">
+		<key id="KEY_CHANNELUP"   mapto="pageUp"           flags="m" />
+		<key id="KEY_CHANNELDOWN" mapto="pageDown"         flags="m" />
+	</map>
+
+	<!--=================================================================================-->
+	<!--=== more P+/P- usage                                                          ===-->
+	<!--=================================================================================-->
+
+	<!-- P+/P- in MediaCenter Player -->
+	<map context="MP_SP_Move">
+		<key id="KEY_CHANNELUP"   unmap="SPMoveUp" />
+		<key id="KEY_CHANNELDOWN" unmap="SPMoveDown" />
+	</map>
+	<map context="InfobarSeekActions">
+		<key id="KEY_CHANNELUP"   mapto="unPauseService"   flags="m" />
+		<key id="KEY_CHANNELDOWN" mapto="playpauseService" flags="m" />
+	</map>
+
+	<!-- Teletext P+/P- for next/prev. page -->
+	<map context="TeletextActions">
+		<key id="KEY_UP"          unmap="nextPage" />
+		<key id="KEY_DOWN"        unmap="prevPage" />
+		<key id="KEY_CHANNELUP"   unmap="zoomMode" />
+		<key id="KEY_CHANNELDOWN" unmap="screenMode" />
+		
+		<key id="KEY_UP"          mapto="zoomMode"         flags="m" />
+		<key id="KEY_DOWN"        mapto="screenMode"       flags="m" />
+		<key id="KEY_CHANNELUP"   mapto="nextPage"         flags="mr" />
+		<key id="KEY_CHANNELDOWN" mapto="prevPage"         flags="mr" />
+	</map>
+
+	<!--=================================================================================-->
+	<!--=== Fischreiher's personal preferences (moved to keymap_usermod.xml)          ===-->
+	<!--=================================================================================-->
+	
+	<!-- in EMC use 'KEY_1' for adding a file to the playlist -->
+	<!-- avoiding addition when accidentally pressing KEY_VIDEO twice
+	<map context="PluginMovieSelectionActions">
+		<key id="KEY_VIDEO"       unmap="EMCVIDEOB"        flags="unmap" />
+		<key id="KEY_1"           mapto="EMCVIDEOB"        flags="m" />
+	</map>-->
+
+	<!-- faster EMC start (but no media player) 
+	<map context="InfobarActions">
+		<key id="KEY_VIDEO"       unmap="showMovies"       flags="unmap" />
+		<key id="KEY_VIDEO"       unmap="showMediaPlayer"  flags="unmap" />
+		<key id="KEY_VIDEO"       mapto="showMovies"       flags="m" />
+	</map>-->
+
+	<!-- Teletext transparency 
+	<map context="TeletextActions">
+		<key id="KEY_F1"          mapto="transparent"      flags="m" />
+	</map>-->
 </keymap>
