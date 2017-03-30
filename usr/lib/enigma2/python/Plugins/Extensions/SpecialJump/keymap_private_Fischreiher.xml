@@ -100,8 +100,8 @@ Bau Deine eigene keymap:
 		<key id="KEY_TEXT"        mapto="specialjump_doNothing"              flags="mr" />
 		
 		<!-- avoid event view on 'unpause' by "KEY_OK" (for boxes without "KEY_UNPAUSE") -->
-		<key id="KEY_OK" mapto="specialjump_OK" flags="b" />
-		<key id="KEY_OK" mapto="specialjump_doNothing" flags="mr" />
+		<key id="KEY_OK"          mapto="specialjump_OK"                     flags="b" />
+		<key id="KEY_OK"          mapto="specialjump_doNothing"              flags="mr" />
 
 		<!-- Show jump distance for normal jump keys -->
 		<key id="KEY_1"           mapto="specialjump_jumpkey1"               flags="m" />
@@ -147,6 +147,16 @@ Bau Deine eigene keymap:
 	<!--=== for 6-key remote                                                          ===-->
 	<!--=================================================================================-->
 	
+	<!-- 'unmap' allows new functions of 'long OK' -->
+	<map context="InfobarShowHideActions">
+		<key id="KEY_OK"          unmap="LongOKPressed" />
+	</map>
+
+	<!-- stop EMC movie playback by 'long OK' -->
+	<map context="CoolPlayerActions2">
+		<key id="KEY_OK"          mapto="leavePlayer"      flags="l" />
+	</map>
+
 	<!-- P+/P- in EMC MovieSelection -->
 	<map context="PluginMovieSelectionActions">
 		<key id="KEY_CHANNELUP"   unmap="EMCBqtPlus" />
