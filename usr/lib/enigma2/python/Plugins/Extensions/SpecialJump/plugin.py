@@ -23,7 +23,6 @@
 
 from Screens.AudioSelection import AudioSelection
 from Screens.Screen import Screen
-from Screens.Console import Console
 from Screens.ChannelSelection import ChannelSelection
 from Screens.ChoiceBox import ChoiceBox
 from Screens.LocationBox import LocationBox
@@ -41,6 +40,7 @@ from Components.Sources.List import List
 ##EMCsp##	from Components.Renderer import EMCPositionGauge
 ##EMCsp##except:
 ##EMCsp##	print "[SpecialJump] import EMCCurrentService failed"
+from Components.Console import Console
 from Components.Lcd import LCD
 from Components.MenuList import MenuList
 from Components.Label import Label
@@ -1078,10 +1078,11 @@ class SpecialJumpConfiguration(Screen, ConfigListScreen):
 			x[1].save()
 		self.changedEntry()
 		global SpecialJumpInstance
-		try:
+		if SpecialJumpInstance is not None:
 			SpecialJump.reloadKeymap(SpecialJumpInstance)
-		except:
-			print "SpecialJump.reloadKeymap failed - probably no SpecialJumpInstance yet."
+		else:
+			print "SpecialJump.reloadKeymap warning: no SpecialJumpInstance yet."
+			SpecialJump.reloadKeymap(SpecialJump(self.session))
 		self.close(True,self.session)
 
 	def cancel(self):
@@ -1234,7 +1235,7 @@ class SpecialJump():
 				print "keymap for plugin SpecialJump (%s) not found." % keymap
 				error = True
 				
-			os.system("ln -fs %s %s" % (keymap, os.path.join(resolveFilename(SCOPE_PLUGINS, "Extensions/SpecialJump/"), "keymap.xml")))
+			Console().ePopen("ln -fs %s %s" % (keymap, os.path.join(resolveFilename(SCOPE_PLUGINS, "Extensions/SpecialJump/"), "keymap.xml")))
 				
 			if error:
 				self.session.open(MessageBox,_("Could not change keymap. Check that files exist and see log file for details."), type = MessageBox.TYPE_ERROR,timeout = 30)
