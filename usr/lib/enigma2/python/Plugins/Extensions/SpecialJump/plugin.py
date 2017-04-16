@@ -1694,13 +1694,19 @@ class SpecialJump():
 		self.InfoBar_instance = parent
 		self.SJMode=mode
 		if mode == "MP":
-			if config.plugins.SpecialJump.EnableSpecialJump2.value and ((not self.isSeekstatePaused()) or (self.SJTimer.isActive() and self.SJLastJumpSize == 'full2')):
+			if self.InfoBar_instance.seekstate[1] or self.InfoBar_instance.seekstate[2]: # cue or slowmotion
+				self.pauseService()
+				self.unPauseService()
+			elif config.plugins.SpecialJump.EnableSpecialJump2.value and ((not self.isSeekstatePaused()) or (self.SJTimer.isActive() and self.SJLastJumpSize == 'full2')):
 				self.specialJumpForwards(parent,mode,'full2',0)
 			else:
 				self.unPauseService()
 		if mode == "TV":
 			if self.isCurrentlySeekable(): # timeshift active and play position "in the past"
-				if config.plugins.SpecialJump.EnableSpecialJump2.value and ((not self.isSeekstatePaused()) or (self.SJTimer.isActive() and self.SJLastJumpSize == 'full2')):
+				if self.InfoBar_instance.seekstate[1] or self.InfoBar_instance.seekstate[2]: # cue or slowmotion
+					self.pauseService()
+					self.unPauseService()
+				elif config.plugins.SpecialJump.EnableSpecialJump2.value and ((not self.isSeekstatePaused()) or (self.SJTimer.isActive() and self.SJLastJumpSize == 'full2')):
 					self.specialJumpForwards(parent,mode,'full2',0)
 				else:
 					if self.SJZapUpTimerActive:  # quickly pressed twice
@@ -2425,16 +2431,13 @@ class SpecialJump():
 		if config.plugins.SpecialJump.debugEnable.getValue(): print "handleOKkey"
 		self.InfoBar_instance = parent
 		self.SJMode=mode
-		if self.SJMode == "TV":
-			if self.isSeekstatePaused():
-				self.unPauseService()
-			else:
-				InfoBarShowHide.OkPressed(self.InfoBar_instance)
+		if self.InfoBar_instance.seekstate[1] or self.InfoBar_instance.seekstate[2]: # cue or slowmotion
+			self.pauseService()
+			self.unPauseService()
+		elif self.isSeekstatePaused():
+			self.unPauseService()
 		else:
-			if self.isSeekstatePaused():
-				self.unPauseService()
-			else:
-				InfoBarShowHide.OkPressed(self.InfoBar_instance)
+			InfoBarShowHide.OkPressed(self.InfoBar_instance)
 
 	def handleOKlong(self,parent,mode):
 		if config.plugins.SpecialJump.debugEnable.getValue(): print "handleOKlong"
