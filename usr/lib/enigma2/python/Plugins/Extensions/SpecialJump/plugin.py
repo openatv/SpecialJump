@@ -1926,7 +1926,7 @@ class SpecialJump():
 			except:
 				self.fastZapRecService = self.session.nav.recordService(fastZapNextService)
 			if self.fastZapRecService is not None:
-				self.fastZapRecService.prepareStreaming()
+				self.fastZapRecService.prepareStreaming(False,True) # descramble=False, includeecm=True
 				self.fastZapRecService.start()
 				if config.plugins.SpecialJump.debugEnable.getValue(): print "zapPredictive ",self.fastZapDirection," pseudo recording service ",fastZapNextService.toString()
 
