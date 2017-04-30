@@ -72,7 +72,7 @@
 			<convert type="ClockToText">Format:%d.%m.%Y</convert>
 		</widget>
 		<eLabel text="SpecialJump Configuration" position="270,15" size="800,43" font="Regular;35" halign="right" foregroundColor="black" backgroundColor="white" transparent="1" />
-		<widget name="config" position="30,90" size="1040,440" itemHeight="30" scrollbarMode="showOnDemand" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/images/sel1040x30.png" backgroundColor="black" transparent="1" />
+		<widget name="config" position="30,90" size="1040,440" itemHeight="30" scrollbarMode="showOnDemand" backgroundColor="black" transparent="1" />
 		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/buttons/red.png" position=" 30,570" size="35,27" alphatest="blend" />
 		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/buttons/green.png" position="290,570" size="35,27" alphatest="blend" />
 		<widget source="key_red" render="Label" position=" 80,573" size="200,26" font="Regular;22" halign="left" foregroundColor="black" backgroundColor="grey" transparent="1" />
