@@ -96,6 +96,7 @@ fixedJumpValues  = [("-3600", "-1:00:00"), ("-3000", "-50:00"), ("-2400", "-40:0
 fixedJumpActions = [("nothing", _("do nothing")), ("audio1", _("change to audio track 1")), ("audio2", _("change to audio track 2")), ("audio3", _("change to audio track 3")), ("audio4", _("change to audio track 4")), ("sub1", _("activate subtitle track 1")), ("sub2", _("activate subtitle track 2")), ("sub3", _("activate subtitle track 3")), ("sub4", _("activate subtitle track 4"))]
 audioVolumes     = [("no_change", _("no change")), ("0", "0"), ("1", "1"), ("2", "2"), ("5", "5"), ("10", "10"), ("20", "20"), ("30", "30"), ("40", "40"), ("50", "50"), ("60", "60"), ("70", "70"), ("80", "80"), ("90", "90"), ("100", "100")]
 timeoutValues    = [("500", "0.5s"), ("1000", "1s"), ("1500", "1.5s"), ("2000", "2s"), ("2500", "2.5s"), ("3000", "3s"), ("4000", "4s"), ("5000", "5s")]
+TSendValues     = [("1000", "1s"), ("1500", "1.5s"), ("2000", "2s"), ("2500", "2.5s"), ("3000", "3s"), ("4000", "4s"), ("5000", "5s"), ("6000", "6s"), ("7000", "7s"), ("8000", "8s"), ("9000", "9s"), ("10000", "10s")]
 protectValues    = [("-1", _("no protection, always zap")), ("5000", "5s"), ("10000", "10s"), ("20000", "20s"), ("30000", "30s"), ("60000", "1min"), ("120000", "2min"), ("300000", "5min"), ("600000", "10min"), ("900000", "15min"), ("1800000", "30min"), ("3600000", "60min")]
 zapSpeedLimits   = [("0", _("no limit")),      ("60", "0.06s"), ("70", "0.07s"), ("80", "0.08s"), ("90", "0.09s"), ("100", "0.1s"), ("120", "0.12s"), ("150", "0.15s"), ("200", "0.2s"), ("300", "0.3s"), ("400", "0.4s"), ("500", "0.5s"), ("600", "0.6s"), ("700", "0.7s"), ("800", "0.8s"), ("900", "0.9s"), ("1000", "1.0s"), ("1100", "1.1s"), ("1200", "1.2s"), ("1500", "1.5s"), ("2000", "2.0s")]
 
@@ -182,6 +183,8 @@ config.plugins.SpecialJump.specialJumpMuteTime_ms         = ConfigSelection([("0
 config.plugins.SpecialJump.jumpMuteTime_ms                = ConfigSelection([("0", _("no mute"))]    + timeoutValues, default="0")
 config.plugins.SpecialJump.zapSpeedLimit_ms               = ConfigSelection(zapSpeedLimits, default="0")
 config.plugins.SpecialJump.zapFromTimeshiftTime_ms        = ConfigSelection([("0", _("never zap"))]  + timeoutValues, default="2000")
+config.plugins.SpecialJump.zapAfterTSstopTime_ms          = ConfigSelection(TSendValues, default="5000")
+config.plugins.SpecialJump.blockZapAfterTSliveTime_ms	  = ConfigSelection(TSendValues, default="5000")
 config.plugins.SpecialJump.zapFromTimeshiftMessageTime_ms = ConfigSelection([("0", _("no message"))] + timeoutValues, default="1000")
 config.plugins.SpecialJump.zapP_ProtectTimeshiftBuffer_ms = ConfigSelection(protectValues, default="5000")
 config.plugins.SpecialJump.zapM_ProtectTimeshiftBuffer_ms = ConfigSelection(protectValues, default="1800000")
@@ -756,9 +759,9 @@ class SpecialJumpInfoBarCuts(Screen):
 
 class ZapMessage(Screen):
 	skin= """
-	<screen name="SpecialJump_ZapMessage" title="SpecialJump" flags="wfNoBorder" position="center,center" size="400,50" zPosition="1" backgroundColor="transparent">
-		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/images/ZapMessageBG.png" position="-1,2" size="400,50" zPosition="-1" />
-		<widget backgroundColor="black" font="Regular; 24" halign="left" name="ZapMessageText" position="30,13" size=" 360,28" transparent="1" />
+	<screen name="SpecialJump_ZapMessage" title="SpecialJump" flags="wfNoBorder" position="center,center" size="500,50" zPosition="1" backgroundColor="transparent">
+		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/images/ZapMessageBG.png" position="-1,2" size="500,50" zPosition="-1" />
+		<widget backgroundColor="black" font="Regular; 24" halign="left" name="ZapMessageText" position="25,13" size=" 450,28" transparent="1" />
 	</screen>
 	"""
 	
@@ -769,12 +772,12 @@ class ZapMessage(Screen):
 		self.labels = ["ZapMessageText"]
 		for x in self.labels:
 			self[x] = Label("")
-		self["ZapMessageText"].setText("timeshift active, 2* P+/P- = zap")
 		self.parent = None
 
 	def doShow(self, parent):
 		self.instance.move(ePoint(config.plugins.SpecialJump.zap_x.getValue(), config.plugins.SpecialJump.zap_y.getValue()))
 		self.parent = parent
+		self["ZapMessageText"].setText(parent.ZapMessageText)
 		self.show()
 
 	def doHide(self):
@@ -998,7 +1001,9 @@ class SpecialJumpConfiguration(Screen, ConfigListScreen):
 		( _("Special jump 6 on P+/P- (subsequent jump)"),                                        7, config.plugins.SpecialJump.specialJump2_6),
 		( _("Special jump 7 on P+/P- (subsequent jump)"),                                        8, config.plugins.SpecialJump.specialJump2_7),
 		( _("Enable SpecialJump 2 on P+/P-"), 	                                                 9, config.plugins.SpecialJump.EnableSpecialJump2),
-		( " ",                                                                                  10, config.plugins.SpecialJump.separator),
+		( _("After stopping timeshift by 'long OK', allow zapping for"), 	                10, config.plugins.SpecialJump.zapAfterTSstopTime_ms),
+		( _("After jumping from timeshift to live TV, block zapping for"), 	                11, config.plugins.SpecialJump.blockZapAfterTSliveTime_ms),
+		( " ",                                                                                  12, config.plugins.SpecialJump.separator),
 		( _("__ Programmable jumps using up to 8 keys __"),                                      0, config.plugins.SpecialJump.showSettingsFixedJump),
 		( _("Programmable jump 1"),                                                              1, config.plugins.SpecialJump.jump1),
 		( _("Programmable jump 1 action"),                                                       2, config.plugins.SpecialJump.jump1action),
@@ -1126,10 +1131,14 @@ class SpecialJump():
 		self.SJZapTimerActive          = False # for zapping speed limit: timer starts when last zapped
 		self.SJZapUpTimerActive        = False # for zapping from timeshift instead of play/pause by pressing KEY_CHANNELUP/DOWN twice quickly: time starts when last "zap up" was blocked
 		self.SJZapDownTimerActive      = False # for zapping from timeshift instead of play/pause by pressing KEY_CHANNELUP/DOWN twice quickly: time starts when last "zap down" was blocked
+		self.SJZapTSstopTimerActive    = False # allows zapping in SixKeys mode / SpecialJump2 mode just after timeshift was stoppel by 'long OK'
+		self.SJZapBlockTSlifeTimerActive=False # block zapping in SixKeys mode / SpecialJump2 mode just after jumping from timeshift to live TV using P+
 		self.skipTeletextActivation = False    # see below
 		self.fastZapDirection = None           # predictive zap direction for fast zapping
 		self.fastZapPipActive = False          # invisible PIP window active (for fast zapping)
 		self.fastZapRecService = None          # pseudo recording service (for fast zapping)
+		self.lastChannelUpWasJump2 = False     # for blocking zapping just after jumping from timeshift to live TV using P+
+		self.ZapMessageText = "(unknown text)" # text for ZapMessage screen
 		
 		self.SJTimer=eTimer()                  # timer for specialJump timeout
 		self.SJTimer.timeout.get().append(self.specialJumpTimeout)
@@ -1151,6 +1160,10 @@ class SpecialJump():
 		self.SJZapUpTimer.timeout.get().append(self.specialJumpZapUpTimeout)
 		self.SJZapDownTimer=eTimer()           # timer for zapping from timeshift (down)
 		self.SJZapDownTimer.timeout.get().append(self.specialJumpZapDownTimeout)
+		self.SJZapTSstopTimer=eTimer()         # timer for zapping after stopping timeshift
+		self.SJZapTSstopTimer.timeout.get().append(self.specialJumpZapTSstopTimeout)
+		self.SJZapBlockTSlifeTimer=eTimer()    # timer for blocking zapping after jumping from timeshift to live TV
+		self.SJZapBlockTSlifeTimer.timeout.get().append(self.specialJumpZapBlockTSlifeTimeout)
 		self.SJZapTimer=eTimer()               # timer for zapping speed limit
 		self.SJZapTimer.timeout.get().append(self.specialJumpZapTimeout)
 		self.SJZapBenchmarkTimer=eTimer()         # timer for fast zap benchmark mode
@@ -1356,9 +1369,15 @@ class SpecialJump():
 			self.SJMuteTimer.start(int(muteTime_ms))
 			self.SJMuteTimerActive = True
 		   
-	def specialJumpShowZapWarning(self):
+	def specialJumpShowZapWarning(self,BlockMessage=False):
 		self.SJZapMessageTimer.stop()
 		self.SJZapMessageTimer.start(int(config.plugins.SpecialJump.zapFromTimeshiftMessageTime_ms.getValue()))
+		if BlockMessage:
+			self.ZapMessageText = "timeshift was active → wait & zap"
+		elif config.plugins.SpecialJump.EnableSpecialJump2.value:
+			self.ZapMessageText = "timeshift active → 'long OK' & zap"
+		else:
+			self.ZapMessageText = "timeshift active → 2* P+/P- = zap"
 		self.ZapMessage_instance.doShow(self)
 		   
 	def specialJumpStartTimerShowAudioBox(self, streams, selected_track):
@@ -1425,15 +1444,29 @@ class SpecialJump():
 			return -1
 		return a/b
 		   
-	def specialJumpStartZapUpTimer(self,factor=1):
+	def specialJumpStartZapUpTimer(self):
 		self.SJZapUpTimer.stop()
-		self.SJZapUpTimer.start(factor*int(config.plugins.SpecialJump.zapFromTimeshiftTime_ms.getValue()))
+		self.SJZapUpTimer.start(int(config.plugins.SpecialJump.zapFromTimeshiftTime_ms.getValue()))
 		self.SJZapUpTimerActive = True
 		   
-	def specialJumpStartZapDownTimer(self,factor=1):
+	def specialJumpStartZapDownTimer(self):
 		self.SJZapDownTimer.stop()
-		self.SJZapDownTimer.start(factor*int(config.plugins.SpecialJump.zapFromTimeshiftTime_ms.getValue()))
+		self.SJZapDownTimer.start(int(config.plugins.SpecialJump.zapFromTimeshiftTime_ms.getValue()))
 		self.SJZapDownTimerActive = True
+		   
+	def specialJumpStartZapTSstopTimer(self):
+		self.SJZapTSstopTimer.stop()
+		self.SJZapTSstopTimer.start(int(config.plugins.SpecialJump.zapAfterTSstopTime_ms.getValue()))
+		self.SJZapTSstopTimerActive = True
+
+	def specialJumpStartZapBlockTSlifeTimer(self):
+		self.SJZapBlockTSlifeTimer.stop()
+		self.SJZapBlockTSlifeTimer.start(int(config.plugins.SpecialJump.blockZapAfterTSliveTime_ms.getValue()))
+		self.SJZapBlockTSlifeTimerActive = True
+		   
+	def specialJumpStopZapBlockTSlifeTimer(self):
+		self.SJZapBlockTSlifeTimer.stop()
+		self.SJZapBlockTSlifeTimerActive = False
 		   
 	def specialJumpStartZapTimer(self):
 		self.SJZapTimer.stop()
@@ -1536,6 +1569,14 @@ class SpecialJump():
 		self.SJZapDownTimer.stop()
 		self.SJZapDownTimerActive = False
 
+	def specialJumpZapTSstopTimeout(self):
+		self.SJZapTSstopTimer.stop()
+		self.SJZapTSstopTimerActive = False
+
+	def specialJumpZapBlockTSlifeTimeout(self):
+		self.SJZapBlockTSlifeTimer.stop()
+		self.SJZapBlockTSlifeTimerActive = False
+
 	def specialJumpZapTimeout(self):
 		self.SJZapTimer.stop()
 		self.SJZapTimerActive = False
@@ -1631,26 +1672,27 @@ class SpecialJump():
 		self.InfoBar_instance = parent
 		self.SJMode=mode
 		if mode == "MP":
-			if self.isSeekstatePaused():
-				if config.plugins.SpecialJump.EnableSpecialJump2.value:
-					if not self.SJTimer.isActive():
-						self.unPauseService()
-					self.specialJumpBackwards(parent,mode,'full2',0)
-				else:
-					self.InfoBar_instance.hide()
-					self.SpecialJumpInfoBar_instance.doHide()
+			if self.infoBarShownAndEnableSpecialJump2(True): #True, first activation only if paused
+				if self.isSeekstatePaused():
+					self.unPauseService()
+				self.specialJumpBackwards(parent,mode,'full2',0)
 			else:
-				if config.plugins.SpecialJump.EnableSpecialJump2.value and self.SJTimer.isActive() and self.SJLastJumpSize == 'full2':
-					self.specialJumpBackwards(parent,mode,'full2',0)
+				if self.isSeekstatePaused():
+					if config.plugins.SpecialJump.EnableSpecialJump2.value:
+						if config.plugins.SpecialJump.debugEnable.getValue(): print "channelDown calls showAfterSeek"
+						InfoBarSeek.showAfterSeek(self.InfoBar_instance)
+					else:
+						self.InfoBar_instance.hide()
+						self.SpecialJumpInfoBar_instance.doHide()
 				else:
 					self.pauseService()
 					if config.plugins.SpecialJump.EnableSpecialJump2.value:
 						self.SpecialJumpInfoBar_instance.hide()
-						InfoBarShowHide.unlockShow(self.InfoBar_instance)
-						InfoBarShowHide.startHideTimer(self.InfoBar_instance)
+						#InfoBarShowHide.unlockShow(self.InfoBar_instance)
+						#InfoBarShowHide.startHideTimer(self.InfoBar_instance)
 		if mode == "TV":
 			if self.isCurrentlySeekable(): # timeshift active and play position "in the past"
-				if config.plugins.SpecialJump.EnableSpecialJump2.value and (self.isSeekstatePaused() or (self.SJTimer.isActive() and self.SJLastJumpSize == 'full2')):
+				if self.infoBarShownAndEnableSpecialJump2(True): #True, first activation only if paused
 					if config.plugins.SpecialJump.EnableSpecialJump2.value and self.isSeekstatePaused() and not self.SJTimer.isActive():
 						self.unPauseService()
 					self.specialJumpBackwards(parent,mode,'full2',0)
@@ -1663,17 +1705,18 @@ class SpecialJump():
 							#if config.plugins.SpecialJump.debugEnable.getValue(): print "B-"
 							self.specialJumpStartZapDownTimer()
 							self.specialJumpShowZapWarning()
-							self.InfoBar_instance.hide()
 							self.SpecialJumpInfoBar_instance.doHide()
+							if config.plugins.SpecialJump.debugEnable.getValue(): print "channelDown calls showAfterSeek"
+							InfoBarSeek.showAfterSeek(self.InfoBar_instance)
 						else:
 							#if config.plugins.SpecialJump.debugEnable.getValue(): print "C-"
 							self.pauseService()
 							if config.plugins.SpecialJump.EnableSpecialJump2.value:
 								self.SpecialJumpInfoBar_instance.hide()
-								InfoBarShowHide.unlockShow(self.InfoBar_instance)
-								InfoBarShowHide.startHideTimer(self.InfoBar_instance)
+								#InfoBarShowHide.unlockShow(self.InfoBar_instance)
+								#InfoBarShowHide.startHideTimer(self.InfoBar_instance)
 			else: # live TV
-				if self.SJZapDownTimerActive:  # quickly pressed twice
+				if self.SJZapTSstopTimerActive or self.SJZapDownTimerActive:  # just stopped timeshift, or key quickly pressed twice
 					#if config.plugins.SpecialJump.debugEnable.getValue(): print "D-"
 					self.zapUp() # zapUp = P-
 				else:
@@ -1697,34 +1740,52 @@ class SpecialJump():
 			if self.InfoBar_instance.seekstate[1] or self.InfoBar_instance.seekstate[2]: # cue or slowmotion
 				self.pauseService()
 				self.unPauseService()
-			elif config.plugins.SpecialJump.EnableSpecialJump2.value and ((not self.isSeekstatePaused()) or (self.SJTimer.isActive() and self.SJLastJumpSize == 'full2')):
+			elif self.infoBarShownAndEnableSpecialJump2(False): #False, first activation only if NOT paused
+				if self.isSeekstatePaused():
+					self.unPauseService()
 				self.specialJumpForwards(parent,mode,'full2',0)
 			else:
 				self.unPauseService()
+				if config.plugins.SpecialJump.debugEnable.getValue(): print "channelUp calls showAfterSeek"
+				InfoBarSeek.showAfterSeek(self.InfoBar_instance)
 		if mode == "TV":
 			if self.isCurrentlySeekable(): # timeshift active and play position "in the past"
 				if self.InfoBar_instance.seekstate[1] or self.InfoBar_instance.seekstate[2]: # cue or slowmotion
 					self.pauseService()
 					self.unPauseService()
-				elif config.plugins.SpecialJump.EnableSpecialJump2.value and ((not self.isSeekstatePaused()) or (self.SJTimer.isActive() and self.SJLastJumpSize == 'full2')):
+					if config.plugins.SpecialJump.debugEnable.getValue(): print "channelUp calls showAfterSeek"
+					InfoBarSeek.showAfterSeek(self.InfoBar_instance)
+				elif self.infoBarShownAndEnableSpecialJump2(False): #False, first activation only if NOT paused
 					self.specialJumpForwards(parent,mode,'full2',0)
+					self.lastChannelUpWasJump2 = True
+					self.specialJumpStartZapBlockTSlifeTimer()
 				else:
 					if self.SJZapUpTimerActive:  # quickly pressed twice
 						#if config.plugins.SpecialJump.debugEnable.getValue(): print "A+"
 						#InfoBarTimeshift.stopTimeshift(self.InfoBar_instance) # not just zap, or zapping will be impossible for ~2s -- didn't help
 						self.zapDown() # zapDown = P+
+						self.lastChannelUpWasJump2 = False
 					else:
 						if not self.isSeekstatePaused():
 							#if config.plugins.SpecialJump.debugEnable.getValue(): print "B+"
-							self.specialJumpStartZapUpTimer()
-							self.specialJumpShowZapWarning()
+							if not config.plugins.SpecialJump.EnableSpecialJump2.value:
+								self.specialJumpStartZapUpTimer()
+								self.specialJumpShowZapWarning()
+							if config.plugins.SpecialJump.debugEnable.getValue(): print "channelUp calls showAfterSeek"
+							InfoBarSeek.showAfterSeek(self.InfoBar_instance)
 						else:
 							#if config.plugins.SpecialJump.debugEnable.getValue(): print "C+"
+							if config.plugins.SpecialJump.debugEnable.getValue(): print "channelUp calls showAfterSeek"
+							InfoBarSeek.showAfterSeek(self.InfoBar_instance)
 							self.unPauseService()
 			else: # live TV
-				if self.SJZapUpTimerActive:  # quickly pressed twice
+				if self.SJZapTSstopTimerActive or self.SJZapUpTimerActive:  # just stopped timeshift, or key quickly pressed twice
 					#if config.plugins.SpecialJump.debugEnable.getValue(): print "D+"
-					self.zapDown() # zapDown = P+
+					if self.SJZapBlockTSlifeTimerActive and self.lastChannelUpWasJump2:
+						self.specialJumpShowZapWarning(True)
+					else:
+						self.zapDown() # zapDown = P+
+						self.specialJumpStopZapBlockTSlifeTimer()
 				else:
 					length = self.getTimeshiftFileSize_kB() # length of timeshift buffer (estimated: 1kB ~ 1ms)
 					if (length > int(config.plugins.SpecialJump.zapP_ProtectTimeshiftBuffer_ms.getValue())) and not (int(config.plugins.SpecialJump.zapP_ProtectTimeshiftBuffer_ms.getValue()) == -1) and (not self.SJLCDon or not config.plugins.SpecialJump.zap_ProtectOnlyWhenBlanked.getValue()): # protect timeshift buffer unless "no protection" is selected
@@ -1733,10 +1794,17 @@ class SpecialJump():
 						self.specialJumpShowZapWarning()
 					else: # zap with speed limit
 						#if config.plugins.SpecialJump.debugEnable.getValue(): print "F+"
-						if not self.SJZapTimerActive:
-							#if config.plugins.SpecialJump.debugEnable.getValue(): print "G+"
-							self.zapDown() # zapDown = P+
-							self.SJZapUpTimer.stop()
+						if self.SJZapBlockTSlifeTimerActive and self.lastChannelUpWasJump2:
+							self.specialJumpShowZapWarning(True)
+						else:
+							if not self.SJZapTimerActive:
+								#if config.plugins.SpecialJump.debugEnable.getValue(): print "G+"
+								self.zapDown() # zapDown = P+
+								self.SJZapUpTimer.stop()
+								self.lastChannelUpWasJump2 = False
+
+	def infoBarShownAndEnableSpecialJump2(self,flag):
+		return config.plugins.SpecialJump.EnableSpecialJump2.value and self.InfoBar_instance.shown and ((self.isSeekstatePaused() == flag) or (self.SJTimer.isActive() and self.SJLastJumpSize == 'full2'))
 
 	def zapUp(self):
 		self.specialJumpStartZapTimer()
@@ -2225,6 +2293,10 @@ class SpecialJump():
 		self.SJZapUpTimer = None
 		self.SJZapDownTimer.callback.remove(self.specialJumpZapDownTimeout)
 		self.SJZapDownTimer = None
+		self.SJZapTSstopTimer.callback.remove(self.specialJumpZapTSstopTimeout)
+		self.SJZapTSstopTimer = None
+		self.SJZapBlockTSlifeTimer.callback.remove(self.specialJumpZapBlockTSlifeTimeout)
+		self.SJZapBlockTSlifeTimer = None
 		self.SJZapTimer.callback.remove(self.specialJumpZapTimeout)
 		self.SJZapTimer = None
 		self.SJZapBenchmarkTimer.callback.remove(self.zapDown)
@@ -2447,8 +2519,7 @@ class SpecialJump():
 			if self.isCurrentlySeekable(): # timeshift active and play position "in the past"
 				InfoBarTimeshift.stopTimeshift(self.InfoBar_instance)
 				# allow zapping after stopping timeshift
-				self.specialJumpStartZapUpTimer(3)
-				self.specialJumpStartZapDownTimer(3)
+				self.specialJumpStartZapTSstopTimer()
 			else:
 				InfoBar.showMovies(self.InfoBar_instance)
 		else:

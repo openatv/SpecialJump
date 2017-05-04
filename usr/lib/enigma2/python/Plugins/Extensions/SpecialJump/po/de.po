@@ -322,6 +322,14 @@ msgstr "SpecialJump Infoleiste: Y-Position"
 msgid "Enable SpecialJump 2 on P+/P-"
 msgstr "SpecialJump 2 auf P+/P- aktivieren"
 
+#: plugin.py:884
+msgid "After jumping from timeshift to live TV, block zapping for"
+msgstr "Nach Sprung von Timeshift zu Live-TV, blockiere Zappen für"
+
+#: plugin.py:884
+msgid "After stopping timeshift by 'long OK', allow zapping for"
+msgstr "Nach Beenden von Timeshift durch 'langes OK', erlaube Zappen für"
+
 #: plugin.py:887
 msgid "__ Programmable jumps using up to 8 keys __"
 msgstr "__ Programmierbare Sprünge (auf bis zu 8 Tasten) __"
