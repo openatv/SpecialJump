@@ -1,169 +1,164 @@
-# German translations for SpecialJump.
-#
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-08 10:40+0200\n"
-"PO-Revision-Date: 2017-06-08 11:05+0200\n"
-"Last-Translator: Fischreiher\n"
-"Language-Team: openATV\n"
-"Language: de\n"
+"POT-Creation-Date: 2017-06-08 10:41+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.0.2\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Basepath: ../../../../../../../..\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SearchPath-0: .\n"
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:96
 msgid "do nothing"
-msgstr "nichts tun"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:96
 msgid "change to audio track 1"
-msgstr "zu Tonspur 1 wechseln"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:96
 msgid "change to audio track 2"
-msgstr "zu Tonspur 2 wechseln"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:96
 msgid "change to audio track 3"
-msgstr "zu Tonspur 3 wechseln"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:96
 msgid "change to audio track 4"
-msgstr "zu Tonspur 4 wechseln"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:96
 msgid "activate subtitle track 1"
-msgstr "Untertitelspur 1 aktivieren"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:96
 msgid "activate subtitle track 2"
-msgstr "Untertitelspur 2 aktivieren"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:96
 msgid "activate subtitle track 3"
-msgstr "Untertitelspur 3 aktivieren"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:96
 msgid "activate subtitle track 4"
-msgstr "Untertitelspur 4 aktivieren"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:97
 msgid "no change"
-msgstr "keine Änderung"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:100
 msgid "no protection, always zap"
-msgstr "kein Schutz, immer zappen"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:101
 msgid "no limit"
-msgstr "unbegrenzt"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:115
 msgid "Yes"
-msgstr "Ja"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:115
 msgid "default"
-msgstr "standard"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:178
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:179
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:180
 msgid "top"
-msgstr "oben"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:178
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:179
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:180
 msgid "bottom"
-msgstr "unten"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:182
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:183
 msgid "no mute"
-msgstr "nicht stummschalten"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:185
 msgid "never zap"
-msgstr "nie zappen"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:188
 msgid "no message"
-msgstr "ohne Meldung"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:192
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:193
 msgid "1-2-n-off-1-2-n-off"
-msgstr "1-2-n-aus-1-2-n-aus"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:192
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:193
 msgid "on-off-on-off"
-msgstr "an-aus-an-aus"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:195
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:196
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:197
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:198
 msgid "no infobox"
-msgstr "keine Infobox"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:195
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:196
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:197
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:198
 msgid "single line"
-msgstr "einzeilig"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:195
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:196
 msgid "one line per track"
-msgstr "eine Zeile pro Spur"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:198
 msgid "full statistics"
-msgstr "volle Statistik"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:218
 msgid "random"
-msgstr "zufällig"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:218
 msgid "random, stop at error"
-msgstr "zufällig, bei Fehler stoppen"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:218
 msgid "No"
-msgstr "Nein"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:218
 msgid "just zap"
-msgstr "nur zappen"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:218
 msgid "just zap, stop at error"
-msgstr "nur zappen, bei Fehler stoppen"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:220
 msgid "Picture in Picture (debug only)"
-msgstr "Bild in Bild (zu Debug-Zwecken)"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:220
 msgid "Picture in Picture, hidden (not recommended)"
-msgstr "Bild in Bild, versteckt (nicht empfohlen)"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:220
 msgid "fake recording"
-msgstr "Pseudo-Aufnahme"
+msgstr ""
 
-#
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:224
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:225
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:226
@@ -177,9 +172,8 @@ msgstr "Pseudo-Aufnahme"
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:234
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:235
 msgid "show"
-msgstr "zeigen"
+msgstr ""
 
-#
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:224
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:225
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:226
@@ -193,471 +187,456 @@ msgstr "zeigen"
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:234
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:235
 msgid "hide"
-msgstr "verbergen"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:316
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:317
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:319
 msgid "Fast manual skipping of commercials, and more..."
-msgstr "Schnelles manuelles Überspringen von Werbung, und mehr..."
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:935
 msgid "SpecialJump Configuration"
-msgstr "SpecialJump Einstellungen"
+msgstr ""
 
-#
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:936
 msgid "Cancel"
-msgstr "Abbrechen"
+msgstr ""
 
-#
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:937
 msgid "OK"
-msgstr "OK"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:949
 msgid "__ General settings __"
-msgstr "__ Allgemeine Einstellungen __"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:950
 msgid "Enable SpecialJump plugin [restart GUI]"
-msgstr "SpecialJump Plugin aktivieren [erfordert GUI-Neustart]"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:951
 msgid "SpecialJump entry in main menu [restart GUI]"
-msgstr "SpecialJump-Eintrag im Hauptmenü [erfordert GUI-Neustart]"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:952
 msgid "Enable SpecialJump debug output in normal logfile"
-msgstr "SpecialJump Debug-Ausgaben im normalen Logfile aktivieren"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:954
 msgid "__ Keymap selection __"
-msgstr "__ Einstellung der Tastenbelegung __"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:955
 msgid "Local keymap file"
-msgstr "Lokale keymap Datei"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:956
 msgid "Create your own keymap (instructions in the file):"
-msgstr "Bau Deine eigene keymap (Anleitung in der Datei):"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:959
 msgid "__ Fast zapping __"
-msgstr "__ Fast Zap Mode (beschleunigte Umschaltzeiten) __"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:960
 msgid "Enable predictive fast zap mode"
-msgstr "Zappen beschleunigen"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:961
 msgid "Fast zap mode method of activating next channel"
-msgstr "Methode, wie der nächste Sender vorgeladen wird"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:962
 msgid "Auto-zap benchmark mode (debug only, random hit/miss/off)"
-msgstr "Auto-Zap Benchmark Modus (zu Debug-Zwecken)"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:963
 msgid ""
 "Also preload next channel if it is on the same transponder (recommended)"
-msgstr "Auch bei gleichem Transponder den nächsten Sender vorladen (empfohlen)"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:964
 msgid "Enable zap speed measurement"
-msgstr "Messung der Umschaltzeiten aktivieren"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:965
 msgid "Zap speed infobox verbosity"
-msgstr "Anzeige der Umschaltzeiten, Ausführlichkeit der Infobox"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:966
 msgid "Zap speed infobox timeout"
-msgstr "Anzeige der Umschaltzeiten, Anzeigedauer der Infobox"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:967
 msgid "Zap speed infobox x position"
-msgstr "Anzeige der Umschaltzeiten, X-Position der Infobox"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:968
 msgid "Zap speed infobox y position"
-msgstr "Anzeige der Umschaltzeiten, Y-Position der Infobox"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:969
 msgid "Zap speed infobox anchor"
-msgstr "Anzeige der Umschaltzeiten, Verankerung der Infobox"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:970
 msgid "Zap speed measurement timeout (zap error) [ms]"
 msgstr ""
-"Timeout bei Messung der Umschaltzeiten (Wertung als Tuning-Fehler) [in ms]"
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:971
 msgid "Auto-zap benchmark mode time between zaps [ms]"
-msgstr "Auto-Zap Benchmark Modus, Zeit zwischen Umschaltvorgängen [in ms]"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:973
 msgid "__ Infobar settings __"
-msgstr "__ Einstellungen zur Infoleiste __"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:974
 msgid ""
 "[OSD settings] Show infobar on skip (set to 'no' when using SpecialJump "
 "infobar)"
 msgstr ""
-"[OSD Einstellungen] Zeige Infoleiste bei Sprüngen (mit SpecialJump "
-"Infoleiste auf 'nein' setzen)"
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:975
 msgid "[Timeshift settings] Show timeshift infobar"
-msgstr "[Timeshift Einstellungen] Zeige Timeshift Infoleiste"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:976
 msgid "Show SpecialJump infobar (set to 'yes')"
-msgstr "Zeige SpecialJump Infoleiste (auf 'ja' stellen)"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:977
 msgid ""
 "Show SpecialJump infobar on jumpNextMark/jumpPreviousMark (set to 'yes')"
 msgstr ""
-"SpecialJump Infoleiste beim Sprung zur nächsten Marke zeigen (auf 'ja' "
-"stellen)"
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:979
 msgid "__ Special jump (fast manual skipping of commercials using 2 keys) __"
-msgstr "__ SpecialJump (Werbung manuell überspringen mit 2 Tasten) __"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:980
 msgid "Special jump 0 (initial value)"
-msgstr "SpecialJump Sprung 0 (erster Wert)"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:981
 msgid "Special jump 1 after 1st direction change"
-msgstr "SpecialJump Sprung 1 nach erstem Richtungswechsel"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:982
 msgid "Special jump 2 (subsequent jump)"
-msgstr "SpecialJump Sprung 2 (nächster Sprung)"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:983
 msgid "Special jump 3 (subsequent jump)"
-msgstr "SpecialJump Sprung 3 (nächster Sprung)"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:984
 msgid "Special jump 4 (subsequent jump)"
-msgstr "SpecialJump Sprung 4 (nächster Sprung)"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:985
 msgid "Special jump 5 (subsequent jump)"
-msgstr "SpecialJump Sprung 5 (nächster Sprung)"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:986
 msgid "Special jump 6 (subsequent jump)"
-msgstr "SpecialJump Sprung 6 (nächster Sprung)"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:987
 msgid "Special jump 7 (subsequent jump)"
-msgstr "SpecialJump Sprung 7 (nächster Sprung)"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:988
 msgid "Special jump timeout"
-msgstr "SpecialJump Sprung Timeout"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:989
 msgid "Mute after SpecialJump"
-msgstr "Stumm schalten nach SpecialJump-Sprung"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:990
 msgid "Small SpecialJump: start at initial value no."
-msgstr "Kleiner SpecialJump-Sprung: Verwende als ersten Wert Nummer ..."
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:991
 msgid "SpecialJump infobar x position"
-msgstr "SpecialJump Infoleiste: X-Position"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:992
 msgid "SpecialJump infobar y position"
-msgstr "SpecialJump Infoleiste: Y-Position"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:994
 msgid "__ Special jump 2 (on the multi functional P+/P- keys) __"
-msgstr "__ SpecialJump 2 (auf den Multifunktions-Tasten P+/P-) __"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:995
 msgid "Special jump 0 on P+/P- (initial value)"
-msgstr "SpecialJump Sprung 0 auf P+/P- (erster Wert)"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:996
 msgid "Special jump 1 on P+/P- after 1st direction change"
-msgstr "SpecialJump Sprung 1 auf P+/P- nach erstem Richtungswechsel"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:997
 msgid "Special jump 2 on P+/P- (subsequent jump)"
-msgstr "SpecialJump Sprung 2 auf P+/P- (nächster Sprung)"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:998
 msgid "Special jump 3 on P+/P- (subsequent jump)"
-msgstr "SpecialJump Sprung 3 auf P+/P- (nächster Sprung)"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:999
 msgid "Special jump 4 on P+/P- (subsequent jump)"
-msgstr "SpecialJump Sprung 4 auf P+/P- (nächster Sprung)"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1000
 msgid "Special jump 5 on P+/P- (subsequent jump)"
-msgstr "SpecialJump Sprung 5 auf P+/P- (nächster Sprung)"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1001
 msgid "Special jump 6 on P+/P- (subsequent jump)"
-msgstr "SpecialJump Sprung 6 auf P+/P- (nächster Sprung)"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1002
 msgid "Special jump 7 on P+/P- (subsequent jump)"
-msgstr "SpecialJump Sprung 7 auf P+/P- (nächster Sprung)"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1003
 msgid "Enable SpecialJump 2 on P+/P-"
-msgstr "SpecialJump 2 auf P+/P- aktivieren"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1004
 msgid "After stopping timeshift by 'long OK', allow zapping for"
-msgstr "Nach Beenden von Timeshift durch 'langes OK', erlaube Zappen für"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1005
 msgid "After jumping from timeshift to live TV, block zapping for"
-msgstr "Nach Sprung von Timeshift zu Live-TV, blockiere Zappen für"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1007
 msgid "__ Programmable jumps using up to 8 keys __"
-msgstr "__ Programmierbare Sprünge (auf bis zu 8 Tasten) __"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1008
 msgid "Programmable jump 1"
-msgstr "Programmierbarer Sprung 1"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1009
 msgid "Programmable jump 1 action"
-msgstr "Programmierbarer Sprung 1, nachfolgende Aktion"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1010
 msgid "Programmable jump 2"
-msgstr "Programmierbarer Sprung 2"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1011
 msgid "Programmable jump 2 action"
-msgstr "Programmierbarer Sprung 2, nachfolgende Aktion"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1012
 msgid "Programmable jump 3"
-msgstr "Programmierbarer Sprung 3"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1013
 msgid "Programmable jump 3 action"
-msgstr "Programmierbarer Sprung 3, nachfolgende Aktion"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1014
 msgid "Programmable jump 4"
-msgstr "Programmierbarer Sprung 4"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1015
 msgid "Programmable jump 4 action"
-msgstr "Programmierbarer Sprung 4, nachfolgende Aktion"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1016
 msgid "Programmable jump 5"
-msgstr "Programmierbarer Sprung 5"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1017
 msgid "Programmable jump 5 action"
-msgstr "Programmierbarer Sprung 5, nachfolgende Aktion"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1018
 msgid "Programmable jump 6"
-msgstr "Programmierbarer Sprung 6"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1019
 msgid "Programmable jump 6 action"
-msgstr "Programmierbarer Sprung 6, nachfolgende Aktion"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1020
 msgid "Programmable jump 7"
-msgstr "Programmierbarer Sprung 7"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1021
 msgid "Programmable jump 7 action"
-msgstr "Programmierbarer Sprung 7, nachfolgende Aktion"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1022
 msgid "Programmable jump 8"
-msgstr "Programmierbarer Sprung 8"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1023
 msgid "Programmable jump 8 action"
-msgstr "Programmierbarer Sprung 8, nachfolgende Aktion"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1024
 msgid "Mute after programmable jump"
-msgstr "Stumm schalten nach programmierbarem Sprung"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1026
 msgid "__ Zap (dual function P+/P- and play/pause) __"
-msgstr "__ Zappen (Doppelfunktion P+/P- und Play/Pause) __"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1027
 msgid "Zap speed limit"
-msgstr "Geschwindigkeits-Limit beim Zappen"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1028
 msgid "Zap from timeshift by pressing P+/P- twice within"
 msgstr ""
-"Schutz des Timeshift-Puffers gegen P+/P- aufheben durch 2* Drücken "
-"innerhalb ..."
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1029
 msgid "Zap from timeshift, warning message duration"
-msgstr "Schutz des Timeshift-Puffers, Anzeigedauer der Warnung"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1030
 msgid "Zap from timeshift, warning message x position"
-msgstr "Schutz des Timeshift-Puffers, X-Position der Warnung"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1031
 msgid "Zap from timeshift, warning message y position"
-msgstr "Schutz des Timeshift-Puffers, Y-Position der Warnung"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1032
 msgid "Protect large timeshift buffer in live TV (P+ required twice)"
 msgstr ""
-"Timeshift-Puffer gegen P+ schützen (aufheben mit 2* P+) ab Pufferinhalt"
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1033
 msgid "Protect large timeshift buffer in live TV (P- required twice)"
 msgstr ""
-"Timeshift-Puffer gegen P- schützen (aufheben mit 2* P-) ab Pufferinhalt"
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1034
 msgid ""
 "Protect large timeshift buffer only in cinema mode (LCD brighness off, see "
 "below)"
 msgstr ""
-"Schutz des Timeshift-Puffers nur im Kino-Modus (bei dunkel geschaltetem "
-"Display)"
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1036
 msgid "__ Subtitle and audio toggling with a single key each __"
-msgstr "__ Untertitel und Tonspur mit je einer Taste ein/aus/umschalten __"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1037
 msgid "Subtitle toggle mode when pressing key only once within infobox timeout"
 msgstr ""
-"Untertitel-Umschalt-Reihenfolge bei 1 Tastendruck innerhalb des Timeouts"
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1038
 msgid ""
 "Subtitle toggle mode when pressing multiple times within infobox timeout"
 msgstr ""
-"Untertitel-Umschalt-Reihenfolge bei >1 Tastendruck innerhalb des Timeouts"
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1039
 msgid "Subtitle toggle infobox timeout"
-msgstr "Untertitel-Umschaltung, Anzeigedauer der Infobox"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1040
 msgid "Subtitle toggle infobox verbosity"
-msgstr "Untertitel-Umschaltung, Ausführlichkeit der Infobox"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1041
 msgid "Subtitle infobox x position"
-msgstr "Untertitel-Umschaltung, X-Position der Infobox"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1042
 msgid "Subtitle infobox y position"
-msgstr "Untertitel-Umschaltung, Y-Position der Infobox"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1043
 msgid "Subtitle infobox anchor"
-msgstr "Untertitel-Umschaltung, Verankerung der Infobox"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1044
 msgid "Audio toggle infobox timeout"
-msgstr "Tonspur-Umschaltung, Anzeigedauer der Infobox"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1045
 msgid "Audio toggle infobox verbosity"
-msgstr "Tonspur-Umschaltung, Ausführlichkeit der Infobox"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1046
 msgid "Audio toggle infobox x position"
-msgstr "Tonspur-Umschaltung, X-Position der Infobox"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1047
 msgid "Audio toggle infobox y position"
-msgstr "Tonspur-Umschaltung, Y-Position der Infobox"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1048
 msgid "Audio toggle infobox anchor"
-msgstr "Tonspur-Umschaltung, Verankerung der Infobox"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1050
 msgid "__ Fixed audio volumes (when remove controls TV volume) __"
-msgstr "__ Feste Lautstärkewerte pro Tonspur (Nachregelung am Fernseher) __"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1051
 msgid "Volume for TV and recorded TV (.ts files)"
-msgstr "Lautstärke für TV und Aufnahmen (.ts Dateien)"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1052
 msgid "Volume for non .ts videos, audio track 1"
-msgstr "Lautstärke für andere Dateien, Tonspur 1"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1053
 msgid "Volume for non .ts videos, audio track 2"
-msgstr "Lautstärke für andere Dateien, Tonspur 2"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1054
 msgid "Volume for non .ts videos, audio track 3"
-msgstr "Lautstärke für andere Dateien, Tonspur 3"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1055
 msgid "Volume for non .ts videos, audio track 4"
-msgstr "Lautstärke für andere Dateien, Tonspur 4"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1056
 msgid "Volume for (nearly) muting after a jump"
-msgstr "Lautstärke für (beinahe) Stummschaltung nach einem Sprung"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1057
 msgid "Volume infobox timeout"
-msgstr "Lautstärke-Umschaltung, Anzeigedauer der Infobox"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1058
 msgid "Volume infobox x position"
-msgstr "Lautstärke-Umschaltung, X-Position der Infobox"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1059
 msgid "Volume infobox y position"
-msgstr "Lautstärke-Umschaltung, X-Position der Infobox"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1060
 msgid "Volume infobox verbosity"
-msgstr "Lautstärke-Umschaltung, Ausführlichkeit der Infobox"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1061
 msgid "[from AV menu] Audio auto volume level"
-msgstr "[AV Menü] Automatische Lautstärkeanpassung"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1063
 msgid "__ Toggle LCD brightness by key __"
-msgstr "__ LCD-Display mit einer Taste dunkel schalten __"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1064
 msgid "Turn LCD on again on event change"
-msgstr "Display bei Senderwechsel wieder hell schalten"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1095
 msgid "Quit without saving changes ?"
-msgstr "Wirklich ohne Sicherung der Einstellungen beenden?"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:1254
 msgid ""
@@ -673,10 +652,9 @@ msgid "unknown"
 msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:2313
-#, fuzzy, python-format
-#| msgid "SpecialJump infobar x position"
+#, python-format
 msgid "SpecialJump: no service%d"
-msgstr "SpecialJump Infoleiste: X-Position"
+msgstr ""
 
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:2696
 msgid "Infobar is MoviePlayer\n"
@@ -709,6 +687,3 @@ msgstr ""
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:2806
 msgid "HDD status detection failed\n"
 msgstr ""
-
-#~ msgid "SpecialJump"
-#~ msgstr "SpecialJump"
