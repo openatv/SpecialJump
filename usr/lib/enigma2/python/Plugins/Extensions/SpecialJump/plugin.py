@@ -1424,6 +1424,7 @@ class SpecialJump():
 		self.SJZapspeedBoxTimerActive = True
 		streams = []
 		streams.append(('','%s zap t=' % (self.zap_list_ind1[ind1]), '%sms' % (self.zap_time),''))
+		if config.plugins.SpecialJump.debugEnable.getValue(): print "Zap Speed: %s zap t=%sms" % (self.zap_list_ind1[ind1], self.zap_time)
 		for ind1 in range(0, len(self.zap_list_ind1)):
 			streams.append(('','','',''))
 			for ind2 in range(0, len(self.zap_list_ind2)):
