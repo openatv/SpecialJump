@@ -158,10 +158,6 @@ config.plugins.SpecialJump.EnableSpecialJump2 = ConfigYesNo(default=False)
 #SpecialJump infobar default coordinates
 config.plugins.SpecialJump.bar_x         = ConfigInteger(default  =  70, limits  = (0, 1919))
 config.plugins.SpecialJump.bar_y         = ConfigInteger(default  = 600, limits  = (0, 1079))
-#SJJumpTime blended text default coordinates
-#config.plugins.SpecialJump.bar_x         = ConfigInteger(default  = 400, limits  = (0, 1919))
-#config.plugins.SpecialJump.bar_y         = ConfigInteger(default  =  50, limits  = (0, 1079))
-
 config.plugins.SpecialJump.zap_x         = ConfigInteger(default  =  50, limits  = (0, 1919))
 config.plugins.SpecialJump.zap_y         = ConfigInteger(default  = 500, limits  = (0, 1079))
 config.plugins.SpecialJump.subs_x        = ConfigInteger(default  = 965, limits  = (0, 1919))
@@ -172,6 +168,8 @@ config.plugins.SpecialJump.audio_x       = ConfigInteger(default  =  30, limits 
 config.plugins.SpecialJump.audio_y       = ConfigInteger(default  =  30, limits  = (0, 1079))
 config.plugins.SpecialJump.audioVolume_x = ConfigInteger(default  =  30, limits  = (0, 1919))
 config.plugins.SpecialJump.audioVolume_y = ConfigInteger(default  =  95, limits  = (0, 1079))
+
+config.plugins.SpecialJump.bar_pos_overwrite_skin         = ConfigYesNo(default=False)
 
 config.plugins.SpecialJump.LCDonOnEventChange             = ConfigYesNo(default=True)
 
@@ -618,7 +616,7 @@ class SpecialJumpEventTracker(Screen):
 
 class SpecialJumpInfoBar(Screen):
 	skin= """
-	<screen name="SpecialJump_SpecialJumpInfoBar" title="SpecialJump InfoBar" flags="wfNoBorder" position="center,center" size="1135,70" zPosition="1" backgroundColor="black">
+	<screen name="SpecialJump_SpecialJumpInfoBar" title="SpecialJump InfoBar" flags="wfNoBorder" position="666,333" size="1135,70" zPosition="1" backgroundColor="black">
 		<widget source="session.CurrentService" render="Label" position="180, 15" size="150,27" font="Arial;22" halign="left" backgroundColor="black" transparent="1" zPosition="3">
 			<convert type="ServicePosition">Remaining</convert>
 		</widget>
@@ -662,7 +660,8 @@ class SpecialJumpInfoBar(Screen):
 		##EMCsp##self['Service'] = EMCCurrentService(session.nav, self.parent) # overwritten in doShow
 
 	def __onShow(self):
-		self.instance.move(ePoint(config.plugins.SpecialJump.bar_x.getValue(), config.plugins.SpecialJump.bar_y.getValue()))
+		if ((self.instance.position().x() == 666) and (self.instance.position().y() == 333)) or config.plugins.SpecialJump.bar_pos_overwrite_skin.getValue():
+			self.instance.move(ePoint(config.plugins.SpecialJump.bar_x.getValue(), config.plugins.SpecialJump.bar_y.getValue()))
 		self.refreshInfoBar()
 
 	def __onClose(self):
@@ -694,7 +693,7 @@ class SpecialJumpInfoBar(Screen):
 
 class SpecialJumpInfoBarCuts(Screen):
 	skin= """
-	<screen name="SpecialJump_SpecialJumpInfoBarCuts" title="SpecialJump InfoBar" flags="wfNoBorder" position="center,center" size="1135,70" zPosition="1" backgroundColor="black">
+	<screen name="SpecialJump_SpecialJumpInfoBarCuts" title="SpecialJump InfoBar" flags="wfNoBorder" position="666,333" size="1135,70" zPosition="1" backgroundColor="black">
 		<widget source="session.CurrentService" render="Label" position="180, 15" size="150,27" font="Arial;22" halign="left" backgroundColor="black" transparent="1" zPosition="3">
 			<convert type="ServicePosition">Remaining</convert>
 		</widget>
@@ -728,7 +727,8 @@ class SpecialJumpInfoBarCuts(Screen):
 		#self['Service'] = EMCCurrentService(session.nav, self.parent) # overwritten in doShow
 
 	def __onShow(self):
-		self.instance.move(ePoint(config.plugins.SpecialJump.bar_x.getValue(), config.plugins.SpecialJump.bar_y.getValue()))
+		if ((self.instance.position().x() == 666) and (self.instance.position().y() == 333)) or config.plugins.SpecialJump.bar_pos_overwrite_skin.getValue():
+			self.instance.move(ePoint(config.plugins.SpecialJump.bar_x.getValue(), config.plugins.SpecialJump.bar_y.getValue()))
 		self.refreshInfoBar()
 
 	def __onClose(self):
@@ -759,7 +759,7 @@ class SpecialJumpInfoBarCuts(Screen):
 
 class ZapMessage(Screen):
 	skin= """
-	<screen name="SpecialJump_ZapMessage" title="SpecialJump" flags="wfNoBorder" position="center,center" size="500,50" zPosition="1" backgroundColor="transparent">
+	<screen name="SpecialJump_ZapMessage" title="SpecialJump" flags="wfNoBorder" position="666,333" size="500,50" zPosition="1" backgroundColor="transparent">
 		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/images/ZapMessageBG.png" position="-1,2" size="500,50" zPosition="-1" />
 		<widget backgroundColor="black" font="Regular; 24" halign="left" name="ZapMessageText" position="25,13" size=" 450,28" transparent="1" />
 	</screen>
@@ -775,7 +775,8 @@ class ZapMessage(Screen):
 		self.parent = None
 
 	def doShow(self, parent):
-		self.instance.move(ePoint(config.plugins.SpecialJump.zap_x.getValue(), config.plugins.SpecialJump.zap_y.getValue()))
+		if (self.instance.position().x() == 666) and (self.instance.position().y() == 333):
+			self.instance.move(ePoint(config.plugins.SpecialJump.zap_x.getValue(), config.plugins.SpecialJump.zap_y.getValue()))
 		self.parent = parent
 		self["ZapMessageText"].setText(parent.ZapMessageText)
 		self.show()
@@ -990,7 +991,8 @@ class SpecialJumpConfiguration(Screen, ConfigListScreen):
 		( _("Small SpecialJump: start at initial value no."),                                   11, config.plugins.SpecialJump.smallSpecialJumpStart),
 		( _("SpecialJump infobar x position"),                                                  12, config.plugins.SpecialJump.bar_x),
 		( _("SpecialJump infobar y position"),                                                  13, config.plugins.SpecialJump.bar_y),
-		( " ",                                                                                  14, config.plugins.SpecialJump.separator),
+		( _("SpecialJump infobar position, overwrite skin settings"),                           14, config.plugins.SpecialJump.bar_pos_overwrite_skin),
+		( " ",                                                                                  15, config.plugins.SpecialJump.separator),
 		( _("__ Special jump 2 (on the multi functional P+/P- keys) __"),                        0, config.plugins.SpecialJump.showSettingsSpecialJump2),
 		( _("Special jump 0 on P+/P- (initial value)"),                                          1, config.plugins.SpecialJump.specialJump2_0),
 		( _("Special jump 1 on P+/P- after 1st direction change"),                               2, config.plugins.SpecialJump.specialJump2_1),

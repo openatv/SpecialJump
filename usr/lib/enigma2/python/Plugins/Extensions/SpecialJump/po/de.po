@@ -380,6 +380,9 @@ msgstr "SpecialJump Infoleiste: X-Position"
 msgid "SpecialJump infobar y position"
 msgstr "SpecialJump Infoleiste: Y-Position"
 
+msgid "SpecialJump infobar position, overwrite skin settings"
+msgstr "SpecialJump Infoleiste: Position aus Skin überschreiben"
+
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:994
 msgid "__ Special jump 2 (on the multi functional P+/P- keys) __"
 msgstr "__ SpecialJump 2 (auf den Multifunktions-Tasten P+/P-) __"
