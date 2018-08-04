@@ -627,13 +627,13 @@ class SpecialJumpInfoBar(Screen):
 		<widget source="session.CurrentService" render="Label" position="1030, 15" size=" 80,27" font="Arial;22" halign="left" backgroundColor="black" transparent="1" zPosition="3">
 			<convert type="ServicePosition">Length</convert>
 		</widget>
-		<widget source="session.CurrentService" render="Progress" position="  10,49" size="1120,8" pixmap="DMConcinnity-HD/progress.png" transparent="1" zPosition="3">
+		<widget source="session.CurrentService" render="Progress" position="  10,49" size="1120,8" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/images/progress.png" transparent="1" zPosition="3">
 			<convert type="ServicePosition">Position</convert>
 		</widget>
-<!--##EMCsp##	    <widget source="Service" render="Progress" position="10,49" size="1120,8" zPosition="4" pixmap="DMConcinnity-HD/progress_rec.png" transparent="1">
+<!--##EMCsp##	    <widget source="Service" render="Progress" position="10,49" size="1120,8" zPosition="4" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/images/progress_rec.png" transparent="1">
 			<convert type="EMCRecordPosition">Position</convert>
 		</widget>
-		<widget source="Service" render="Progress" position="10,49" size="1120,8" zPosition="5" pixmap="DMConcinnity-HD/progress.png" transparent="1">
+		<widget source="Service" render="Progress" position="10,49" size="1120,8" zPosition="5" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/images/progress.png" transparent="1">
 			<convert type="EMCServicePosition">Position</convert>
 		</widget>
 		<widget source="Service" render="EMCPositionGauge" position="10,48" size="1120,10" zPosition="6" transparent="1">
