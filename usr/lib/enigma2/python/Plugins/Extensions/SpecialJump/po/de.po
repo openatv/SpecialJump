@@ -264,6 +264,10 @@ msgid ""
 "Also preload next channel if it is on the same transponder (recommended)"
 msgstr "Auch bei gleichem Transponder den nächsten Sender vorladen (empfohlen)"
 
+msgid ""
+"Disable preload for IPTV"
+msgstr "Vorladen des nächsten Senders bei IPTV unterdrücken"
+
 #: usr/lib/enigma2/python/Plugins/Extensions/SpecialJump/plugin.py:964
 msgid "Enable zap speed measurement"
 msgstr "Messung der Umschaltzeiten aktivieren"
