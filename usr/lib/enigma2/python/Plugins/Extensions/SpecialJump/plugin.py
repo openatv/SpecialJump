@@ -2654,6 +2654,7 @@ class SpecialJump():
 		
 	def isIPTV(self):
 		ref = self.session.nav.getCurrentlyPlayingServiceReference()
+		mypath = ''
 		if ref is not None:
 			try:
 				mypath = ref.getPath()
