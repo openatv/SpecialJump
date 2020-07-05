@@ -1,3 +1,4 @@
+from __future__ import print_function
 
 # -*- coding: utf-8 -*-
 
@@ -14,7 +15,7 @@ def localeInit():
 def _(txt):
 	t = gettext.dgettext("SpecialJump", txt)
 	if t == txt:
-		print("[SpecialJump] fallback to default translation for", txt)
+		print(("[SpecialJump] fallback to default translation for", txt))
 		t = gettext.gettext(txt)
 	return t
 
