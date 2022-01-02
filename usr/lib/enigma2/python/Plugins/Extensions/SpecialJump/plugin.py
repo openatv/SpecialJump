@@ -2899,9 +2899,34 @@ class SpecialJump():
 			
 			# write getBufferCharge (or other things) to a file periodically
 			if False:
-				self.executeCyclicTimer.start(500,False)#repetitive
+				self.timeCnt = 0
+				self.lastPlayPos = 0
+				self.executeCyclicTimer.start(30000,False)#repetitive
 
 	def executeCyclic(self):
+		# debug stalled playback on 2nd box, compare and log playpos and expected time periodically
+		self.timeCnt = self.timeCnt + 30
+		if self.session:
+			if self.session.nav:
+				if self.session.nav.getCurrentService():
+					seek = self.getSeek()
+					if seek is not None:
+						playpos = seek.getPlayPosition()
+						playpos_s = playpos[1]/90000
+						print "DEBUG playpos %s / delta %s / delta2 %s" % (playpos_s,playpos_s-self.lastPlayPos-30,playpos_s-self.timeCnt);
+						if (playpos_s-self.lastPlayPos < 25) or (playpos_s-self.lastPlayPos > 35):
+							print "DEBUG unusual delta"
+						self.lastPlayPos = playpos_s
+					else:
+						print "DEBUG no seek"
+				else:
+					print "DEBUG no CurrentService"
+			else:
+				print "DEBUG no nav"
+		else:
+			print "DEBUG no session"
+
+	def executeCyclic1(self):
 		from Components.Harddisk import harddiskmanager
 		f = open("/tmp/executeCyclic.log", "a")
 		f.write("%s" % datetime.now())
