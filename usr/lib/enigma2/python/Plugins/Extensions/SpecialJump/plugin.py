@@ -977,7 +977,7 @@ class SpecialJumpConfiguration(Screen, ConfigListScreen):
 		( " ",                                                                                  14, config.plugins.SpecialJump.separator),
 		( _("__ Infobar settings __"),                                                           0, config.plugins.SpecialJump.showSettingsInfobar),
 		( _("[OSD settings] Show infobar on skip (set to 'no' when using SpecialJump infobar)"), 1, config.usage.show_infobar_on_skip),
-		( _("[Timeshift settings] Show timeshift infobar"),                                      2, config.timeshift.showinfobar),
+		( _("[Timeshift settings] Show timeshift infobar"),                                      2, config.timeshift.showInfoBar),
 		( _("Show SpecialJump infobar (set to 'yes')"),                                          3, config.plugins.SpecialJump.show_infobar),
 		( _("Show SpecialJump infobar on jumpNextMark/jumpPreviousMark (set to 'yes')"),         4, config.plugins.SpecialJump.show_infobar_on_jumpPreviousNextMark),
 		( " ",                                                                                   5, config.plugins.SpecialJump.separator),
