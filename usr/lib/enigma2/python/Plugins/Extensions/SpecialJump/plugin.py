@@ -1319,7 +1319,7 @@ class SpecialJump():
 	def showTimeBetweenKeys(self):
 		if self.lastZapTime is not None:
 			if config.plugins.SpecialJump.debugEnable.getValue():
-				print("Time since last KEY: %s" str(datetime.now() - self.lastZapTime))
+				print("Time since last KEY: %s" % str(datetime.now() - self.lastZapTime))
 		self.lastZapTime = datetime.now()
 
 	def powerOn(self):
@@ -3024,7 +3024,7 @@ class SpecialJump():
 						playpos = seek.getPlayPosition()
 						playpos_s = playpos[1] / 90000
 						print("DEBUG playpos %s / delta %s / delta2 %s" % (playpos_s, playpos_s - self.lastPlayPos - 30, playpos_s - self.timeCnt))
-						if (playpos_s - self.lastPlayPos < 25) or (playpos_s - self.lastPlayPos > 35)
+						if (playpos_s - self.lastPlayPos < 25) or (playpos_s - self.lastPlayPos > 35):
 							print("DEBUG unusual delta")
 						self.lastPlayPos = playpos_s
 					else:
