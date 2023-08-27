@@ -1429,7 +1429,7 @@ class SpecialJump():
 		else:
 			if config.plugins.SpecialJump.show_infobar.getValue():
 				self.SpecialJumpInfoBar_instance.doShow(self, self.InfoBar_instance)  # grandparent_InfoBar
-		if muteTime_ms > 0:
+		if int(muteTime_ms) > 0:
 			self.specialJumpMute(muteTime_ms)
 
 	def specialJumpMute(self, muteTime_ms):
