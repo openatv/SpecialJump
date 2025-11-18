@@ -456,15 +456,21 @@ def SJzapDown(self):
 	base_InfoBarChannelSelection_zapDown(self)
 
 
-def SJzap(self, enable_pipzap=False, preview_zap=False, checkParentalControl=True, ref=None):
+def SJzap(self, enable_pipzap=False, preview_zap=False, checkParentalControl=True, ref=None, **kwargs):
 	global thisZapDirection
 	# zapUp, zapDown, ChannelSelection are using ChannelSelection.zap.
 	SpecialJump.initInfoBar(SpecialJumpInstance, None)  # 'self' isn't InfoBar, pass 'None'
 	SpecialJump.initZapSpeedCounter(SpecialJumpInstance)
-	#now only done after zapping (TODO remove):
-	#if thisZapDirection != SpecialJumpInstance.fastZapDirection: # guessed wrong
-	#	SpecialJump.disablePredictiveRecOrPIP(SpecialJumpInstance)
-	base_ChannelSelection_zap(self, enable_pipzap, preview_zap, checkParentalControl, ref)
+	# now only done after zapping (TODO remove):
+	"""
+	if thisZapDirection != SpecialJumpInstance.fastZapDirection: # guessed wrong
+		SpecialJump.disablePredictiveRecOrPIP(SpecialJumpInstance)
+	"""
+	doPlay = kwargs.get("doPlay", None)
+	if doPlay is not None:
+		base_ChannelSelection_zap(self, enable_pipzap, preview_zap, checkParentalControl, ref, doPlay)
+	else:
+		base_ChannelSelection_zap(self, enable_pipzap, preview_zap, checkParentalControl, ref)
 	if thisZapDirection != "None":
 		SpecialJump.zapHandler(SpecialJumpInstance, thisZapDirection)
 	else:
